@@ -21,6 +21,6 @@ const config_1 = require("./server/config/config");
 // https.createServer({}, app).listen(PORT , () => {
 //     console.log('Express server listening on port '+ PORT);
 // });
-http.createServer(app_1.default).listen(config_1.PORT, () => {
+http.createServer(app_1.default).listen(process.env.PORT || config_1.PORT, () => {
     console.log('Express server listening on port ' + config_1.PORT);
 });
