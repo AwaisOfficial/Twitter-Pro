@@ -19,8 +19,8 @@ class App {
     }
     config() {
         var distDir = __dirname + "/dist/";
-        this.app.use(express_1.static(distDir));
-        
+        this.app.use(express_1.default.static(distDir));
+
         this.app.use(cors());
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: false }));
