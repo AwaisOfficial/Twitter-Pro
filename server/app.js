@@ -18,6 +18,7 @@ class App {
         this.routePrv.routes(this.app);
     }
     config() {
+        this.app.use(express.static(__dirname + '/dist'));
         this.app.use(cors());
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: false }));

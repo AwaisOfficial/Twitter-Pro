@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_1 = require("../controllers/auth");
+const path = require('path');
 const upload_1 = __importDefault(require("../utils/upload"));
 class Routes {
     constructor() {
@@ -33,6 +34,10 @@ class Routes {
         app.route('/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
         app.post('/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
             res.json({ success: true, filename: req.file.filename });
+        });
+
+        this.app.get('/*', function(req, res) {
+            res.sendFile(path.join(__dirname + '/dist/index.html'));
         });
     }
 }
