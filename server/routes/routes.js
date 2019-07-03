@@ -35,10 +35,7 @@ class Routes {
         app.post('/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
             res.json({ success: true, filename: req.file.filename });
         });
-
-        this.app.get('/*', function(req, res) {
-            res.sendFile(path.join(__dirname + '/dist/index.html'));
-        });
+        
     }
 }
 exports.Routes = Routes;

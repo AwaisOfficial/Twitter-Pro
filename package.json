@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "run-server": "nodemon server.js",
     "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "ng build --output-path dist",
-    "deploy": "git push origin master && git push heroku master"
+    "deploy": "git push origin master && git push heroku master",
+    "run-server": "nodemon server.js"
   },
   "private": true,
   "engines": {
@@ -18,11 +18,9 @@
     "npm": "6.4.1"
   },
   "dependencies": {
-    "@angular/cli": "~7.2.1",
-    
-    "@angular/compiler-cli": "~7.2.0",
-   
     "@angular/animations": "~7.2.0",
+    "@angular/cli": "~7.2.1",
+    "@angular/compiler-cli": "~7.2.0",
     "@angular/common": "~7.2.0",
     "@angular/compiler": "~7.2.0",
     "@angular/core": "~7.2.0",
