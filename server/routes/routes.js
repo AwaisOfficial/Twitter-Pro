@@ -37,7 +37,7 @@ class Routes {
         });
 
         app.get('/*', function(req,res) {    
-            res.sendFile(path.join(__dirname+'/dist/twitter-pro/index.html'));
+            res.sendFile(path.join(__dirname+'/dist/index.html'));
         });
         
     }
