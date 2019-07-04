@@ -19,7 +19,7 @@ class Routes {
         //     });
         // });
         /* Registration */
-        app.route('/register').post((req, res, next) => {
+        app.route('/api/register').post((req, res, next) => {
             // // middleware
             // console.log(`Request from: ${req.originalUrl}`);
             // console.log(`Request type: ${req.method}`);            
@@ -30,16 +30,13 @@ class Routes {
             // }                     
             next();
         }, this.authController.validate('register'), this.authController.register);
-        app.route('/login').post(this.authController.validate('login'), this.authController.login);
-        app.route('/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
-        app.route('/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
-        app.post('/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
+        app.route('/api/login').post(this.authController.validate('login'), this.authController.login);
+        app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
+        app.route('/api/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
+        app.post('/api/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
             res.json({ success: true, filename: req.file.filename });
         });
 
-        app.get('/*' , (req, res) => {
-            res.sendFile(path.join('../../dist/TwitterPro/index.html'));
-        });
         
     }
 }

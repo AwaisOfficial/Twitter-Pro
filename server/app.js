@@ -19,9 +19,6 @@ class App {
         this.routePrv.routes(this.app);
     }
     config() {
-        var distDir = "../dist/TwitterPro/";
-
-        this.app.use(express_1.default.static(distDir));
         
         this.app.use(cors());
         this.app.use(body_parser_1.default.json());
