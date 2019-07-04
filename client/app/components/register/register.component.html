@@ -22,53 +22,52 @@
                                     </div>
                                     <form class="login-form" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
 
-                                        <div class="alert" [ngClass]="{'alert-success': response.success , 'alert-danger' : !response.success }" role="alert" *ngIf="response">
-                                          <p class="text-center">{{ response?.message }} </p>
-                                        </div>
+                                      <app-alert *ngIf="response" [response]="response"></app-alert>
 
                                       <div class="custom-form">
 
                                           <div class="form-group">
                                             <label for="first_name"> First Name</label>
                                             <input type="text" class="form-control" formControlName="first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': f.first_name.touched && f.first_name.errors }" >
-                                            <div *ngIf="f.first_name.errors" class="invalid-feedback">
-                                              <div *ngIf="f.first_name.errors.required">First name is required</div>
+                                            <div class="invalid-feedback">
+                                              <div *ngIf="f.first_name.hasError('required')">First name is required</div>
                                             </div> 
                                           </div>
 
                                           <div class="form-group">
                                             <label for="last_name"> Last Name</label>
                                             <input type="text" class="form-control" formControlName="last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': f.last_name.touched && f.last_name.errors }" >
-                                            <div *ngIf="f.last_name.errors" class="invalid-feedback">
-                                              <div *ngIf="f.last_name.errors.required">Last name is required</div>
+                                            <div class="invalid-feedback">
+                                              <div *ngIf="f.last_name.hasError('required')">Last name is required</div>
                                             </div> 
                                           </div>
 
                                           <div class="form-group">
                                             <label for="user_name"> Username</label>
-                                            <input type="text" class="form-control" formControlName="user_name" class="form-control" placeholder="Enter username" [ngClass]="{ 'is-invalid': f.user_name.touched && f.user_name.errors }" >
-                                            <div *ngIf="f.user_name.errors || !response?.success" class="invalid-feedback">
+                                            <input type="text" class="form-control" formControlName="user_name" class="form-control" placeholder="Enter username" [ngClass]="{ 'is-invalid': (f.user_name.touched && f.user_name.errors) || isErrorField('Username') }" >
+                                            <div class="invalid-feedback">
                                               <div *ngIf="f.user_name.hasError('required')">Username is required</div>
-                                              <div *ngIf="response?.message?.indexOf('Username') > -1">{{ response?.message }}</div>
+                                              <div *ngIf="isErrorField('Username')">{{ response?.message }}</div>
                                             </div> 
                                           </div>
 
                                           <div class="form-group">
                                             <label for="user_name">Email</label>
-                                            <input type="email" class="form-control" formControlName="email" class="form-control" placeholder="Enter email" [ngClass]="{ 'is-invalid': f.email.touched && f.email.errors }" >
-                                            <div *ngIf="f.email.errors || !response?.success" class="invalid-feedback">
-                                              <div *ngIf="f.email.hasError('required')">Email is required</div>
-                                              <div *ngIf="f.email.hasError('pattern')">Email is invalid</div>
+                                            <input type="email" class="form-control" formControlName="email" class="form-control" placeholder="Enter email" [ngClass]="{ 'is-invalid': (f.email.touched && f.email.errors) || isErrorField('Email') }" >
+                                              <div class="invalid-feedback">
+                                                <div *ngIf="f.email.hasError('required')">Email is required</div>
+                                                <div *ngIf="f.email.hasError('pattern')">Email is invalid</div>
+                                                <div *ngIf="isErrorField('Email')">{{ response?.message }}</div>
                                               </div> 
                                             </div>
-                                            <div *ngIf="response?.message.indexOf('Email') > -1" class="invalid-feedback">{{ response?.message }}</div>
+                                            
 
                                           <div class="form-group">
                                             <label>Password</label>
                                             <input type="password" formControlName="password" placeholder="Enter password" class="form-control" [ngClass]="{ 'is-invalid': f.password.touched && f.password.errors }" />
                                             
-                                            <div *ngIf="f.password.invalid && (f.password.dirty || f.password.touched)" class="invalid-feedback">
-                                              <div *ngIf="f.password.errors.required">Password is required</div>
+                                            <div class="invalid-feedback">
+                                              <div *ngIf="f.password.hasError('required')">Password is required</div>
                                               <div *ngIf="f.password.hasError('hasNumber')">Must have at least 1 number!</div>
                                               <div *ngIf="f.password.hasError('hasCapitalCase')">Must have at least 1 UpperCase letter!</div>
                                               <div *ngIf="f.password.hasError('hasLowerCase')">Must have at least 1 LowerCase letter!</div>
@@ -78,8 +77,8 @@
                                           <div class="form-group">
                                             <label>Confirm Password</label>
                                             <input type="password" formControlName="confirm_password" placeholder="Confirm password" class="form-control" [ngClass]="{ 'is-invalid': f.confirm_password.touched && f.confirm_password.errors }" />
-                                            <div *ngIf="f.confirm_password.errors" class="invalid-feedback">
-                                              <div *ngIf="f.confirm_password.errors.required">Confirm Password is required</div>
+                                            <div class="invalid-feedback">
+                                              <div *ngIf="f.confirm_password.hasError('required')">Confirm Password is required</div>
                                               <div *ngIf="f.confirm_password.hasError('NoPassswordMatch')">Password doesn't match</div>
                                             </div>
                                           </div>

@@ -12,8 +12,8 @@ export class LoginComponent implements OnInit {
 
   loginForm : FormGroup;
   submitted : boolean;
-  returnUrl : string;
-  
+  returnUrl : string; 
+  response: any; 
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
               private authService: AuthService) { }
 
   ngOnInit() {
+
     this.submitted = false;
 
     this.loginForm = this.formBuilder.group({
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
       password : ['' , Validators.required]
     });
 
+    this.loginForm.valueChanges.subscribe(result => {this.response = undefined; });
     this.authService.logOut();
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
@@ -41,7 +43,8 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.authService.login(this.loginForm.value).subscribe(user => {
-      //console.log('User', user);
+      console.log('User', user);
+      this.response = user;
       if(user) 
         this.router.navigate([this.returnUrl]);
     },

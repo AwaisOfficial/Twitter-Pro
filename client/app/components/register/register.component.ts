@@ -48,6 +48,8 @@ export class RegisterComponent implements OnInit {
     avatar : [''],
     role : 'user'
     } , { validators : CustomValidator.passwordValidator});
+
+    this.signUpForm.valueChanges.subscribe(result => {this.response = undefined; });
   }
 
   get f() { return this.signUpForm.controls; }
@@ -73,32 +75,30 @@ export class RegisterComponent implements OnInit {
     const fileUpload = this.operationsService.postOperations('profile-image' , this.formData);    
     const register = fileUpload.pipe(
       mergeMap((response : any) => {
-        console.log('Response', response);
+        //console.log('Response', response);
         if(response.success) {
           this.signUpForm.get('avatar').setValue(response.filename);
-          console.log('Updated Form', this.signUpForm.value);
           return this.operationsService.postOperations('register',this.signUpForm.value);
         }
         else
           return of(null);
     }));
-
     
     register.subscribe(response => {
       this.response = {};
       this.response = response;
-      console.log('response' , this.response);
       if(response.success){
         setTimeout(() => {
-          window.scroll(0 , 0);
-          this.router.navigateByUrl('/login');
+          window.scrollTo(0 , 0);
+          this.router.navigateByUrl('/');
         }, 5000);        
-      }
-      else {
-        console.log(this.response.message.indexOf('Email') > -1);
       }
     },
     error => console.error("Registration response", error));      
   }  
 
+
+  isErrorField(field: string) {
+    return this.response && !this.response.success && this.response.message.indexOf(field) > -1;
+  }
 }
