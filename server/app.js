@@ -9,6 +9,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const config_1 = require("./config/config");
 const routes_1 = require("./routes/routes");
 const cors = require("cors");
+
 class App {
     constructor() {
         this.routePrv = new routes_1.Routes();
@@ -18,7 +19,8 @@ class App {
         this.routePrv.routes(this.app);
     }
     config() {
-        var distDir = __dirname + "/dist/TwitterPro/";
+        var distDir = "../dist/TwitterPro/";
+
         this.app.use(express_1.default.static(distDir));
         
         this.app.use(cors());

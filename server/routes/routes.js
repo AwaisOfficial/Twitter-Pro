@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const auth_1 = require("../controllers/auth");
 const path = require('path');
 const upload_1 = __importDefault(require("../utils/upload"));
+
 class Routes {
     constructor() {
         this.authController = new auth_1.AuthController();
@@ -37,7 +38,7 @@ class Routes {
         });
 
         app.get('/*' , (req, res) => {
-            res.sendFile(path.join(__dirname  + '/dist/TwitterPro/index.html'));
+            res.sendFile(path.join(__dirname  + '../../dist/TwitterPro/index.html'));
         });
         
     }
