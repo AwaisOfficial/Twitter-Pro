@@ -24,8 +24,8 @@ const config_1 = require("./server/config/config");
 //     console.log('Express server listening on port '+ PORT);
 // });
 
-app_1.use(express_1.default.static(__dirname + '/dist/TwitterPro/'));
-app_1.get('/*' , (req , res) => {
+app_1.default.use(express_1.default.static(__dirname + '/dist/TwitterPro/'));
+app_1.default.get('/*' , (req , res) => {
   res.sendFile(path.join(__dirname + '/dist/TwitterPro/index.html'));
 });
 
