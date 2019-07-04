@@ -88,8 +88,12 @@ export class RegisterComponent implements OnInit {
       this.response = {};
       this.response = response;
       console.log('response' , this.response);
-      if(response.success)
-        this.router.navigateByUrl('/login');
+      if(response.success){
+        setTimeout(() => {
+          window.scroll(0 , 0);
+          this.router.navigateByUrl('/login');
+        }, 5000);        
+      }
       else {
         console.log(this.response.message.indexOf('Email') > -1);
       }
