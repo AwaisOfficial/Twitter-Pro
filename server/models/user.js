@@ -14,6 +14,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const config_1 = require("../config/config");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+
 exports.userSchema = new mongoose_1.Schema({
     first_name: { type: String },
     last_name: { type: String },
@@ -23,6 +24,7 @@ exports.userSchema = new mongoose_1.Schema({
     created_at: { type: Date, default: new Date() },
     password: { type: String },
     avatar: { type: String, required: true },
+    isVerified: { type: Boolean , default : false },
     salt: { type: String, default: config_1.JWTSECRET },
     active: { type: Number, default: 0 },
     suspended: { type: Number, default: 0 },

@@ -87,9 +87,11 @@ export class RegisterComponent implements OnInit {
     register.subscribe(response => {
       this.response = {};
       this.response = response;
+      window.scrollTo(0 , 0);
+      this.signUpForm.reset();
+
       if(response.success){
         setTimeout(() => {
-          window.scrollTo(0 , 0);
           this.router.navigateByUrl('/');
         }, 5000);        
       }

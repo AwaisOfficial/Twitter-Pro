@@ -66,7 +66,7 @@ class AuthController {
                     PasswordReset.create(entry).then((response) => {
                         //this.send_Mail(res, document, token);
                         console.log(token);
-                        this.sendMail(res, document, token).then(mailResponse => {
+                        this.sendMail(res, { document: document, token : token }).then(mailResponse => {
                             console.log(mailResponse);
                             return res.json({ success: true, message: config_1.PASSWORD_RESET_MAIL_SENT });
                         })
@@ -106,7 +106,6 @@ class AuthController {
                             this.sendError(res);
                             return;
                         }
-                        ;
                         res.status(200).json({ success: true, message: 'Password updated.' });
                     }).catch(error => this.sendError(res, error.message ? error.message : config_1.ERROR_MSG));
                 }).catch(error => this.sendError(res, error.message ? error.message : config_1.ERROR_MSG));
@@ -158,12 +157,35 @@ class AuthController {
                 res.status(200).json({ success: false, message: err.errmsg || '' });
             }
             else {
-                const jwt = user.schema.methods.generateJwt(response);
-                res.status(200).json({ success: true , message : 'Account created successfully. Welcome to Twitter Pro.' , token: jwt});
+                const token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
+                // Save the verification token
+                token.save( (err) => {
+                    if (err) { return res.status(500).send({ success: false, msg: err.message }); }
+                    // Send the email
+                    let transporter = nodemailer.createTransport({
+                        service: "Gmail",
+                        auth: {
+                            user: 'im.awais.official@gmail.com',
+                            pass: '1$Pakistan'
+                        }
+                    });
+                    let mailOptions = { from: 'no-reply@twitterpro.com', to: user.email, subject: 'Account Verification', 
+                    text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
+                    transporter.sendMail(mailOptions, (err) => {
+                        if (err) { return res.status(500).send({ success: false, msg: err.message }); }
+                        res.status(200).send({success: true, message : 'A verification email has been sent to ' + user.email + '.' });
+                    });
+                });
+                
+                //const jwt = user.schema.methods.generateJwt(response);
+                //res.status(200).json({ success: true , message : 'Account created successfully. Welcome to Twitter Pro.' , token: jwt});
             }
         });
     }
-    sendMail(res, user, token) {
+    sendMail(res, data) {
+        const user  = data.document;
+        const token = data.token;
+
         return __awaiter(this, void 0, void 0, function* () {
             let transporter = nodemailer.createTransport({
                 service: "Gmail",
