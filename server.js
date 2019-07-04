@@ -11,6 +11,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./server/app"));
+const express = __importStar(require("express"));
+const path = __importStar(require("path"));
 const http = __importStar(require("http"));
 const config_1 = require("./server/config/config");
 
