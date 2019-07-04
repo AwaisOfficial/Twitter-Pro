@@ -11,7 +11,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./server/app"));
-const express = __importStar(require("express"));
+const express_1 = __importDefault(require("express"));
 const path = __importStar(require("path"));
 const http = __importStar(require("http"));
 const config_1 = require("./server/config/config");
@@ -24,7 +24,7 @@ const config_1 = require("./server/config/config");
 //     console.log('Express server listening on port '+ PORT);
 // });
 
-app_1.use(express.static(__dirname + '/dist/TwitterPro/'));
+app_1.use(express_1.default.static(__dirname + '/dist/TwitterPro/'));
 app_1.get('/*' , (req , res) => {
   res.sendFile(path.join(__dirname + '/dist/TwitterPro/index.html'));
 });
