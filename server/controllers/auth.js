@@ -27,7 +27,9 @@ const config_1 = require("../config/config");
 const bson_1 = require("bson");
 let User = mongoose.model('User', models_1.userSchema);
 let PasswordReset = mongoose.model('PasswordReset', models_1.passwordResetSchema);
+
 class AuthController {
+
     constructor() {
         this.login = (req, res) => {
             this.findUser(req).then(document => {
@@ -157,7 +159,7 @@ class AuthController {
             }
             else {
                 const jwt = user.schema.methods.generateJwt(response);
-                res.status(200).json({ token: jwt , message : 'Account created successfully. Welcome to Twitter Pro.'});
+                res.status(200).json({ success: true , message : 'Account created successfully. Welcome to Twitter Pro.' , token: jwt});
             }
         });
     }

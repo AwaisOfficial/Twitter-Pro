@@ -22,7 +22,7 @@
                                     </div>
                                     <form class="login-form" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
 
-                                        <div class="alert" [ngClass]="{'alert-success': response?.success , 'alert-danger' : !response?.success}" role="alert" *ngIf="response">
+                                        <div class="alert" [ngClass]="{'alert-success': response.success , 'alert-danger' : !response.success }" role="alert" *ngIf="response">
                                           <p class="text-center">{{ response?.message }} </p>
                                         </div>
 
