@@ -32,17 +32,3 @@ app_1.default.get('/*' , (req , res) => {
 http.createServer(app_1.default).listen(process.env.PORT || config_1.PORT, () => {
     console.log('Express server listening on port ' + config_1.PORT);
 });
-
-
-// var express = require('express');
-// var path =  require('path');
-
-// var app = express();
-
-// app.use(express.static(__dirname + '/dist/TwitterPro/'));
-
-// app.listen(process.env.PORT || 3000 ,() => console.log("Express Server listening."));
-
-// app.get('/*' , (req , res) => {
-//     res.sendFile(path.join(__dirname + '/dist/TwitterPro/index.html'));
-// });
