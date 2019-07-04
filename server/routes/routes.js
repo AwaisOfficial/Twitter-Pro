@@ -11,12 +11,12 @@ class Routes {
         this.authController = new auth_1.AuthController();
     }
     routes(app) {
-        app.route('/')
-            .get((req, res) => {
-            res.status(200).send({
-                message: 'GET request successfulll!!!!'
-            });
-        });
+        // app.route('/')
+        //     .get((req, res) => {
+        //     res.status(200).send({
+        //         message: 'GET request successfulll!!!!'
+        //     });
+        // });
         /* Registration */
         app.route('/register').post((req, res, next) => {
             // // middleware
@@ -34,6 +34,10 @@ class Routes {
         app.route('/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
         app.post('/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
             res.json({ success: true, filename: req.file.filename });
+        });
+
+        app.get('/*' , (req, res) => {
+            res.sendFile(path.join(__dirname  + '/dist/index.html'));
         });
         
     }
