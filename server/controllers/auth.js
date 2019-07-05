@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -20,16 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
 const crypto_1 = __importDefault(require("crypto"));
-const nodemailer = require("nodemailer");
 const express_validator_1 = require("express-validator");
 const models_1 = require("../models/");
 const config_1 = require("../config/config");
 const bson_1 = require("bson");
+const nodemailer_1 = require("../utils/nodemailer");
 let User = mongoose.model('User', models_1.userSchema);
-let PasswordReset = mongoose.model('PasswordReset', models_1.passwordResetSchema);
-
+let Token = mongoose.model('Token', models_1.tokenSchema);
 class AuthController {
-
     constructor() {
         this.login = (req, res) => {
             this.findUser(req).then(document => {
@@ -40,8 +30,16 @@ class AuthController {
                 let user = new User();
                 let isCompared = user.schema.methods.comparePassword(req.body.password, document);
                 if (isCompared) {
-                    const jwt = user.schema.methods.generateJwt(document);
-                    res.status(200).json({ success: true, token: jwt });
+                    if (!document.isVerified)
+                        res.status(200).json({ success: false, message: 'Please verify your email address.' });
+                    else if (document.isSuspended)
+                        res.status(200).json({ success: false, message: 'We are sorry. your account has been suspended.' });
+                    else if (document.isDefaulted)
+                        res.status(200).json({ success: false, message: 'We are sorry. your account has been blocked.' });
+                    else {
+                        const jwt = user.schema.methods.generateJwt(document);
+                        res.status(200).json({ success: true, token: jwt });
+                    }
                 }
                 else
                     res.status(200).json({ success: false, message: config_1.INVALID_PASSWORD });
@@ -52,40 +50,42 @@ class AuthController {
         };
         this.forgotPassword = (req, res) => {
             this.findUser(req).then(document => {
-                console.log('Document ', document);
                 if (!document) {
                     res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
                     return;
                 }
-                PasswordReset.findOne({ userId: document._id }, (err, resetPassword) => {
-                    console.log('Password Reset', resetPassword);
-                    if (resetPassword)
-                        PasswordReset.deleteOne({ userId: document._id });
-                    const token = crypto_1.default.randomBytes(32).toString('hex');
-                    const entry = { userId: document._id, token: token, expire: new Date().getTime() + (3600 * 1000), status: 0 };
-                    PasswordReset.create(entry).then((response) => {
-                        //this.send_Mail(res, document, token);
-                        console.log(token);
-                        this.sendMail(res, { document: document, token : token }).then(mailResponse => {
-                            console.log(mailResponse);
+                /* Finding Already Saved Token against this user and Deleting them From DB
+                  and then Saving the verification token
+                */
+                Token.find({ _userId: new bson_1.ObjectId(document._id) }, (err, resetPassword) => {
+                    const token = new Token({ _userId: document._id, token: crypto_1.default.randomBytes(16).toString('hex') });
+                    Token.create(token).then((response) => {
+                        let payload = {
+                            to: document.email,
+                            subject: 'Password Reset',
+                            content: '<h4><b>Twitter Pro:</b></h4>' +
+                                '<p>To reset your password, Go to the following url and follow the instructions.:</p>' +
+                                '<a href=' + config_1.CLIENT_URL + 'reset-password/' + response.get('token') + '>Click Here</a>' +
+                                '<br><br>' +
+                                '<p>--Twitter Pro Team --</p>'
+                        };
+                        nodemailer_1.NodeMailer.sendMail(payload).then(result => {
                             return res.json({ success: true, message: config_1.PASSWORD_RESET_MAIL_SENT });
-                        })
-                            .catch(error => {
-                            console.error(error);
+                        }).catch(error => {
                             return res.json({ success: true, message: config_1.PASSWORD_RESET_MAIL_SENT_ERROR });
                         });
                     }).catch(error => {
-                        console.error("Password Reset Creation Error", error);
+                        //console.error("Password Reset Creation Error", error);
                         res.status(200).json({ success: false, message: config_1.ERROR_MSG });
                     });
-                });
+                }).remove().exec();
             }).catch(error => {
                 console.error("Error", error);
-                res.status(500).json(error);
+                res.status(200).json(error);
             });
         };
         this.resetPassword = (req, res) => {
-            PasswordReset.findOne({ userId: req.body.userId }, (err, result) => {
+            Token.findOne({ token: req.body.token }, (err, result) => {
                 if (!result) {
                     this.sendError(res);
                     return;
@@ -100,15 +100,41 @@ class AuthController {
                     return;
                 }
                 const hash = new User().schema.methods.createHash(req.body.password);
-                User.updateOne({ _id: new bson_1.ObjectId(req.body.userId) }, { $set: { password: hash } }, (err, response) => {
-                    PasswordReset.deleteOne({ userId: req.body.userId }).then(result => {
+                User.updateOne({ _id: new bson_1.ObjectId(result.userId) }, { $set: { password: hash } }, (err, response) => {
+                    Token.deleteOne({ userId: result.userId, token: req.body.token }).then(result => {
                         if (!result) {
                             this.sendError(res);
                             return;
                         }
+                        ;
                         res.status(200).json({ success: true, message: 'Password updated.' });
                     }).catch(error => this.sendError(res, error.message ? error.message : config_1.ERROR_MSG));
                 }).catch(error => this.sendError(res, error.message ? error.message : config_1.ERROR_MSG));
+            });
+        };
+        this.verifyEmail = (req, res) => {
+            req.params.token = req.params.token.replace(/['"]+/g, '');
+            console.log('Verify Email', req.params.token);
+            // Find a matching token
+            Token.findOne({ token: req.params.token }, (err, token) => {
+                console.log('Result', token);
+                if (token.token != req.params.token)
+                    return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token my have expired.' });
+                // If we found a token, find a matching user
+                User.findOne({ _id: token._userId }, (err, user) => {
+                    if (user._id.toString() != token._userId.toString())
+                        return res.status(400).send({ success: false, msg: 'We were unable to find a user for this token.' });
+                    if (user.isVerified)
+                        return res.status(400).send({ type: 'already-verified', msg: 'This user has already been verified.' });
+                    // Verify and save the user
+                    user.isVerified = true;
+                    user.save((err) => {
+                        if (err) {
+                            return res.status(500).send({ msg: err.message });
+                        }
+                        res.redirect(config_1.CLIENT_URL + '/login?isVerified=true');
+                    });
+                });
             });
         };
         this.validate = (method) => {
@@ -119,6 +145,7 @@ class AuthController {
                         express_validator_1.body('email', 'Email is required.').exists(),
                         express_validator_1.body('email', 'Email is invalid.').isEmail(),
                         express_validator_1.body('password', ' Password is required.').exists(),
+                        express_validator_1.body('role', 'Role is required.').exists()
                     ];
                 case 'login':
                     return [
@@ -147,72 +174,43 @@ class AuthController {
         }
         let user = new User(req.body);
         user.password = user.schema.methods.createHash(req.body.password);
-        //console.log('User', user);
         user.save((err, response) => {
-            if (err){
-                if(err.errmsg && err.errmsg.indexOf('email') > -1)
-                 err.errmsg = 'Email already exists';
-                else if(err.errmsg && err.errmsg.indexOf('user_name') > -1)
-                 err.errmsg = 'Username already exists.';
+            if (err) {
+                if (err.errmsg && err.errmsg.indexOf('email') > -1)
+                    err.errmsg = 'Email already exists';
+                else if (err.errmsg && err.errmsg.indexOf('user_name') > -1)
+                    err.errmsg = 'Username already exists.';
                 res.status(200).json({ success: false, message: err.errmsg || '' });
             }
             else {
-                const token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
+                let token = new Token({ _userId: user._id, token: crypto_1.default.randomBytes(16).toString('hex') });
                 // Save the verification token
-                token.save( (err) => {
-                    if (err) { return res.status(500).send({ success: false, msg: err.message }); }
+                token.save((err, _token) => {
+                    if (err) {
+                        return res.status(500).send({ success: false, msg: err.message });
+                    }
                     // Send the email
-                    let transporter = nodemailer.createTransport({
-                        service: "Gmail",
-                        auth: {
-                            user: 'im.awais.official@gmail.com',
-                            pass: '1$Pakistan'
+                    const url = 'http://' + req.headers.host + '/api/verifyEmail/' + _token.token;
+                    const content = '<h4><b>Twitter Pro:</b></h4>' +
+                        '<p>To verify your email , Please click the below link:</p>' +
+                        '<a href=' + url + '">Click Here</a>' +
+                        '<br><br>' +
+                        '<p>-- Team Twitter Pro --</p>';
+                    let payload = {
+                        to: user.email,
+                        subject: 'Account Verification',
+                        content: content
+                    };
+                    nodemailer_1.NodeMailer.sendMail(payload).then(response => {
+                        if (err) {
+                            return res.status(200).send({ success: false, msg: 'Unable to send verification email.' });
                         }
-                    });
-                    let mailOptions = { from: 'no-reply@twitterpro.com', to: user.email, subject: 'Account Verification', 
-                    text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
-                    transporter.sendMail(mailOptions, (err) => {
-                        if (err) { return res.status(500).send({ success: false, msg: err.message }); }
-                        res.status(200).send({success: true, message : 'A verification email has been sent to ' + user.email + '.' });
+                        res.status(200).send({ success: true, message: 'Account created successfully. Please verify your account. We have sent you an email to this account ' + user.email + ' .' });
+                    }).catch(error => {
+                        return res.status(200).send({ success: false, msg: 'Unable to send verification email.' });
                     });
                 });
-                
-                //const jwt = user.schema.methods.generateJwt(response);
-                //res.status(200).json({ success: true , message : 'Account created successfully. Welcome to Twitter Pro.' , token: jwt});
             }
-        });
-    }
-    sendMail(res, data) {
-        const user  = data.document;
-        const token = data.token;
-
-        return __awaiter(this, void 0, void 0, function* () {
-            let transporter = nodemailer.createTransport({
-                service: "Gmail",
-                auth: {
-                    user: 'im.awais.official@gmail.com',
-                    pass: '1$Pakistan'
-                }
-            });
-            transporter.verify((err, success) => {
-                if (err)
-                    console.error(err);
-                console.log('Your config is correct');
-            });
-            // send mail with defined transport object
-            let info = yield transporter.sendMail({
-                from: '"Twitter Pro 👻" im.awais.official@gmail.com',
-                to: user.email,
-                subject: 'Password Reset',
-                html: '<h4><b>Twitter Pro:</b></h4>' +
-                    '<p>To reset your password, Go to the following url and follow the instructions.:</p>' +
-                    '<a href=' + config_1.CLIENT_URL + 'reset/' + user.id + '/' + token + '">Click Here</a>' +
-                    '<br><br>' +
-                    '<p>--Twitter Pro Team --</p>'
-            });
-            console.log("Message sent: %s", info.messageId);
-            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-            return info;
         });
     }
     findUser(req) {

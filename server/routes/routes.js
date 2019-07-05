@@ -4,20 +4,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_1 = require("../controllers/auth");
-const path = require('path');
 const upload_1 = __importDefault(require("../utils/upload"));
-
 class Routes {
     constructor() {
         this.authController = new auth_1.AuthController();
     }
     routes(app) {
         // app.route('/')
-        //     .get((req, res) => {
+        // .get((req: Request, res: Response) => {            
         //     res.status(200).send({
         //         message: 'GET request successfulll!!!!'
         //     });
-        // });
+        // })
         /* Registration */
         app.route('/api/register').post((req, res, next) => {
             // // middleware
@@ -30,14 +28,13 @@ class Routes {
             // }                     
             next();
         }, this.authController.validate('register'), this.authController.register);
+        app.route('/api/verifyEmail/:token').get(this.authController.verifyEmail);
         app.route('/api/login').post(this.authController.validate('login'), this.authController.login);
         app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
         app.route('/api/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
         app.post('/api/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
             res.json({ success: true, filename: req.file.filename });
         });
-
-        
     }
 }
 exports.Routes = Routes;

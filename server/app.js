@@ -9,7 +9,6 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const config_1 = require("./config/config");
 const routes_1 = require("./routes/routes");
 const cors = require("cors");
-
 class App {
     constructor() {
         this.routePrv = new routes_1.Routes();
@@ -19,13 +18,12 @@ class App {
         this.routePrv.routes(this.app);
     }
     config() {
-        
         this.app.use(cors());
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: false }));
     }
     mongoSetup() {
-        mongoose_1.default.connect(process.env.MONGODB_URI || config_1.DATABASE_URL, { useCreateIndex: true, useNewUrlParser: true });
+        mongoose_1.default.connect(config_1.DATABASE_URL, { useCreateIndex: true, useNewUrlParser: true });
         const connection = mongoose_1.default.connection;
         connection.once('open', () => {
             console.log('MongoDB connection established successfullly.');

@@ -3,9 +3,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OperationsService } from 'client/app/services';
 import { EMAIL_PATTERN } from 'client/app/constants/constants';
 import { CustomValidator } from 'client/app/helpers/custom-validator';
-import { Router } from '@angular/router';
 import {  mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { AngularButtonLoaderService } from 'angular-button-loader';
+
 
 @Component({
   selector: 'app-register',
@@ -23,10 +24,11 @@ export class RegisterComponent implements OnInit {
 
 
   constructor(private formBuilder: FormBuilder,
-              private router: Router,
+              private btnLoaderService: AngularButtonLoaderService,
               private operationsService: OperationsService) { }
 
   ngOnInit() {
+    
     this.submitted = this.isRegistered = this.isImageSelected = false;
 
     this.signUpForm = this.formBuilder.group({
@@ -39,14 +41,12 @@ export class RegisterComponent implements OnInit {
                   CustomValidator.patternValidator(/\d/, { hasNumber: true }) ,
                   CustomValidator.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
                   CustomValidator.patternValidator(/[a-z]/, { hasLowerCase: true }),
-                  // 6. Has a minimum length of 8 characters
                   Validators.minLength(5)
-                      
-                  ]) ],
+                ]) ],
     confirm_password: ['', Validators.compose([Validators.required])] ,
     profile_image : ['', Validators.required],
     avatar : [''],
-    role : 'user'
+    role : ['user']
     } , { validators : CustomValidator.passwordValidator});
 
     this.signUpForm.valueChanges.subscribe(result => {this.response = undefined; });
@@ -65,19 +65,19 @@ export class RegisterComponent implements OnInit {
   }
   onSubmit() {
     this.submitted = true;
-    if(this.signUpForm.invalid) {
+    if(this.signUpForm.invalid) 
       return;
-    }
-
     else if(!this.isImageSelected)
       return;
-      
+     
+    this.btnLoaderService.displayLoader();  
     const fileUpload = this.operationsService.postOperations('profile-image' , this.formData);    
     const register = fileUpload.pipe(
       mergeMap((response : any) => {
         //console.log('Response', response);
         if(response.success) {
           this.signUpForm.get('avatar').setValue(response.filename);
+          this.signUpForm.get('role').setValue('user');
           return this.operationsService.postOperations('register',this.signUpForm.value);
         }
         else
@@ -85,18 +85,22 @@ export class RegisterComponent implements OnInit {
     }));
     
     register.subscribe(response => {
-      this.response = {};
+      this.btnLoaderService.hideLoader();
       this.response = response;
       window.scrollTo(0 , 0);
-      this.signUpForm.reset();
 
-      if(response.success){
+      if(response.success) {
+       
         setTimeout(() => {
-          this.router.navigateByUrl('/');
+          //this.router.navigateByUrl('/');
+          this.signUpForm.reset();
         }, 5000);        
       }
     },
-    error => console.error("Registration response", error));      
+    error => {
+      console.error("Registration response", error);
+      this.btnLoaderService.hideLoader();
+    });      
   }  
 
 
