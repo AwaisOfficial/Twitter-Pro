@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CLIENT_URL = 'http://localhost:4200/';
+exports.CLIENT_URL = 'https://floating-mountain-61938.herokuapp.com/';
 exports.DATABASE_URL = process.env.DATABASE || 'mongodb+srv://Awais:awais31@twitterclone-cfqlw.mongodb.net/TwitterPro?retryWrites=true&w=majority';
 exports.JWTSECRET = '$QET_UWN';
 exports.PORT = 3000;
