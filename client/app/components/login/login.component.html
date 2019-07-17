@@ -16,7 +16,9 @@
                                       <p>Twitter Pro dolor sit amet</p>
                                   </div>
                                   <div class="twitter-button text-center">
-                                    <button class="btn btn-twitter" disabled><i class="fab fa-twitter"></i>Sign Up / Login with Twitter</button>
+                                    <!-- <button class="btn btn-twitter" buttonLoader [loaderColor]="'white'" (click)="twitterLogin()"><span></span> <i class="fab fa-twitter"></i>Sign Up / Login with Twitter</button> -->
+                                    <!-- http://localhost:4200/login?oauth_token=KzWU9gAAAAAA_Q-oAAABa_j014o&oauth_verifier=y5HV41FKMh7cqYXGNCJDXNL2hG9habAg -->
+                                    <a href='http://localhost:3000/api/twitter-login'>Log In with Twitter</a>
                                   </div>
                                   <div class="or-seperator">
                                     <span>OR</span>
@@ -58,22 +60,20 @@
                                       Don't have an account yet?
                                       <a routerLink="/register">Sign Up</a>
                                   </div>
-
-                                  <!-- <div class="social-icon mb-4 text-center">
+                                  <div class="social-icon mb-4 text-center">
                                     <ul>
                                       <li><a href="#"><i class="fab fa-instagram"></i></a></li>
                                       <li><a href="#"><i class="fab fa-twitter"></i></a></li>
                                       <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
                                     </ul>
-                                  </div> -->
-
+                                  </div>
                                   <div class="login-footer text-center">
                                     <ul class="mb-4">
-                                      <li><a href="#">About</a></li>
+                                      <li><a routerLink="/about">About</a></li>
                                       <li><a href="#">FAQ’s</a></li>
                                       <li><a href="#">Contact</a></li>
-                                      <li><a href="#">Terms</a></li>
-                                      <li><a href="#">Privacy</a></li>
+                                      <li><a routerLink="/terms-of-service">Terms</a></li>
+                                      <li><a routerLink="/privacy-policy">Privacy</a></li>
                                     </ul>
                                       <p>© 2019 Only VIPs. All rights reserved.</p>
                                   </div>

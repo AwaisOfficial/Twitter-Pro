@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OperationsService } from 'client/app/services';
 import { EMAIL_PATTERN } from 'client/app/constants/constants';
 import { CustomValidator } from 'client/app/helpers/custom-validator';
+import { Router } from '@angular/router';
 import {  mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AngularButtonLoaderService } from 'angular-button-loader';

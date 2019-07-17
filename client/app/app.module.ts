@@ -20,6 +20,9 @@ import { SlideShowComponent } from './components/shared/slide-show/slide-show.co
 import { HeaderComponent } from './components/shared/header/header.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
 import { AlertComponent } from './components/shared/alert/alert.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component';
+import { AboutComponent } from './components/about/about.component';
 
 
 @NgModule({
@@ -33,7 +36,10 @@ import { AlertComponent } from './components/shared/alert/alert.component';
     SlideShowComponent,
     HeaderComponent,
     FooterComponent,
-    AlertComponent
+    AlertComponent,
+    PrivacyPolicyComponent,
+    TermsOfServiceComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

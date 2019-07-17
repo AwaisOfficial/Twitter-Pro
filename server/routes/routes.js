@@ -3,19 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const auth_1 = require("../controllers/auth");
+const controllers_1 = require("../controllers");
 const upload_1 = __importDefault(require("../utils/upload"));
+const config_1 = require("../config/config");
+const passport = require('passport');
 class Routes {
     constructor() {
-        this.authController = new auth_1.AuthController();
+        this.authController = new controllers_1.AuthController();
     }
     routes(app) {
-        // app.route('/')
-        // .get((req: Request, res: Response) => {            
-        //     res.status(200).send({
-        //         message: 'GET request successfulll!!!!'
-        //     });
-        // })
         /* Registration */
         app.route('/api/register').post((req, res, next) => {
             // // middleware
@@ -30,10 +26,26 @@ class Routes {
         }, this.authController.validate('register'), this.authController.register);
         app.route('/api/verifyEmail/:token').get(this.authController.verifyEmail);
         app.route('/api/login').post(this.authController.validate('login'), this.authController.login);
+        app.route('/api/twitter-login').get(passport.authenticate('twitter'));
+        app.route('/api/twitter-callback').get(passport.authenticate('twitter', { failureRedirect: config_1.CLIENT_URL + 'login?isAuthenticated=false',
+            successRedirect: config_1.CLIENT_URL + 'login?isAuthenticated=true'
+        }));
+        app.get('/api/twitter-profile', (req, res) => {
+            console.log('Twitter Profile', req.user, req.cookies);
+            if (req.user)
+                res.json({
+                    success: true,
+                    message: "user has successfully authenticated",
+                    user: req.user,
+                    cookies: req.cookies
+                });
+            else
+                res.json({ success: false, user: null });
+        });
         app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
         app.route('/api/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
         app.post('/api/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
-          res.json({ success: true, filename: req.file.filename });
+            res.json({ success: true, filename: req.file.filename });
         });
     }
 }

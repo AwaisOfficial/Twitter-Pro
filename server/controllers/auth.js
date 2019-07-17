@@ -17,6 +17,7 @@ const models_1 = require("../models/");
 const config_1 = require("../config/config");
 const bson_1 = require("bson");
 const nodemailer_1 = require("../utils/nodemailer");
+const Twitter = require('twit');
 let User = mongoose.model('User', models_1.userSchema);
 let Token = mongoose.model('Token', models_1.tokenSchema);
 class AuthController {
@@ -46,6 +47,80 @@ class AuthController {
             }).catch(error => {
                 console.error("Error", error);
                 res.status(200).json(error);
+            });
+        };
+        this.twitterLogin = (req, res) => {
+            /*
+            consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
+              if (error) {
+                res.json({success: false, error : "Error getting OAuth request token : " + util.inspect(error), code : 500});
+              } else {
+                
+                data.tokens = {oauthToken : oauthToken, oauthTokenSecret : oauthTokenSecret }
+                res.redirect("https://twitter.com/oauth/authorize?oauth_token="+oauthToken);
+                //res.json({success: true, url : "https://twitter.com/oauth/authorize?oauth_token="+oauthToken});
+              
+              }
+            });
+            */
+        };
+        this.twitterCallback = (req, res) => {
+            /*
+             util.puts(">>"+data.tokens.oauthToken);
+             util.puts(">>"+data.tokens.oauthTokenSecret);
+             util.puts(">>"+req.query.oauth_verifier);
+             consumer.getOAuthAccessToken(data.tokens.oauthToken, data.tokens.oauthTokenSecret, req.query.oauth_verifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
+               data.tokens = {};
+               if (error)
+                 res.json({ success : false, error : "Error getting OAuth access token : " , code : 500});
+               else {
+                 //res.json({success: true ,oauthAccessToken : oauthAccessToken , oauthAccessTokenSecret : oauthAccessTokenSecret})
+                 const twit = new Twit({
+                   consumer_key:        TWITTER_CONSUMER_KEY,
+                   consumer_secret:     TWITTER_CONSUMER_SECRET,
+                   access_token:         oauthAccessToken,
+                   access_token_secret:  oauthAccessTokenSecret,
+                   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
+                   strictSSL:            true,     // optional - requires SSL certificates to be valid.
+                 });
+       
+                 twit.get('account/verify_credentials', { skip_status: true })
+                 .catch(function (err : any) {
+                   console.log('caught error', err.stack)
+                   res.json({ success : false, error : "Error verifying twitter account\'s credentials." , code : 500});
+                 })
+                 .then((result : any)  => {
+                   // `result` is an Object with keys "data" and "resp".
+                   // `data` and `resp` are the same objects as the ones passed
+                   // to the callback.
+                   // See https://github.com/ttezel/twit#tgetpath-params-callback
+                   // for details.
+               
+                   console.log('data', result.data);
+                   return res.json({success: true , data: result.data });
+                 });
+               }
+             });
+             */
+        };
+        this.twitterAccountDetails = (req, res) => {
+            console.log(req.body);
+            const twitter = new Twitter({
+                consumer_key: config_1.TWITTER_CONSUMER_KEY,
+                consumer_secret: config_1.TWITTER_CONSUMER_SECRET,
+                access_token: req.body.access_token,
+                access_token_secret: req.body.access_token_verifier,
+                timeout_ms: 60 * 1000,
+                strictSSL: false,
+            });
+            twitter.get('account/verify_credentials', { skip_status: true })
+                .catch((err) => {
+                console.log('caught error', err.stack);
+                return res.json({ success: false, message: err.stack });
+            })
+                .then((result) => {
+                console.log('data', result.data);
+                return res.json({ success: true, message: result.data });
             });
         };
         this.forgotPassword = (req, res) => {
@@ -166,6 +241,9 @@ class AuthController {
             }
         };
     }
+    set twitterTokens(tokens) { this._tokens = tokens; }
+    ;
+    get twitterTokens() { return this._tokens; }
     register(req, res) {
         const errors = express_validator_1.validationResult(req);
         if (!errors.isEmpty()) {
