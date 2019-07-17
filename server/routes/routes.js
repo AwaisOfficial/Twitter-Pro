@@ -28,7 +28,7 @@ class Routes {
         app.route('/api/login').post(this.authController.validate('login'), this.authController.login);
         app.route('/api/twitter-login').get(passport.authenticate('twitter'));
         app.route('/api/twitter-callback').get(passport.authenticate('twitter', { failureRedirect: config_1.CLIENT_URL + 'login?isAuthenticated=false',
-            successRedirect: config_1.CLIENT_URL + 'login?isAuthenticated=true'
+            successRedirect: config_1.CLIENT_URL + '/login?isAuthenticated=true'
         }));
         app.get('/api/twitter-profile', this.authController.twitterProfile);
         app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
