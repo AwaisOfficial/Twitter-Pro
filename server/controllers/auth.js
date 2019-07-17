@@ -62,7 +62,7 @@ class AuthController {
                             subject: 'Password Reset',
                             content: '<h4><b>Twitter Pro:</b></h4>' +
                                 '<p>To reset your password, Go to the following url and follow the instructions.:</p>' +
-                                '<a href=' + config_1.CLIENT_URL + 'reset-password/' + response.get('token') + '>Click Here</a>' +
+                                '<a href=' + config_1.CLIENT_URL + '/reset-password/' + response.get('token') + '>Click Here</a>' +
                                 '<br><br>' +
                                 '<p>--Twitter Pro Team --</p>'
                         };
