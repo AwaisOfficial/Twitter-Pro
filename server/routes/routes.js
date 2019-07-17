@@ -30,18 +30,7 @@ class Routes {
         app.route('/api/twitter-callback').get(passport.authenticate('twitter', { failureRedirect: config_1.CLIENT_URL + 'login?isAuthenticated=false',
             successRedirect: config_1.CLIENT_URL + 'login?isAuthenticated=true'
         }));
-        app.get('/api/twitter-profile', (req, res) => {
-            console.log('Twitter Profile', req.user, req.cookies);
-            if (req.user)
-                res.json({
-                    success: true,
-                    message: "user has successfully authenticated",
-                    user: req.user,
-                    cookies: req.cookies
-                });
-            else
-                res.json({ success: false, user: null });
-        });
+        app.get('/api/twitter-profile', this.authController.twitterProfile);
         app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
         app.route('/api/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
         app.post('/api/profile-image', upload_1.default.single('avatar'), (req, res, next) => {

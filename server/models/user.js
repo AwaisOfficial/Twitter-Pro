@@ -20,6 +20,7 @@ exports.userSchema = new mongoose_1.Schema({
     user_name: { type: String, unique: true, required: true },
     email: { type: String, unique: true, required: true },
     role: { type: String, required: true, default: 'user' },
+    twitterId: { type: String, default: null },
     created_at: { type: Date, default: new Date() },
     password: { type: String },
     avatar: { type: String, required: true },

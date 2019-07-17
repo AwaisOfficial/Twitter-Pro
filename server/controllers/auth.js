@@ -30,18 +30,8 @@ class AuthController {
                 }
                 let user = new User();
                 let isCompared = user.schema.methods.comparePassword(req.body.password, document);
-                if (isCompared) {
-                    if (!document.isVerified)
-                        res.status(200).json({ success: false, message: 'Please verify your email address.' });
-                    else if (document.isSuspended)
-                        res.status(200).json({ success: false, message: 'We are sorry. your account has been suspended.' });
-                    else if (document.isDefaulted)
-                        res.status(200).json({ success: false, message: 'We are sorry. your account has been blocked.' });
-                    else {
-                        const jwt = user.schema.methods.generateJwt(document);
-                        res.status(200).json({ success: true, token: jwt });
-                    }
-                }
+                if (isCompared)
+                    this.sendProfileResponse(document, res, user);
                 else
                     res.status(200).json({ success: false, message: config_1.INVALID_PASSWORD });
             }).catch(error => {
@@ -49,79 +39,11 @@ class AuthController {
                 res.status(200).json(error);
             });
         };
-        this.twitterLogin = (req, res) => {
-            /*
-            consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
-              if (error) {
-                res.json({success: false, error : "Error getting OAuth request token : " + util.inspect(error), code : 500});
-              } else {
-                
-                data.tokens = {oauthToken : oauthToken, oauthTokenSecret : oauthTokenSecret }
-                res.redirect("https://twitter.com/oauth/authorize?oauth_token="+oauthToken);
-                //res.json({success: true, url : "https://twitter.com/oauth/authorize?oauth_token="+oauthToken});
-              
-              }
-            });
-            */
-        };
-        this.twitterCallback = (req, res) => {
-            /*
-             util.puts(">>"+data.tokens.oauthToken);
-             util.puts(">>"+data.tokens.oauthTokenSecret);
-             util.puts(">>"+req.query.oauth_verifier);
-             consumer.getOAuthAccessToken(data.tokens.oauthToken, data.tokens.oauthTokenSecret, req.query.oauth_verifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
-               data.tokens = {};
-               if (error)
-                 res.json({ success : false, error : "Error getting OAuth access token : " , code : 500});
-               else {
-                 //res.json({success: true ,oauthAccessToken : oauthAccessToken , oauthAccessTokenSecret : oauthAccessTokenSecret})
-                 const twit = new Twit({
-                   consumer_key:        TWITTER_CONSUMER_KEY,
-                   consumer_secret:     TWITTER_CONSUMER_SECRET,
-                   access_token:         oauthAccessToken,
-                   access_token_secret:  oauthAccessTokenSecret,
-                   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
-                   strictSSL:            true,     // optional - requires SSL certificates to be valid.
-                 });
-       
-                 twit.get('account/verify_credentials', { skip_status: true })
-                 .catch(function (err : any) {
-                   console.log('caught error', err.stack)
-                   res.json({ success : false, error : "Error verifying twitter account\'s credentials." , code : 500});
-                 })
-                 .then((result : any)  => {
-                   // `result` is an Object with keys "data" and "resp".
-                   // `data` and `resp` are the same objects as the ones passed
-                   // to the callback.
-                   // See https://github.com/ttezel/twit#tgetpath-params-callback
-                   // for details.
-               
-                   console.log('data', result.data);
-                   return res.json({success: true , data: result.data });
-                 });
-               }
-             });
-             */
-        };
-        this.twitterAccountDetails = (req, res) => {
-            console.log(req.body);
-            const twitter = new Twitter({
-                consumer_key: config_1.TWITTER_CONSUMER_KEY,
-                consumer_secret: config_1.TWITTER_CONSUMER_SECRET,
-                access_token: req.body.access_token,
-                access_token_secret: req.body.access_token_verifier,
-                timeout_ms: 60 * 1000,
-                strictSSL: false,
-            });
-            twitter.get('account/verify_credentials', { skip_status: true })
-                .catch((err) => {
-                console.log('caught error', err.stack);
-                return res.json({ success: false, message: err.stack });
-            })
-                .then((result) => {
-                console.log('data', result.data);
-                return res.json({ success: true, message: result.data });
-            });
+        this.twitterProfile = (req, res) => {
+            if (req.user)
+                this.sendProfileResponse(req.user, res, new User());
+            else
+                res.json({ success: false, user: null });
         };
         this.forgotPassword = (req, res) => {
             this.findUser(req).then(document => {
@@ -311,6 +233,18 @@ class AuthController {
     }
     sendError(res, message) {
         res.status(200).json({ success: false, message: message || config_1.ERROR_MSG });
+    }
+    sendProfileResponse(document, res, user) {
+        if (!document.isVerified && !document.twitterId)
+            res.status(200).json({ success: false, message: 'Please verify your email address.' });
+        else if (document.isSuspended)
+            res.status(200).json({ success: false, message: 'We are sorry. your account has been suspended.' });
+        else if (document.isDefaulted)
+            res.status(200).json({ success: false, message: 'We are sorry. your account has been blocked.' });
+        else {
+            const jwt = user.schema.methods.generateJwt(document);
+            res.status(200).json({ success: true, token: jwt });
+        }
     }
 }
 exports.AuthController = AuthController;

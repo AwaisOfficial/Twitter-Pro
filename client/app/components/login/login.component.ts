@@ -15,14 +15,12 @@ export class LoginComponent implements OnInit {
 
   loginForm : FormGroup;
   submitted : boolean;
-  returnUrl : string; 
   response: any; 
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
               private btnLoaderService: AngularButtonLoaderService,
-              private operationsService: OperationsService,
               private authService: AuthService) { }
 
   ngOnInit() {
@@ -35,10 +33,7 @@ export class LoginComponent implements OnInit {
     });
     this.loginForm.valueChanges.subscribe(result => {this.response = undefined; });
     this.authService.logOut();
-    //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
     this.route.queryParamMap.subscribe((allParams : any) => {
-      console.log('Params', allParams.params);
       if(allParams.params && allParams.params.isVerified)
         this.response = {success : true, message : 'Email verified. Welcome to '+ APP_NAME + '.'};
       else if(allParams.params && allParams.params.isAuthenticated == 'true')
@@ -55,33 +50,30 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.btnLoaderService.hideLoader();
-    this.authService.login(this.loginForm.value).subscribe(user => {
-      console.log('User', user);
-      this.btnLoaderService.hideLoader();
-      this.response = user;
-      if(user) 
-        this.router.navigate([this.returnUrl]);
-    },
-    error => {
-      console.error('Error', error);
-      this.btnLoaderService.hideLoader();
-    });
-  }
-
-  handlError(error: any){    
+    this.authService.login(this.loginForm.value).subscribe(
+    response => this.handleResponse(response),
+    error    => this.handleError(error));
   }
 
   getTwitterUser(){
     this.btnLoaderService.displayLoader();
-    let twitterLogin : Observable<any> = this.operationsService.getOperations('twitter-profile');
-    twitterLogin.subscribe((result : any) => {
-      this.btnLoaderService.hideLoader();
-      console.log('Twitter User\'s Info Result ', result);
-    },
-    error => {
-      this.btnLoaderService.hideLoader();
-      console.error('Twitter User\'s Info Error', error);
-    });
+    let twitterLogin : Observable<any> = this.authService.getTwitterUser();
+    twitterLogin.subscribe(
+    (response : any) =>  this.handleResponse(response),
+    (error : any )   => this.handleError(error));
+  }
+
+  handleResponse(response : any){
+    console.log('User', response);
+    this.btnLoaderService.hideLoader();
+    this.response = response;
+    if(response && response.user) 
+      this.router.navigate(['/']);
+  }
+
+  handleError(error : any){
+    this.btnLoaderService.hideLoader();
+    console.error('Login Error', error);
   }
 
 }

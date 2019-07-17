@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CLIENT_URL = 'http://localhost:4200/';
+exports.CLIENT_URL = 'http://twitterpro.herokuapp.com';
 exports.DATABASE_URL = process.env.DATABASE || 'mongodb+srv://Awais:awais31@twitterclone-cfqlw.mongodb.net/TwitterPro?retryWrites=true&w=majority';
 exports.JWTSECRET = '$QET_UWN';
 exports.PORT = 3000;
@@ -13,5 +13,5 @@ exports.PASSWORD_RESET_MAIL_SENT_ERROR = 'Unable to send email.';
 exports.TOKEN_EXPIRED_ERROR = 'Token is expired.';
 exports.UPLOAD_PATH = 'uploads';
 exports.COLLECTION_NAME = 'images';
-exports.TWITTER_CONSUMER_KEY = "oB2hvPFSU2LLyPI1emGqRvCUG";
-exports.TWITTER_CONSUMER_SECRET = "TkvSjClgxMaINegHVqZiTfOI6Cx5FoaYBO5Iiq0KZTfWqcTqad";
+exports.TWITTER_CONSUMER_KEY = "E1Pqit9PSS956U2hpfSbnf3MM";
+exports.TWITTER_CONSUMER_SECRET = "G8KpfTKSU41QHLYAaowhPPNEoAgTlAudpeJV1DsDWfgDe1EZ14";

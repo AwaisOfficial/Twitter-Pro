@@ -25,7 +25,6 @@ const config_1 = require("../config/config");
 const models_1 = require("../models/");
 let User = mongoose.model('User', models_1.userSchema);
 passport_1.default.serializeUser((user, done) => {
-    console.log('Serialize User Id', user);
     done(null, user._id);
 });
 // deserialize the cookieUserId to user in the database
@@ -41,8 +40,10 @@ passport_1.default.deserializeUser((id, done) => {
 passport_1.default.use('twitter', new TwitterStrategy({
     consumerKey: config_1.TWITTER_CONSUMER_KEY,
     consumerSecret: config_1.TWITTER_CONSUMER_SECRET,
+    includeEmail: true,
     callbackURL: '/api/twitter-callback'
 }, (token, tokenSecret, profile, done) => __awaiter(this, void 0, void 0, function* () {
+    console.log(profile.emails);
     // find current user in UserModel
     const currentUser = yield User.findOne({
         user_name: profile.username
@@ -53,8 +54,9 @@ passport_1.default.use('twitter', new TwitterStrategy({
             first_name: profile.displayName.split(' ')[0],
             last_name: profile.displayName.split(' ')[1],
             user_name: profile.username,
-            email: profile.email ? profile.email : 'testing@gmail.com',
+            email: profile.emails[0].value ? profile.emails[0].value : 'twitter_mail_' + new Date().getTime() + '@mail.com',
             avatar: profile.photos[0].value ? profile.photos[0].value : '',
+            twitterId: profile.id
         }).save();
         if (newUser) {
             done(null, newUser);

@@ -28,15 +28,15 @@ class App {
             credentials: true // allow session cookie from browser to pass through
         }));
         this.app.use(cookieSession({
-            name: "session",
+            name: "VIP_Session",
             keys: [config_1.JWTSECRET],
             maxAge: 24 * 60 * 60 * 100
         }));
         this.app.use(cookieParser());
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: false }));
+        this.app.use(passport.initialize());
+        this.app.use(passport.session());
     }
     mongoSetup() {
         mongoose_1.default.connect(config_1.DATABASE_URL, { useCreateIndex: true, useNewUrlParser: true });
