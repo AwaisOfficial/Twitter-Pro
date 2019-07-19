@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AngularButtonLoaderService } from 'angular-button-loader';
 import { APP_NAME } from 'client/app/constants/constants';
 import { Observable } from 'rxjs';
+import { environment } from 'client/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
   loginForm : FormGroup;
   submitted : boolean;
   response: any; 
+  END_POINT: string;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -25,7 +27,7 @@ export class LoginComponent implements OnInit {
               private authService: AuthService) { }
 
   ngOnInit() {
-
+    this.END_POINT = environment.APIEndPoint;
     this.submitted = false;
 
     this.loginForm = this.formBuilder.group({
