@@ -23,8 +23,8 @@ class App {
     }
     config() {
         this.app.use(cors({
-            origin: "http://localhost:4200",
-            methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+            origin: config_1.CLIENT_URL,
+            methods: "OPTIONS , GET,HEAD,PUT,PATCH,POST,DELETE",
             credentials: true // allow session cookie from browser to pass through
         }));
         this.app.use(cookieSession({

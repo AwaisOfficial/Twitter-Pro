@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, OperationsService } from 'client/app/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularButtonLoaderService } from 'angular-button-loader';
-import { APP_NAME, SERVER_URL } from 'client/app/constants/constants';
+import { APP_NAME } from 'client/app/constants/constants';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -16,16 +16,16 @@ export class LoginComponent implements OnInit {
   loginForm : FormGroup;
   submitted : boolean;
   response: any; 
-  Server_Url : string;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
               private btnLoaderService: AngularButtonLoaderService,
+              private operationsService: OperationsService,
               private authService: AuthService) { }
 
   ngOnInit() {
-    this.Server_Url = SERVER_URL;
+
     this.submitted = false;
 
     this.loginForm = this.formBuilder.group({

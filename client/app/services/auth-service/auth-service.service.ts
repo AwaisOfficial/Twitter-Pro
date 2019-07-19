@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import * as jwt_decode from 'jwt-decode';
-import { SERVER_URL, JWTOKEN, USER_INFO } from 'client/app/constants/constants';
+import { JWTOKEN, USER_INFO } from 'client/app/constants/constants';
 import { map } from 'rxjs/operators'
 import { User } from 'client/app/interfaces/user';
 import { Http_Headers } from '../../helpers/headers';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthService {
   }
 
   login(payload: any){
-    const url = SERVER_URL + 'login';
+    const url = environment.APIEndPoint + 'login';
     return this.http.post(`${url}` , payload).pipe(map((response : any) => {
       if(response && response.success) {
         this.Token = response.token;
@@ -34,7 +35,7 @@ export class AuthService {
   }
 
   getTwitterUser(){
-    const url = SERVER_URL + 'twitter-profile';
+    const url = environment.APIEndPoint + 'twitter-profile';
     return this.http.get(`${url}`, {headers: new Http_Headers().getHeaders(), withCredentials : true}).pipe(map((response : any) => {
       console.log('Twitter Profile ', response);
       if(response && response.success) {

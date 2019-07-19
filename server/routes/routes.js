@@ -6,10 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const controllers_1 = require("../controllers");
 const upload_1 = __importDefault(require("../utils/upload"));
 const config_1 = require("../config/config");
+const auth_guard_1 = require("../utils/auth-guard");
 const passport = require('passport');
 class Routes {
     constructor() {
         this.authController = new controllers_1.AuthController();
+        this.postController = new controllers_1.PostController();
+        this.authGuard = new auth_guard_1.AuthGuard();
     }
     routes(app) {
         /* Registration */
@@ -26,16 +29,18 @@ class Routes {
         }, this.authController.validate('register'), this.authController.register);
         app.route('/api/verifyEmail/:token').get(this.authController.verifyEmail);
         app.route('/api/login').post(this.authController.validate('login'), this.authController.login);
-        app.route('/api/twitter-login').get(passport.authenticate('twitter'));
-        app.route('/api/twitter-callback').get(passport.authenticate('twitter', { failureRedirect: config_1.CLIENT_URL + 'login?isAuthenticated=false',
-            successRedirect: config_1.CLIENT_URL + '/login?isAuthenticated=true'
-        }));
-        app.get('/api/twitter-profile', this.authController.twitterProfile);
         app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
         app.route('/api/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
         app.post('/api/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
             res.json({ success: true, filename: req.file.filename });
         });
+        app.route('/api/twitter-login').get(passport.authenticate('twitter'));
+        app.route('/api/twitter-callback').get(passport.authenticate('twitter', { failureRedirect: config_1.CLIENT_URL + '/login?isAuthenticated=false',
+            successRedirect: config_1.CLIENT_URL + '/login?isAuthenticated=true'
+        }));
+        app.route('/api/twitter-profile').get(this.authController.twitterProfile);
+        /* ROUTES WHICH REQUIRED AUTHORIZATION  */
+        app.route('/api/create-post').post(this.authGuard.isAuthorized('member'), this.postController.createPost);
     }
 }
 exports.Routes = Routes;
