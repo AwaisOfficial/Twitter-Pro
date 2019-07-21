@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CLIENT_URL = 'http://localhost:4200' || 'http://twitterpro.herokuapp.com';
+exports.CLIENT_URL = 'https://twitterpro.herokuapp.com' || 'http://localhost:4200';
 exports.DATABASE_URL = process.env.DATABASE || 'mongodb+srv://Awais:awais31@twitterclone-cfqlw.mongodb.net/TwitterPro?retryWrites=true&w=majority';
 exports.PORT = process.env.PORT || 3000;
 exports.JWTSECRET = '$QET_UWN';

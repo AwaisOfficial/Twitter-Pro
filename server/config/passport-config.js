@@ -48,7 +48,6 @@ passport_1.default.use('twitter', new TwitterStrategy({
     const currentUser = yield User.findOne({
         userName: profile.username
     });
-    console.log('user', currentUser);
     // create new user if the database doesn't have this user
     if (!currentUser) {
         const _user = {
