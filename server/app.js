@@ -23,7 +23,7 @@ class App {
     }
     config() {
 
-        var distDir = __dirname + "/dist/";
+        var distDir = __dirname + "/dist/Twitter-Pro/";
         this.app.use(express_1.default.static(distDir));
 
         

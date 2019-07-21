@@ -45,7 +45,7 @@ class Routes {
         app.route('/api/create-post').post(this.authGuard.isAuthorized(['member', 'user']), this.postController.createPost);
     
         app.get('/*' , (req, res) => {
-            res.sendFile(path.join(__dirname  + '/dist/index.html'));
+            res.sendFile(path.join(__dirname  + '/dist/Twitter-Pro/index.html'));
         });
     }
 }
