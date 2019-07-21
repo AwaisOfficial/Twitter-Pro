@@ -15,18 +15,19 @@ const config_1 = require("../config/config");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.userSchema = new mongoose_1.Schema({
-    first_name: { type: String },
-    last_name: { type: String },
-    user_name: { type: String, unique: true, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
+    userName: { type: String, unique: true, required: true },
     email: { type: String, unique: true, required: true },
-    role: { type: String, required: true },
-    created_at: { type: Date, default: new Date() },
+    role: { type: String, required: true, default: 'user' },
+    twitterId: { type: String, default: null },
+    createdAt: { type: Date, default: Date.now },
     password: { type: String },
     avatar: { type: String, required: true },
     salt: { type: String, default: config_1.JWTSECRET },
-    active: { type: Number, default: 0 },
-    suspended: { type: Number, default: 0 },
-    defaulted: { type: Number, default: 0 },
+    isVerified: { type: Boolean, default: false },
+    isSuspended: { type: Boolean, default: false },
+    isDefaulted: { type: Boolean, default: false },
 });
 exports.userSchema.method('createHash', (password) => {
     return bcryptjs_1.default.hashSync(password);
@@ -44,5 +45,13 @@ exports.userSchema.method('generateJwt', function (user) {
         user: user,
         exp: expiry.getTime() / 10000
     }, config_1.JWTSECRET);
+});
+exports.userSchema.method('emailVerifier', function (email) {
+    exports.User.findOne({ email: email }, (error, res) => {
+        if (error)
+            return false;
+        else
+            return true;
+    });
 });
 exports.User = mongoose_1.default.model('User', exports.userSchema);
