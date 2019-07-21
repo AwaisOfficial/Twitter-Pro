@@ -41,6 +41,10 @@ class Routes {
         app.route('/api/twitter-profile').get(this.authController.twitterProfile);
         /* ROUTES WHICH REQUIRED AUTHORIZATION  */
         app.route('/api/create-post').post(this.authGuard.isAuthorized(['member', 'user']), this.postController.createPost);
+    
+        app.get('/*' , (req, res) => {
+            res.sendFile(path.join(__dirname  + '/dist/index.html'));
+        });
     }
 }
 exports.Routes = Routes;
