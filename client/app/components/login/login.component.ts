@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
 
     this.submitted = false;
-
     this.loginForm = this.formBuilder.group({
       userName : ['', Validators.required] ,
       password : ['' , Validators.required]
@@ -65,7 +64,6 @@ export class LoginComponent implements OnInit {
   }
 
   handleResponse(response : any){
-    console.log('User', response);
     this.btnLoaderService.hideLoader();
     this.response = response;
     if(response && response.user) 
