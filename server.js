@@ -13,6 +13,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./server/app"));
 const http = __importStar(require("http"));
 const config_1 = require("./server/config/config");
+const path = require('path');
+
+app_1.default.get('/*' , (req, res) => {
+    res.sendFile(path.join(__dirname  + '/dist/Twitter-Pro/index.html'));
+});
 
 // const httpOptions = {
 //     key : fs.readFileSync(path.resolve("../certificates/key.pem")),
