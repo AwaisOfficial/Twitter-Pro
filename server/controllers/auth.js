@@ -60,11 +60,11 @@ class AuthController {
                         let payload = {
                             to: document.email,
                             subject: 'Password Reset',
-                            content: '<h4><b>Twitter Pro:</b></h4>' +
+                            content: '<h4><b>Only VIPs:</b></h4>' +
                                 '<p>To reset your password, Go to the following url and follow the instructions.:</p>' +
                                 '<a href=' + config_1.CLIENT_URL + '/reset-password/' + response.get('token') + '>Click Here</a>' +
                                 '<br><br>' +
-                                '<p>--Twitter Pro Team --</p>'
+                                '<p>--Only VIPs Team --</p>'
                         };
                         nodemailer_1.NodeMailer.sendMail(payload).then(result => {
                             return res.json({ success: true, message: config_1.PASSWORD_RESET_MAIL_SENT });
@@ -178,7 +178,7 @@ class AuthController {
             if (err) {
                 if (err.errmsg && err.errmsg.indexOf('email') > -1)
                     err.errmsg = 'Email already exists';
-                else if (err.errmsg && err.errmsg.indexOf('user_name') > -1)
+                else if (err.errmsg && err.errmsg.indexOf('userName') > -1)
                     err.errmsg = 'Username already exists.';
                 res.status(200).json({ success: false, message: err.errmsg || '' });
             }
@@ -191,11 +191,11 @@ class AuthController {
                     }
                     // Send the email
                     const url = 'http://' + req.headers.host + '/api/verifyEmail/' + _token.token;
-                    const content = '<h4><b>Twitter Pro:</b></h4>' +
+                    const content = '<h4><b>Only VIPs:</b></h4>' +
                         '<p>To verify your email , Please click the below link:</p>' +
                         '<a href=' + url + '">Click Here</a>' +
                         '<br><br>' +
-                        '<p>-- Team Twitter Pro --</p>';
+                        '<p>-- Team Only VIPs --</p>';
                     let payload = {
                         to: user.email,
                         subject: 'Account Verification',

@@ -3,7 +3,8 @@
     <div class="row">
       <div class="col-md-3">
             <div class="logo-inner">
-                <h1>{{ title ? title : 'VIPs'}}</h1>
+                <!-- <h1>{{ title ? title : 'Only VIPs'}}</h1> -->
+                <img src="assets/logo-sm.png" alt="" style="padding: 10px;height: 55px;">
               </div>
           </div>
           <div class="col-md-9" *ngIf="isLoggedIn">
@@ -25,6 +26,9 @@
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#"><i class="fas fa-user"></i></a>
+                    </li>
+                    <li class="nav-item" (click)="logOut()">
+                      <a class="nav-link" href="#"><i class="fas fa-power-off"></i></a>
                     </li>
                   </ul>
                 </div>

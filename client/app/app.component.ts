@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { OperationsService } from './services';
+import { OperationsService, AuthService } from './services';
 import { APP_NAME } from './constants/constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ export class AppComponent implements OnInit {
 
   title = APP_NAME;
 
-  constructor(private operationsService: OperationsService){}
+  constructor(private authService: AuthService){}
 
   ngOnInit(){ }
   

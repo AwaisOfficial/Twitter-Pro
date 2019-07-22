@@ -26,7 +26,7 @@ class NodeMailer {
             });
             // send mail with defined transport object
             let info = yield transporter.sendMail({
-                from: '"Twitter Pro 👻" no-replytwitterpro@gmail.com',
+                from: '"Only VIPs 👻" no-replytwitterpro@gmail.com',
                 to: payload.to,
                 subject: payload.subject,
                 html: payload.content

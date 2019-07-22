@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthService {
 
-  private userSubject : BehaviorSubject<any>;
+  public userSubject : BehaviorSubject<any>;
 
   constructor(private http: HttpClient) {
     this.userSubject = new BehaviorSubject<any>(JSON.parse(this.user));
@@ -37,7 +37,7 @@ export class AuthService {
   getTwitterUser(){
     const url = environment.APIEndPoint + 'twitter-profile';
     return this.http.get(`${url}`, {headers: new Http_Headers().getHeaders(), withCredentials : true}).pipe(map((response : any) => {
-      console.log('Twitter Profile ', response);
+      console.log('Only VIPs ', response);
       if(response && response.success) {
         this.Token = response.token;
         const user = this.decodeJWT();
@@ -65,6 +65,7 @@ export class AuthService {
 
   logOut() { 
     localStorage.removeItem(JWTOKEN);
-    this.userSubject.next(null);
+    localStorage.removeItem(USER_INFO);
+    this.userSubject.next(null);    
   }
 }

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import {  mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AngularButtonLoaderService } from 'angular-button-loader';
+import { environment } from 'client/environments/environment';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class RegisterComponent implements OnInit {
   formData: FormData;
   isImageSelected: boolean;
   response: any;
+  SERVER_URL : string;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -30,6 +32,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     
+    this.SERVER_URL = environment.APIEndPoint;
     this.submitted = this.isRegistered = this.isImageSelected = false;
 
     this.signUpForm = this.formBuilder.group({
