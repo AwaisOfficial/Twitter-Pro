@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     
     this.SERVER_URL = environment.APIEndPoint;
-    console.log(this.SERVER_URL);
+    
     this.submitted = this.isRegistered = this.isImageSelected = false;
 
     this.signUpForm = this.formBuilder.group({
@@ -89,6 +89,8 @@ export class RegisterComponent implements OnInit {
     }));
     
     register.subscribe(response => {
+      
+
       this.btnLoaderService.hideLoader();
       this.response = response;
       window.scrollTo(0 , 0);
@@ -109,6 +111,7 @@ export class RegisterComponent implements OnInit {
 
 
   isErrorField(field: string) {
+    console.warn('Response ', this.response);
     return this.response && !this.response.success && this.response.message.indexOf(field) > -1;
   }
 }
