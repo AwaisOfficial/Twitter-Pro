@@ -15,7 +15,8 @@ const http = __importStar(require("http"));
 const config_1 = require("./server/config/config");
 const path = require('path');
 
-app_1.default.get('/*' , (req, res) => {
+app_1.default.get('*' , (req, res) => {
+    console.warn('\nDIRECTORY NAME ', __dirname);
     res.sendFile(path.join(__dirname  + '/dist/onlyVIPs/index.html'));
 });
 
