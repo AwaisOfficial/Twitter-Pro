@@ -24,7 +24,7 @@ const path = require('path');
 //     console.log('Express server listening on port '+ PORT);
 // });
 http.createServer(app_1.default).listen(process.env.PORT || config_1.PORT, () => {
-    console.log('Express server listening on port ' + config_1.PORT);
+    console.log('onlyVIP\'s server listening on port ' + config_1.PORT);
 });
 
 var distDir = __dirname + "/dist/onlyVIPs/";

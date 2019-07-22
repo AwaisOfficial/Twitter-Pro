@@ -1,22 +1,24 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose = __importStar(require("mongoose"));
 const crypto_1 = __importDefault(require("crypto"));
 const express_validator_1 = require("express-validator");
 const models_1 = require("../models/");
 const config_1 = require("../config/config");
 const bson_1 = require("bson");
 const nodemailer_1 = require("../utils/nodemailer");
+let User = mongoose.model('User', models_1.userSchema);
+let Token = mongoose.model('Token', models_1.tokenSchema);
 class AuthController {
     constructor() {
         this.login = (req, res) => {
@@ -25,7 +27,7 @@ class AuthController {
                     res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
                     return;
                 }
-                let user = new models_1.User();
+                let user = new User();
                 let isCompared = user.schema.methods.comparePassword(req.body.password, document);
                 if (isCompared)
                     this.sendProfileResponse(document, res, user);
@@ -38,13 +40,12 @@ class AuthController {
         };
         this.twitterProfile = (req, res) => {
             if (req.user)
-                this.sendProfileResponse(req.user, res, new models_1.User());
+                this.sendProfileResponse(req.user, res, new User());
             else
                 res.json({ success: false, user: null });
         };
         this.forgotPassword = (req, res) => {
-            this.findUser(req).then((document) => {
-                console.log('User', document);
+            this.findUser(req).then(document => {
                 if (!document) {
                     res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
                     return;
@@ -52,11 +53,11 @@ class AuthController {
                 /* Finding Already Saved Token against this user and Deleting them From DB
                   and then Saving the verification token
                 */
-                models_1.Token.findOne({ _userId: new bson_1.ObjectId(document._id) }, (err, resetPassword) => {
-                    const token = new models_1.Token({ _userId: document._id, token: crypto_1.default.randomBytes(16).toString('hex') });
-                    models_1.Token.create(token).then((response) => {
+                Token.find({ _userId: new bson_1.ObjectId(document._id) }, (err, resetPassword) => {
+                    const token = new Token({ _userId: document._id, token: crypto_1.default.randomBytes(16).toString('hex') });
+                    Token.create(token).then((response) => {
                         let payload = {
-                            to: document['email'],
+                            to: document.email,
                             subject: 'Password Reset',
                             content: '<h4><b>Only VIPs:</b></h4>' +
                                 '<p>To reset your password, Go to the following url and follow the instructions.:</p>' +
@@ -73,17 +74,14 @@ class AuthController {
                         //console.error("Password Reset Creation Error", error);
                         res.status(200).json({ success: false, message: config_1.ERROR_MSG });
                     });
-                }).exec().then(document => {
-                    if (document)
-                        models_1.Token.deleteOne(document).exec();
-                });
+                }).remove().exec();
             }).catch(error => {
                 console.error("Error", error);
                 res.status(200).json(error);
             });
         };
         this.resetPassword = (req, res) => {
-            models_1.Token.findOne({ token: req.body.token }, (err, result) => {
+            Token.findOne({ token: req.body.token }, (err, result) => {
                 if (!result) {
                     this.sendError(res);
                     return;
@@ -97,9 +95,9 @@ class AuthController {
                     this.sendError(res, config_1.TOKEN_EXPIRED_ERROR);
                     return;
                 }
-                const hash = new models_1.User().schema.methods.createHash(req.body.password);
-                models_1.User.updateOne({ _id: new bson_1.ObjectId(result.userId) }, { $set: { password: hash } }, (err, response) => {
-                    models_1.Token.deleteOne({ userId: result.userId, token: req.body.token }).then(result => {
+                const hash = new User().schema.methods.createHash(req.body.password);
+                User.updateOne({ _id: new bson_1.ObjectId(result.userId) }, { $set: { password: hash } }, (err, response) => {
+                    Token.deleteOne({ userId: result.userId, token: req.body.token }).then(result => {
                         if (!result) {
                             this.sendError(res);
                             return;
@@ -114,12 +112,12 @@ class AuthController {
             req.params.token = req.params.token.replace(/['"]+/g, '');
             console.log('Verify Email', req.params.token);
             // Find a matching token
-            models_1.Token.findOne({ token: req.params.token }, (err, token) => {
+            Token.findOne({ token: req.params.token }, (err, token) => {
                 console.log('Result', token);
                 if (token.token != req.params.token)
                     return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token my have expired.' });
                 // If we found a token, find a matching user
-                models_1.User.findOne({ _id: token._userId }, (err, user) => {
+                User.findOne({ _id: token._userId }, (err, user) => {
                     if (user._id.toString() != token._userId.toString())
                         return res.status(400).send({ success: false, msg: 'We were unable to find a user for this token.' });
                     if (user.isVerified)
@@ -139,7 +137,7 @@ class AuthController {
             switch (method) {
                 case 'register':
                     return [
-                        express_validator_1.body('userName', 'User name is required.').exists(),
+                        express_validator_1.body('user_name', 'User name is required.').exists(),
                         express_validator_1.body('email', 'Email is required.').exists(),
                         express_validator_1.body('email', 'Email is invalid.').isEmail(),
                         express_validator_1.body('password', ' Password is required.').exists(),
@@ -147,13 +145,13 @@ class AuthController {
                     ];
                 case 'login':
                     return [
-                        express_validator_1.body('userName', 'User name / Email is required.').exists(),
+                        express_validator_1.body('user_name', 'User name / Email is required.').exists(),
                         express_validator_1.body('password', 'Password is required.').exists()
                     ];
                 case 'forgot-password':
                     return [
-                        express_validator_1.body('userName', 'Email is required.').exists(),
-                        express_validator_1.body('userName', 'Email is invalid.').isEmail(),
+                        express_validator_1.body('user_name', 'Email is required.').exists(),
+                        express_validator_1.body('user_name', 'Email is invalid.').isEmail(),
                     ];
                 case 'reset-password':
                     return [
@@ -173,7 +171,7 @@ class AuthController {
             res.status(200).json({ success: false, error: errors });
             return;
         }
-        let user = new models_1.User(req.body);
+        let user = new User(req.body);
         user.password = user.schema.methods.createHash(req.body.password);
         user.save((err, response) => {
             if (err) {
@@ -184,7 +182,7 @@ class AuthController {
                 res.status(200).json({ success: false, message: err.errmsg || '' });
             }
             else {
-                let token = new models_1.Token({ _userId: user._id, token: crypto_1.default.randomBytes(16).toString('hex') });
+                let token = new Token({ _userId: user._id, token: crypto_1.default.randomBytes(16).toString('hex') });
                 // Save the verification token
                 token.save((err, _token) => {
                     if (err) {
@@ -215,17 +213,21 @@ class AuthController {
         });
     }
     findUser(req) {
-        return __awaiter(this, void 0, void 0, function* () {
+        return new Promise((resolve, reject) => {
             const errors = express_validator_1.validationResult(req);
-            if (!errors.isEmpty())
-                return { success: false, error: errors };
-            let value = req.body.userName;
-            let criteria = value.indexOf('@') > -1 ? { email: value } : { userName: value };
-            const user = yield models_1.User.findOne(criteria);
-            if (!user)
-                return ({ success: false, status: 200, message: config_1.USER_NOT_FOUND });
-            else
-                return user;
+            if (!errors.isEmpty()) {
+                reject({ success: false, error: errors });
+                return;
+            }
+            let value = req.body.user_name;
+            let criteria = value.indexOf('@') > -1 ? { email: value } : { user_name: value };
+            console.log(criteria);
+            User.findOne(criteria, (err, document) => {
+                if (err || document == null)
+                    reject({ success: false, status: 200, message: config_1.USER_NOT_FOUND });
+                else
+                    resolve(document);
+            });
         });
     }
     sendError(res, message) {

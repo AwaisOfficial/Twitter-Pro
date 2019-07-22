@@ -28,32 +28,32 @@
                                     <div class="custom-form">
 
                                         <div class="form-group">
-                                          <label for="firstName"> First Name</label>
-                                          <input type="text" class="form-control" formControlName="firstName" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': f.firstName.touched && f.firstName.errors }" >
+                                          <label for="first_name"> First Name</label>
+                                          <input type="text" class="form-control" formControlName="first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': f.first_name.touched && f.first_name.errors }" >
                                           <div class="invalid-feedback">
-                                            <div *ngIf="f.firstName.hasError('required')">First name is required</div>
+                                            <div *ngIf="f.first_name.hasError('required')">First name is required</div>
                                           </div> 
                                         </div>
 
                                         <div class="form-group">
-                                          <label for="lastName"> Last Name</label>
-                                          <input type="text" class="form-control" formControlName="lastName" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': f.lastName.touched && f.lastName.errors }" >
+                                          <label for="last_name"> Last Name</label>
+                                          <input type="text" class="form-control" formControlName="last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': f.last_name.touched && f.last_name.errors }" >
                                           <div class="invalid-feedback">
-                                            <div *ngIf="f.lastName.hasError('required')">Last name is required</div>
+                                            <div *ngIf="f.last_name.hasError('required')">Last name is required</div>
                                           </div> 
                                         </div>
 
                                         <div class="form-group">
-                                          <label for="userName"> Username</label>
-                                          <input type="text" class="form-control" formControlName="userName" class="form-control" placeholder="Enter username" [ngClass]="{ 'is-invalid': (f.userName.touched && f.userName.errors) || isErrorField('Username') }" >
+                                          <label for="user_name"> Username</label>
+                                          <input type="text" class="form-control" formControlName="user_name" class="form-control" placeholder="Enter username" [ngClass]="{ 'is-invalid': (f.user_name.touched && f.user_name.errors) || isErrorField('Username') }" >
                                           <div class="invalid-feedback">
-                                            <div *ngIf="f.userName.hasError('required')">Username is required</div>
+                                            <div *ngIf="f.user_name.hasError('required')">Username is required</div>
                                             <div *ngIf="isErrorField('Username')">{{ response?.message }}</div>
                                           </div> 
                                         </div>
 
                                         <div class="form-group">
-                                          <label for="userName">Email</label>
+                                          <label for="user_name">Email</label>
                                           <input type="email" class="form-control" formControlName="email" class="form-control" placeholder="Enter email" [ngClass]="{ 'is-invalid': (f.email.touched && f.email.errors) || isErrorField('Email') }" >
                                             <div class="invalid-feedback">
                                               <div *ngIf="f.email.hasError('required')">Email is required</div>

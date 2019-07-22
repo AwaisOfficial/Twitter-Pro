@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AngularButtonLoaderService } from 'angular-button-loader';
 import { APP_NAME } from 'client/app/constants/constants';
 import { Observable } from 'rxjs';
-import { environment } from 'client/environments/environment.staging';
+import { environment } from 'client/environments/environment.prod';
 
 @Component({
   selector: 'app-login',
@@ -29,11 +29,11 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
 
     this.SERVER_URL = environment.APIEndPoint;
+    console.log(this.SERVER_URL);
     this.submitted = false;
 
-    this.submitted = false;
     this.loginForm = this.formBuilder.group({
-      userName : ['', Validators.required] ,
+      user_name : ['', Validators.required] ,
       password : ['' , Validators.required]
     });
     this.loginForm.valueChanges.subscribe(result => {this.response = undefined; });
@@ -69,6 +69,7 @@ export class LoginComponent implements OnInit {
   }
 
   handleResponse(response : any){
+    console.log('User', response);
     this.btnLoaderService.hideLoader();
     this.response = response;
     if(response && response.user) 

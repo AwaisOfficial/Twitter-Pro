@@ -1,5 +1,4 @@
 import { HttpHeaders } from '@angular/common/http';
-import { JWTOKEN } from '../constants/constants';
 
 export class Http_Headers {
 
@@ -7,7 +6,6 @@ export class Http_Headers {
 
     getHeaders(): HttpHeaders {
         const headers : HttpHeaders = new HttpHeaders();
-       // headers.append('Authorization', localStorage.getItem(JWTOKEN));
         headers.append('Access-Control-Allow-Origin', '*');
         headers.append('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, DELETE');
         headers.append("Content-Type" ,  "application/json");

@@ -25,7 +25,6 @@ export class RegisterComponent implements OnInit {
   response: any;
   SERVER_URL : string;
 
-
   constructor(private formBuilder: FormBuilder,
               private btnLoaderService: AngularButtonLoaderService,
               private operationsService: OperationsService) { }
@@ -33,12 +32,13 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     
     this.SERVER_URL = environment.APIEndPoint;
+    console.log(this.SERVER_URL);
     this.submitted = this.isRegistered = this.isImageSelected = false;
 
     this.signUpForm = this.formBuilder.group({
-      firstName : ['', Validators.required] ,
-      lastName : ['', Validators.required] ,
-      userName : ['', Validators.required] ,
+      first_name : ['', Validators.required] ,
+      last_name : ['', Validators.required] ,
+      user_name : ['', Validators.required] ,
       email : ['', Validators.compose([ Validators.required , Validators.pattern(EMAIL_PATTERN)]) ] ,
       password : ['' , Validators.compose([ 
                   Validators.required,

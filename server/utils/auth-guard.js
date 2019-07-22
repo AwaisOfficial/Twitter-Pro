@@ -31,7 +31,6 @@ class AuthGuard {
         };
     }
     sendError(message, res) {
-        console.log(message);
         return res.status(401).json({ success: false, message: message });
     }
 }

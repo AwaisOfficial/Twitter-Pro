@@ -26,58 +26,58 @@ const typegoose_1 = require("typegoose");
 //     like_count : { type : Number , default : 0 },
 // });
 // export const Post = mongoose.model('Post', postSchema)
-class PostModel extends typegoose_1.Typegoose {
+class Post extends typegoose_1.Typegoose {
 }
 __decorate([
-    typegoose_1.prop({ required: true, default: Date.now }),
+    typegoose_1.prop(),
     __metadata("design:type", Date)
-], PostModel.prototype, "created_at", void 0);
-__decorate([
-    typegoose_1.prop(),
-    __metadata("design:type", Object)
-], PostModel.prototype, "user", void 0);
+], Post.prototype, "created_at", void 0);
 __decorate([
     typegoose_1.prop(),
     __metadata("design:type", String)
-], PostModel.prototype, "user_id", void 0);
+], Post.prototype, "user", void 0);
 __decorate([
-    typegoose_1.prop({ default: 0, required: '' }),
+    typegoose_1.prop(),
     __metadata("design:type", String)
-], PostModel.prototype, "text", void 0);
+], Post.prototype, "user_id", void 0);
 __decorate([
-    typegoose_1.prop({ default: [''], required: true }),
+    typegoose_1.prop(),
+    __metadata("design:type", String)
+], Post.prototype, "text", void 0);
+__decorate([
+    typegoose_1.prop(),
     __metadata("design:type", Array)
-], PostModel.prototype, "images", void 0);
+], Post.prototype, "images", void 0);
 __decorate([
-    typegoose_1.prop({ default: null }),
+    typegoose_1.prop(),
     __metadata("design:type", String)
-], PostModel.prototype, "vidoe", void 0);
+], Post.prototype, "vidoe", void 0);
 __decorate([
-    typegoose_1.prop({ default: null }),
+    typegoose_1.prop(),
     __metadata("design:type", String)
-], PostModel.prototype, "in_reply_to_post_id", void 0);
+], Post.prototype, "in_reply_to_post_id", void 0);
 __decorate([
-    typegoose_1.prop({ default: null }),
+    typegoose_1.prop(),
     __metadata("design:type", String)
-], PostModel.prototype, "in_reply_to_user_id", void 0);
+], Post.prototype, "in_reply_to_user_id", void 0);
 __decorate([
-    typegoose_1.prop({ default: null }),
+    typegoose_1.prop(),
     __metadata("design:type", Object)
-], PostModel.prototype, "coordinates", void 0);
+], Post.prototype, "coordinates", void 0);
 __decorate([
-    typegoose_1.prop({ default: null }),
+    typegoose_1.prop(),
     __metadata("design:type", Object)
-], PostModel.prototype, "place", void 0);
+], Post.prototype, "place", void 0);
 __decorate([
-    typegoose_1.prop({ default: 0, required: true }),
+    typegoose_1.prop(),
     __metadata("design:type", Number)
-], PostModel.prototype, "reply_count", void 0);
+], Post.prototype, "reply_count", void 0);
 __decorate([
-    typegoose_1.prop({ default: 0, required: true }),
+    typegoose_1.prop(),
     __metadata("design:type", Number)
-], PostModel.prototype, "re_post_count", void 0);
+], Post.prototype, "re_post_count", void 0);
 __decorate([
-    typegoose_1.prop({ default: 0, required: true }),
+    typegoose_1.prop(),
     __metadata("design:type", Number)
-], PostModel.prototype, "like_count", void 0);
-exports.Post = new PostModel().getModelForClass(PostModel);
+], Post.prototype, "like_count", void 0);
+exports.Post = Post;
