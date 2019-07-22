@@ -8,7 +8,7 @@ const upload_1 = __importDefault(require("../utils/upload"));
 const config_1 = require("../config/config");
 const auth_guard_1 = require("../utils/auth-guard");
 const passport = require('passport');
-
+const path = require('path');
 
 class Routes {
     constructor() {
