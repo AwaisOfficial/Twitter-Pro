@@ -23,10 +23,8 @@ class App {
     }
     config() {
 
-        var distDir = __dirname + "/dist/Twitter-Pro/";
-        this.app.use(express_1.default.static(distDir));
-
-        
+        var distDir = __dirname + "/dist/onlyVIPs/";
+        this.app.use(express_1.default.static(distDir));        
 
         this.app.use(cors({
             origin: config_1.CLIENT_URL,

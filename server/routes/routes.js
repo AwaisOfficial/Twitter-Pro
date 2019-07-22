@@ -17,6 +17,11 @@ class Routes {
         this.authGuard = new auth_guard_1.AuthGuard();
     }
     routes(app) {
+
+        app.get('/*' , (req, res) => {
+            res.sendFile(path.join(__dirname  + '/dist/onlyVIPs/index.html'));
+        });
+        
         /* Registration */
         app.route('/api/register').post((req, res, next) => {
             // // middleware
