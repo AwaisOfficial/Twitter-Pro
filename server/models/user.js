@@ -15,13 +15,13 @@ const config_1 = require("../config/config");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.userSchema = new mongoose_1.Schema({
-    first_name: { type: String },
-    last_name: { type: String },
-    user_name: { type: String, unique: true, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
+    userName: { type: String, unique: true, required: true },
     email: { type: String, unique: true, required: true },
     role: { type: String, required: true, default: 'user' },
     twitterId: { type: String, default: null },
-    created_at: { type: Date, default: new Date() },
+    createdAt: { type: Date, default: Date.now },
     password: { type: String },
     avatar: { type: String, required: true },
     salt: { type: String, default: config_1.JWTSECRET },

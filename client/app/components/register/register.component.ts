@@ -36,9 +36,9 @@ export class RegisterComponent implements OnInit {
     this.submitted = this.isRegistered = this.isImageSelected = false;
 
     this.signUpForm = this.formBuilder.group({
-      first_name : ['', Validators.required] ,
-      last_name : ['', Validators.required] ,
-      user_name : ['', Validators.required] ,
+      firstName : ['', Validators.required] ,
+      lastName : ['', Validators.required] ,
+      userName : ['', Validators.required] ,
       email : ['', Validators.compose([ Validators.required , Validators.pattern(EMAIL_PATTERN)]) ] ,
       password : ['' , Validators.compose([ 
                   Validators.required,

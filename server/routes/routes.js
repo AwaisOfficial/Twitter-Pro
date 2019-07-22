@@ -8,6 +8,8 @@ const upload_1 = __importDefault(require("../utils/upload"));
 const config_1 = require("../config/config");
 const auth_guard_1 = require("../utils/auth-guard");
 const passport = require('passport');
+
+
 class Routes {
     constructor() {
         this.authController = new controllers_1.AuthController();
@@ -40,7 +42,9 @@ class Routes {
         }));
         app.route('/api/twitter-profile').get(this.authController.twitterProfile);
         /* ROUTES WHICH REQUIRED AUTHORIZATION  */
-        app.route('/api/create-post').post(this.authGuard.isAuthorized('member'), this.postController.createPost);
+        app.route('/api/create-post').post(this.authGuard.isAuthorized(['member', 'user']), this.postController.createPost);
+    
+        
     }
 }
 exports.Routes = Routes;

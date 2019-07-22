@@ -29,10 +29,10 @@
 
                                     <div class="custom-form">
                                         <div class="form-group">
-                                          <label for="user_name">Email / Username</label>
-                                          <input type="email" class="form-control" formControlName="user_name" class="form-control" placeholder="Enter username / email" [ngClass]="{ 'is-invalid': (f.user_name.touched && f.user_name.errors) || (response && !response?.success) }" >
-                                          <div *ngIf="f.user_name.errors || !response?.success" class="invalid-feedback">
-                                            <div *ngIf="f.user_name.hasError('required')">Username / Email is required</div>
+                                          <label for="userName">Email / Username</label>
+                                          <input type="email" class="form-control" formControlName="userName" class="form-control" placeholder="Enter username / email" [ngClass]="{ 'is-invalid': (f.userName.touched && f.userName.errors) || (response && !response?.success) }" >
+                                          <div *ngIf="f.userName.errors || !response?.success" class="invalid-feedback">
+                                            <div *ngIf="f.userName.hasError('required')">Username / Email is required</div>
                                           </div> 
                                         </div>
                                           <div class="form-group">

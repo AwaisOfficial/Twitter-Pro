@@ -50,14 +50,15 @@ passport_1.default.use('twitter', new TwitterStrategy({
     });
     // create new user if the database doesn't have this user
     if (!currentUser) {
-        const newUser = yield new User({
+        const newUser = {
             firstName: profile.displayName.split(' ')[0],
             lastName: profile.displayName.split(' ')[1],
             userName: profile.username,
             email: profile.emails[0].value ? profile.emails[0].value : 'twitter_mail_' + new Date().getTime() + '@mail.com',
             avatar: profile.photos[0].value ? profile.photos[0].value : '',
             twitterId: profile.id
-        }).save();
+        };
+        const newUser = yield new User(_user).save();
         if (newUser) {
             done(null, newUser);
         }

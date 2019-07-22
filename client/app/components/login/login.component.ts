@@ -31,8 +31,9 @@ export class LoginComponent implements OnInit {
     this.SERVER_URL = environment.APIEndPoint;
     this.submitted = false;
 
+    this.submitted = false;
     this.loginForm = this.formBuilder.group({
-      user_name : ['', Validators.required] ,
+      userName : ['', Validators.required] ,
       password : ['' , Validators.required]
     });
     this.loginForm.valueChanges.subscribe(result => {this.response = undefined; });
@@ -68,7 +69,6 @@ export class LoginComponent implements OnInit {
   }
 
   handleResponse(response : any){
-    console.log('User', response);
     this.btnLoaderService.hideLoader();
     this.response = response;
     if(response && response.user) 

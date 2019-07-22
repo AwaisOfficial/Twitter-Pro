@@ -11,10 +11,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./server/app"));
-const express_1 = __importDefault(require("express"));
-const path = __importStar(require("path"));
 const http = __importStar(require("http"));
 const config_1 = require("./server/config/config");
+const path = require('path');
+
+app_1.default.get('/*' , (req, res) => {
+    res.sendFile(path.join(__dirname  + '/dist/Twitter-Pro/index.html'));
+});
 
 // const httpOptions = {
 //     key : fs.readFileSync(path.resolve("../certificates/key.pem")),
@@ -23,12 +26,6 @@ const config_1 = require("./server/config/config");
 // https.createServer({}, app).listen(PORT , () => {
 //     console.log('Express server listening on port '+ PORT);
 // });
-
-app_1.default.use(express_1.default.static(__dirname + '/dist/TwitterPro/'));
-app_1.default.get('/*' , (req , res) => {
-  res.sendFile(path.join(__dirname + '/dist/TwitterPro/index.html'));
-});
-
 http.createServer(app_1.default).listen(process.env.PORT || config_1.PORT, () => {
     console.log('Express server listening on port ' + config_1.PORT);
 });

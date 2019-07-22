@@ -22,9 +22,15 @@ class App {
         this.routePrv.routes(this.app);
     }
     config() {
+
+        var distDir = __dirname + "/dist/Twitter-Pro/";
+        this.app.use(express_1.default.static(distDir));
+
+        
+
         this.app.use(cors({
             origin: config_1.CLIENT_URL,
-            methods: "OPTIONS , GET,HEAD,PUT,PATCH,POST,DELETE",
+            methods: "OPTIONS,GET,HEAD,PUT,PATCH,POST,DELETE",
             credentials: true // allow session cookie from browser to pass through
         }));
         this.app.use(cookieSession({
