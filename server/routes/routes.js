@@ -9,7 +9,7 @@ const config_1 = require("../config/config");
 const auth_guard_1 = require("../utils/auth-guard");
 const passport = require('passport');
 const path = require('path');
-
+const dir = require('../../dist/onlyVIPs')
 class Routes {
     constructor() {
         this.authController = new controllers_1.AuthController();
@@ -19,7 +19,8 @@ class Routes {
     routes(app) {
 
         app.get('/*' , (req, res) => {
-            res.sendFile(path.join(__dirname  + '/dist/onlyVIPs/index.html'));
+            const dir = '../../';
+            res.sendFile(path.join('../../dist/onlyVIPs/index.html'));
         });
         
         /* Registration */
