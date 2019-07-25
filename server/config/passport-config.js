@@ -43,7 +43,7 @@ passport_1.default.use('twitter', new TwitterStrategy({
     includeEmail: true,
     callbackURL: '/api/twitter-callback'
 }, (token, tokenSecret, profile, done) => __awaiter(this, void 0, void 0, function* () {
-    console.log('EMAILs', profile.emails);
+    console.log('EMAILs', profile.emails , profile.username);
     // find current user in UserModel
     const currentUser = yield User.findOne({
         userName: profile.username
