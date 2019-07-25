@@ -22,7 +22,7 @@ class App {
         this.routePrv.routes(this.app);
     }
     config() {
-        var whitelist = [CLIENT_URL, 'http://twitterpro.herokuapp.com']
+        var whitelist = [config_1.CLIENT_URL, 'http://twitterpro.herokuapp.com']
         this.app.use(cors({
             origin: function (origin, callback) {
                 if (whitelist.indexOf(origin) !== -1) {
