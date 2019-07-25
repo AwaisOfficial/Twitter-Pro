@@ -54,7 +54,7 @@ passport_1.default.use('twitter', new TwitterStrategy({
             firstName: profile.displayName.split(' ')[0],
             lastName: profile.displayName.split(' ')[1],
             userName: profile.username,
-            email: profile.emails[0].value ? profile.emails[0].value : 'twitter_mail_' + new Date().getTime() + '@mail.com',
+            email: profile.emails[0].value ,
             avatar: profile.photos[0].value ? profile.photos[0].value : '',
             twitterId: profile.id
         }).save();
