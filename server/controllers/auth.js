@@ -165,6 +165,7 @@ class AuthController {
     set twitterTokens(tokens) { this._tokens = tokens; }
     ;
     get twitterTokens() { return this._tokens; }
+
     register(req, res) {
         const errors = express_validator_1.validationResult(req);
         if (!errors.isEmpty()) {
@@ -192,7 +193,7 @@ class AuthController {
                     const url = 'http://' + req.headers.host + '/api/verifyEmail/' + _token.token;
                     const content = '<h4><b>Only VIPs:</b></h4>' +
                         '<p>To verify your email , Please click the below link:</p>' +
-                        '<a href=' + url + '">Click Here</a>' +
+                        '<a href=' + url + '>Click Here</a>' +
                         '<br><br>' +
                         '<p>-- Team Only VIPs --</p>';
                     let payload = {
