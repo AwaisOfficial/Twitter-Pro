@@ -22,8 +22,15 @@ class App {
         this.routePrv.routes(this.app);
     }
     config() {
+        var whitelist = [CLIENT_URL, 'http://twitterpro.herokuapp.com']
         this.app.use(cors({
-            origin: config_1.CLIENT_URL,
+            origin: function (origin, callback) {
+                if (whitelist.indexOf(origin) !== -1) {
+                  callback(null, true)
+                } else {
+                  callback(new Error('Not allowed by CORS'))
+                }
+            },
             methods: "OPTIONS , GET,HEAD,PUT,PATCH,POST,DELETE",
             credentials: true // allow session cookie from browser to pass through
         }));
