@@ -22,6 +22,7 @@ let Token = mongoose.model('Token', models_1.tokenSchema);
 class AuthController {
     constructor() {
         this.login = (req, res) => {
+            console.log(req.body);
             this.findUser(req).then(document => {
                 if (!document) {
                     res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
@@ -137,7 +138,7 @@ class AuthController {
             switch (method) {
                 case 'register':
                     return [
-                        express_validator_1.body('user_name', 'User name is required.').exists(),
+                        express_validator_1.body('userName', 'User name is required.').exists(),
                         express_validator_1.body('email', 'Email is required.').exists(),
                         express_validator_1.body('email', 'Email is invalid.').isEmail(),
                         express_validator_1.body('password', ' Password is required.').exists(),
@@ -145,13 +146,13 @@ class AuthController {
                     ];
                 case 'login':
                     return [
-                        express_validator_1.body('user_name', 'User name / Email is required.').exists(),
+                        express_validator_1.body('userName', 'User name / Email is required.').exists(),
                         express_validator_1.body('password', 'Password is required.').exists()
                     ];
                 case 'forgot-password':
                     return [
-                        express_validator_1.body('user_name', 'Email is required.').exists(),
-                        express_validator_1.body('user_name', 'Email is invalid.').isEmail(),
+                        express_validator_1.body('userName', 'Email is required.').exists(),
+                        express_validator_1.body('userName', 'Email is invalid.').isEmail(),
                     ];
                 case 'reset-password':
                     return [
@@ -165,7 +166,6 @@ class AuthController {
     set twitterTokens(tokens) { this._tokens = tokens; }
     ;
     get twitterTokens() { return this._tokens; }
-
     register(req, res) {
         const errors = express_validator_1.validationResult(req);
         if (!errors.isEmpty()) {
@@ -173,9 +173,11 @@ class AuthController {
             return;
         }
         let user = new User(req.body);
+        console.log('User', user);
         user.password = user.schema.methods.createHash(req.body.password);
         user.save((err, response) => {
             if (err) {
+                console.error('Error', err);
                 if (err.errmsg && err.errmsg.indexOf('email') > -1)
                     err.errmsg = 'Email already exists';
                 else if (err.errmsg && err.errmsg.indexOf('userName') > -1)
@@ -220,8 +222,8 @@ class AuthController {
                 reject({ success: false, error: errors });
                 return;
             }
-            let value = req.body.user_name;
-            let criteria = value.indexOf('@') > -1 ? { email: value } : { user_name: value };
+            let value = req.body.userName;
+            let criteria = value.indexOf('@') > -1 ? { email: value } : { userName: value };
             console.log(criteria);
             User.findOne(criteria, (err, document) => {
                 if (err || document == null)

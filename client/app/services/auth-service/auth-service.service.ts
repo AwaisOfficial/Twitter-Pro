@@ -19,6 +19,12 @@ export class AuthService {
     this.userSubject = new BehaviorSubject<any>(JSON.parse(this.user));
   }
 
+  register(endPoint: string , payload: any){
+    const url = environment.APIEndPoint + endPoint;
+    return this.http.post(`${url}` , payload);
+  }
+
+
   login(payload: any){
     const url = environment.APIEndPoint + 'login';
     return this.http.post(`${url}` , payload).pipe(map((response : any) => {

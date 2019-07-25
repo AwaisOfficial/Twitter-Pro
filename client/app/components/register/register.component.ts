@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { OperationsService } from 'client/app/services';
-import { EMAIL_PATTERN } from 'client/app/constants/constants';
+import { OperationsService, AuthService } from 'client/app/services';
+import { EMAIL_PATTERN, ERROR_MSG } from 'client/app/constants/constants';
 import { CustomValidator } from 'client/app/helpers/custom-validator';
 import { Router } from '@angular/router';
 import {  mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AngularButtonLoaderService } from 'angular-button-loader';
-import { environment } from 'client/environments/environment';
 
 
 @Component({
@@ -23,22 +22,21 @@ export class RegisterComponent implements OnInit {
   formData: FormData;
   isImageSelected: boolean;
   response: any;
-  SERVER_URL : string;
+
 
   constructor(private formBuilder: FormBuilder,
               private btnLoaderService: AngularButtonLoaderService,
-              private operationsService: OperationsService) { }
+              private operationsService: OperationsService,
+              private authService: AuthService) { }
 
   ngOnInit() {
-    
-    this.SERVER_URL = environment.APIEndPoint;
     
     this.submitted = this.isRegistered = this.isImageSelected = false;
 
     this.signUpForm = this.formBuilder.group({
-      first_name : ['', Validators.required] ,
-      last_name : ['', Validators.required] ,
-      user_name : ['', Validators.required] ,
+      firstName : ['', Validators.required] ,
+      lastName : ['', Validators.required] ,
+      userName : ['', Validators.required] ,
       email : ['', Validators.compose([ Validators.required , Validators.pattern(EMAIL_PATTERN)]) ] ,
       password : ['' , Validators.compose([ 
                   Validators.required,
@@ -69,30 +67,37 @@ export class RegisterComponent implements OnInit {
   }
   onSubmit() {
     this.submitted = true;
+    console.log(this.isImageSelected , this.signUpForm.value)
     if(this.signUpForm.invalid) 
       return;
     else if(!this.isImageSelected)
       return;
      
+    console.log(this.isImageSelected , this.signUpForm.value)
     this.btnLoaderService.displayLoader();  
-    const fileUpload = this.operationsService.postOperations('profile-image' , this.formData);    
+    const fileUpload = this.authService.register('profile-image' , this.formData);    
     const register = fileUpload.pipe(
       mergeMap((response : any) => {
-        //console.log('Response', response);
+        console.log('profile-image Response', response);
         if(response.success) {
           this.signUpForm.get('avatar').setValue(response.filename);
           this.signUpForm.get('role').setValue('user');
-          return this.operationsService.postOperations('register',this.signUpForm.value);
+          return this.authService.register('register',this.signUpForm.value);
         }
         else
           return of(null);
     }));
     
     register.subscribe(response => {
-      
+      console.log('Registration Response ', response);
+      this.btnLoaderService.hideLoader();      
 
-      this.btnLoaderService.hideLoader();
       this.response = response;
+
+      if(!this.response){
+        this.response = {success : false, message : ERROR_MSG};
+        return;
+      }
       window.scrollTo(0 , 0);
 
       if(response.success) {
@@ -111,7 +116,6 @@ export class RegisterComponent implements OnInit {
 
 
   isErrorField(field: string) {
-    console.warn('Response ', this.response);
     return this.response && !this.response.success && this.response.message.indexOf(field) > -1;
   }
 }

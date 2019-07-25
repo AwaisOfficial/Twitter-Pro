@@ -21,7 +21,7 @@ export class ForgotPasswordComponent implements OnInit {
   ngOnInit() {
     
     this.resetPwdForm = this.formBuilder.group({
-      user_name: ['', Validators.compose ( [ Validators.required, Validators.pattern(EMAIL_PATTERN) ])]
+      userName: ['', Validators.compose ( [ Validators.required, Validators.pattern(EMAIL_PATTERN) ])]
     });
 
     this.resetPwdForm.valueChanges.subscribe(result => {

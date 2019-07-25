@@ -15,9 +15,9 @@ const config_1 = require("../config/config");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.userSchema = new mongoose_1.Schema({
-    first_name: { type: String },
-    last_name: { type: String },
-    user_name: { type: String, unique: true, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
+    userName: { type: String, unique: true, required: true },
     email: { type: String, unique: true, required: true },
     role: { type: String, required: true, default: 'user' },
     twitterId: { type: String, default: null },
@@ -43,7 +43,7 @@ exports.userSchema.method('generateJwt', function (user) {
     expiry.setDate(expiry.getDate() + 7);
     return jsonwebtoken_1.default.sign({
         user: user,
-        exp: expiry.getTime() / 10000
+        exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60 * 100)
     }, config_1.JWTSECRET);
 });
 exports.userSchema.method('emailVerifier', function (email) {
