@@ -31,7 +31,7 @@ class Routes {
         app.route('/api/login').post(this.authController.validate('login'), this.authController.login);
         app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
         app.route('/api/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
-        app.post('/api/profile-image', upload_1.default.single('avatar'), (req, res, next) => {
+        app.post('/api/profile-image', upload_1.default.single('avatar'), (req, res) => {
             res.json({ success: true, filename: req.file.filename });
         });
         app.route('/api/twitter-login').get(passport.authenticate('twitter'));
