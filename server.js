@@ -25,7 +25,7 @@ const path = require('path');
 // });
 http.createServer(app_1.default).listen(process.env.PORT || config_1.PORT, () => {
     console.log('onlyVIP\'s server listening on port ' + config_1.PORT);
-    console.log('Host is ',process.env.HOST);
+    console.log('Host is ',process.env.host);
 });
 
 var distDir = __dirname + "/dist/onlyVIPs/";
