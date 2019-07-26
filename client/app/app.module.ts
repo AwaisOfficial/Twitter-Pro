@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms'
 import { AngularButtonLoaderModule } from 'angular-button-loader';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 /* Components */
 import { AppComponent } from './app.component';
 
@@ -48,6 +49,7 @@ import { AboutComponent } from './components/about/about.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule ,
+    //NgbModule ,
     AngularButtonLoaderModule.forRoot()
   ],
   providers: [ OperationsService ],

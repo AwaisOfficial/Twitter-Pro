@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const controllers_1 = require("../controllers");
-const upload_1 = __importDefault(require("../utils/upload"));
+const upload_1 = require("../utils/upload");
 const config_1 = require("../config/config");
 const auth_guard_1 = require("../utils/auth-guard");
 const passport = require('passport');
@@ -31,7 +28,7 @@ class Routes {
         app.route('/api/login').post(this.authController.validate('login'), this.authController.login);
         app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
         app.route('/api/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
-        app.post('/api/profile-image', upload_1.default.single('avatar'), (req, res) => {
+        app.post('/api/profile-image', upload_1.upload.single('avatar'), (req, res) => {
             res.json({ success: true, filename: req.file.filename });
         });
         app.route('/api/twitter-login').get(passport.authenticate('twitter'));
@@ -41,6 +38,15 @@ class Routes {
         app.route('/api/twitter-profile').get(this.authController.twitterProfile);
         /* ROUTES WHICH REQUIRED AUTHORIZATION  */
         app.route('/api/create-post').post(this.authGuard.isAuthorized('member'), this.postController.createPost);
+        app.post('/api/post-images', (req, res) => {
+            upload_1.postUploads(req, res, (error) => {
+                //console.log(req.files);
+                if (error) {
+                    return res.end("Error uploading file.");
+                }
+                res.json({ success: true, messsage: "Files is uploaded " });
+            });
+        });
     }
 }
 exports.Routes = Routes;

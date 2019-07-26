@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OperationsService, AuthService } from 'client/app/services';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-header',
@@ -23,5 +25,9 @@ export class HeaderComponent implements OnInit {
     this.authService.logOut();
     this.router.navigateByUrl('login');
   }
+
+  // confirm() {
+  //   this.modalService.open(AlertComponent);
+  // }
 
 }

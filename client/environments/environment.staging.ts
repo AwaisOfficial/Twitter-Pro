@@ -1,5 +1,6 @@
 export const environment = {
-    production: true,
+    name : 'staging',
+    production: false,
     APIEndPoint : 'https://twitterpro.herokuapp.com/api/'
   };
   

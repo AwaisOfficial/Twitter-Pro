@@ -43,18 +43,22 @@ passport_1.default.use('twitter', new TwitterStrategy({
     includeEmail: true,
     callbackURL: '/api/twitter-callback'
 }, (token, tokenSecret, profile, done) => __awaiter(this, void 0, void 0, function* () {
-    console.log('EMAILs', profile.emails , profile.username);
+    console.log(profile.emails);
     // find current user in UserModel
     const currentUser = yield User.findOne({
-        userName: profile.username
+        $or: [
+            { userName: profile.username },
+            { email: profile.emails[0].value }
+        ]
     });
+    console.log('User Found ', currentUser);
     // create new user if the database doesn't have this user
     if (!currentUser) {
         const newUser = yield new User({
             firstName: profile.displayName.split(' ')[0],
             lastName: profile.displayName.split(' ')[1],
             userName: profile.username,
-            email: profile.emails[0].value ,
+            email: profile.emails[0].value ? profile.emails[0].value : 'twitter_mail_' + new Date().getTime() + '@mail.com',
             avatar: profile.photos[0].value ? profile.photos[0].value : '',
             twitterId: profile.id
         }).save();

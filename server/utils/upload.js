@@ -1,5 +1,4 @@
 "use strict";
-
 Object.defineProperty(exports, "__esModule", { value: true });
 const multer = require('multer');
 let storage = multer.diskStorage({
@@ -8,8 +7,10 @@ let storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const filename = new Date().getTime() + '_' + file.originalname;
+        console.log('File Name ', filename);
         cb(null, filename);
     }
 });
-const upload = multer({ storage: storage });
-exports.default = upload;
+exports.postUploads = multer({ storage: storage }).array('postImages', 2);
+exports.upload = multer({ storage: storage });
+exports.default = exports.upload;

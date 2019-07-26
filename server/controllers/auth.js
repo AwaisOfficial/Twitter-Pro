@@ -173,11 +173,10 @@ class AuthController {
             return;
         }
         let user = new User(req.body);
-        console.log('User', user);
         user.password = user.schema.methods.createHash(req.body.password);
         user.save((err, response) => {
             if (err) {
-                console.error('Error', err);
+                console.error('Registration Error', err);
                 if (err.errmsg && err.errmsg.indexOf('email') > -1)
                     err.errmsg = 'Email already exists';
                 else if (err.errmsg && err.errmsg.indexOf('userName') > -1)

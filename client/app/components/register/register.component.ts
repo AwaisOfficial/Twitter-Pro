@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import {  mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AngularButtonLoaderService } from 'angular-button-loader';
-import { environment } from 'client/environments/environment.prod';
+import { environment } from 'client/environments/environment';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
   formData: FormData;
   isImageSelected: boolean;
   response: any;
-  SERVER_URL : string;
+  SERVER_URL: string;
 
   constructor(private formBuilder: FormBuilder,
               private btnLoaderService: AngularButtonLoaderService,

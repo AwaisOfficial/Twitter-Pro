@@ -41,6 +41,7 @@
             ]
           },
           "configurations": {
+
             "production": {
               "fileReplacements": [
                 {
@@ -64,7 +65,26 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "client/environments/environment.ts",
+                  "with": "client/environments/environment.staging.ts"
+                }
+              ]
+            },
+
+            "dev" :{
+              "fileReplacements": [
+                {
+                  "replace": "client/environments/environment.ts",
+                  "with": "client/environments/environment.dev.ts"
+                }
+              ]
             }
+
           }
         },
         "serve": {
@@ -75,6 +95,12 @@
           "configurations": {
             "production": {
               "browserTarget": "Twitter-Pro:build:production"
+            },
+            "staging": {
+              "browserTarget": "Twitter-Pro:build:staging"
+            },
+            "dev": {
+              "browserTarget": "Twitter-Pro:build:dev"
             }
           }
         },
