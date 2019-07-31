@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OperationsService } from 'client/app/services';
 import { EMAIL_PATTERN } from 'client/app/constants/constants';
-import { AngularButtonLoaderService } from 'angular-button-loader';
+
 
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.css']
+  styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent implements OnInit {
 
@@ -15,7 +15,6 @@ export class ForgotPasswordComponent implements OnInit {
   response: any;
 
   constructor(private formBuilder: FormBuilder,
-              private btnLoaderService: AngularButtonLoaderService,
               private operationsService: OperationsService) { }
 
   ngOnInit() {
@@ -34,9 +33,9 @@ export class ForgotPasswordComponent implements OnInit {
   onSubmit(){
     if(this.resetPwdForm.invalid) return;
 
-    this.btnLoaderService.displayLoader();
+    
     this.operationsService.postOperations('forgot-password', this.resetPwdForm.value).subscribe(( response : any) => {
-      this.btnLoaderService.hideLoader();
+      
       this.response = response;
       if(response.success) {
         setTimeout(() => { 
@@ -47,7 +46,7 @@ export class ForgotPasswordComponent implements OnInit {
     },
     error => {
       console.error('Forgot Password Error', error)
-      this.btnLoaderService.hideLoader();
+      
     });
   }
 

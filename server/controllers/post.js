@@ -13,7 +13,7 @@ class PostController {
         */
         this.createPost = (req, res) => {
             const token = req.headers.authorization;
-            console.log('Token', token);
+            //console.log('Payload', req.body);
             if (!token)
                 return res.status(200).json({ success: false, error: config_1.AUTHORIZATION_HEADER_MISSING });
             let user = jsonwebtoken_1.default.verify(token, config_1.JWTSECRET);

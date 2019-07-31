@@ -6,14 +6,14 @@ import { CustomValidator } from 'client/app/helpers/custom-validator';
 import { Router } from '@angular/router';
 import {  mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { AngularButtonLoaderService } from 'angular-button-loader';
+
 import { environment } from 'client/environments/environment';
 
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
 
@@ -26,11 +26,10 @@ export class RegisterComponent implements OnInit {
   SERVER_URL: string;
 
   constructor(private formBuilder: FormBuilder,
-              private btnLoaderService: AngularButtonLoaderService,
-              private operationsService: OperationsService,
               private authService: AuthService) { }
 
   ngOnInit() {
+    
     this.SERVER_URL = environment.APIEndPoint;
     this.submitted = this.isRegistered = this.isImageSelected = false;
 
@@ -75,7 +74,7 @@ export class RegisterComponent implements OnInit {
       return;
      
     console.log(this.isImageSelected , this.signUpForm.value)
-    this.btnLoaderService.displayLoader();  
+      
     const fileUpload = this.authService.register('profile-image' , this.formData);    
     const register = fileUpload.pipe(
       mergeMap((response : any) => {
@@ -83,7 +82,7 @@ export class RegisterComponent implements OnInit {
         if(response.success) {
           this.signUpForm.get('avatar').setValue(response.filename);
           this.signUpForm.get('role').setValue('user');
-          return this.authService.register('register',this.signUpForm.value);
+          return this.authService.register('register', this.signUpForm.value);
         }
         else
           return of(null);
@@ -91,7 +90,7 @@ export class RegisterComponent implements OnInit {
     
     register.subscribe(response => {
       console.log('Registration Response ', response);
-      this.btnLoaderService.hideLoader();      
+            
 
       this.response = response;
 
@@ -111,7 +110,7 @@ export class RegisterComponent implements OnInit {
     },
     error => {
       console.error("Registration response", error);
-      this.btnLoaderService.hideLoader();
+      
     });      
   }  
 

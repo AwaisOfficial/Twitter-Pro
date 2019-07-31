@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OperationsService } from 'client/app/services';
-import { AngularButtonLoaderService } from 'angular-button-loader';
+
 import { ActivatedRoute } from '@angular/router';
 import { CustomValidator } from 'client/app/helpers/custom-validator';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css']
+  styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent implements OnInit {
 
@@ -17,8 +17,7 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private operationsService: OperationsService ,
-              private activeRoute: ActivatedRoute,
-              private btnLoaderService: AngularButtonLoaderService) { }
+              private activeRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.resetPwdForm = this.formBuilder.group({
@@ -47,12 +46,12 @@ export class ResetPasswordComponent implements OnInit {
   onSubmit(){
     if(this.resetPwdForm.invalid) return;
 
-    this.btnLoaderService.displayLoader();
+    
 
     console.log('Form', this.resetPwdForm.value);
     
     this.operationsService.postOperations('reset-password', this.resetPwdForm.value).subscribe(result => {
-      this.btnLoaderService.hideLoader();
+      
       this.response = result;
       setTimeout(() => {
         this.resetPwdForm.get('password').setValue('');

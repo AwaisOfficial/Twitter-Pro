@@ -1,4 +1,4 @@
-import { ValidationErrors, AbstractControl } from '@angular/forms';
+import { ValidationErrors, AbstractControl, FormControl } from '@angular/forms';
 
 export class CustomValidator {
 
@@ -20,6 +20,25 @@ export class CustomValidator {
         if (password !== confirmPassword) {
             // if they don't match, set an error in our confirmPassword form control
             control.get('confirm_password').setErrors({ NoPassswordMatch: true });
+        }
+    }
+
+    static fileType(types: Array<any>){
+        return (control : FormControl) => {
+            const file = control.value;
+            if ( file ) {
+                console.log(file , file.name);
+                const extension = file.name.split('.')[1].toLowerCase();
+                if ( types.indexOf( extension.toLowerCase() ) > -1) {
+                  return {
+                    fileType: true
+                  };
+                }
+                
+                return null;
+              }
+          
+              return null;
         }
     }
 }

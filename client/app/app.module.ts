@@ -5,8 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms'
-import { AngularButtonLoaderModule } from 'angular-button-loader';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 /* Components */
 import { AppComponent } from './app.component';
 
@@ -24,6 +23,7 @@ import { AlertComponent } from './components/shared/alert/alert.component';
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component';
 import { AboutComponent } from './components/about/about.component';
+import { ModalComponent } from './components/shared/modal/modal.component';
 
 
 @NgModule({
@@ -40,7 +40,8 @@ import { AboutComponent } from './components/about/about.component';
     AlertComponent,
     PrivacyPolicyComponent,
     TermsOfServiceComponent,
-    AboutComponent
+    AboutComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
@@ -49,10 +50,11 @@ import { AboutComponent } from './components/about/about.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule ,
-    //NgbModule ,
-    AngularButtonLoaderModule.forRoot()
+   // MDBBootstrapModule.forRoot(),
+    NgbModule
   ],
-  providers: [ OperationsService ],
+  entryComponents:[ModalComponent],
+  providers: [ OperationsService , NgbActiveModal ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

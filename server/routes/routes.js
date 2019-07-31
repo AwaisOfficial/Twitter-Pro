@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const controllers_1 = require("../controllers");
 const upload_1 = require("../utils/upload");
+const multer = require('multer');
 const config_1 = require("../config/config");
 const auth_guard_1 = require("../utils/auth-guard");
 const passport = require('passport');
@@ -37,14 +38,15 @@ class Routes {
         }));
         app.route('/api/twitter-profile').get(this.authController.twitterProfile);
         /* ROUTES WHICH REQUIRED AUTHORIZATION  */
-        app.route('/api/create-post').post(this.authGuard.isAuthorized('member'), this.postController.createPost);
+        app.route('/api/create-post').post(this.postController.createPost);
         app.post('/api/post-images', (req, res) => {
             upload_1.postUploads(req, res, (error) => {
                 //console.log(req.files);
-                if (error) {
-                    return res.end("Error uploading file.");
+                if (error instanceof multer.MulterError) {
+                    console.error(error);
+                    return res.json({ success: false, message: "Error uploading file." });
                 }
-                res.json({ success: true, messsage: "Files is uploaded " });
+                res.json({ success: true, messsage: "Files are uploaded ", files: req.files });
             });
         });
     }
