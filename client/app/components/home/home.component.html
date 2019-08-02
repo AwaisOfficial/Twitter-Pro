@@ -1,15 +1,20 @@
 
 <app-header></app-header>
 
-<div class="container bg-white">
+<div class="container">
   <div class="row">
     <div class="col-md-8">
+        
+        
         <div class="post-section" >
             <div class="create-post">
                 <div class="form-group mb-5 position-relative">
-                    <input type="text" readonly class="form-control" placeholder="Create Post">
-                      <button class="btn go-live"><i class="fas fa-video"></i> Go Live</button>
+                    <!-- <input type="text" class="form-control" placeholder="Create Post"> -->
+                    <label class="form-control" >Create Post</label>
+                    <button class="btn go-live"><i class="fas fa-video"></i> Go Live</button>
                   </div>
+                  
+                <app-alert *ngIf="postCreationResponse" [response]="postCreationResponse"></app-alert>  
 
                 <textarea #postText type="text-area" class="form-control post-send" placeholder="What's on your mind ?"></textarea>  
                 
@@ -24,10 +29,12 @@
                     <button class="btn choose-video" [style.margin-left.px]="files.imagesCount > 0 ? '70' : '20'">
                         <i class="fa fa-video"></i>
                         <input type="file" (change)="onImagesSelection($event , 'videos')" accept="video/*">
-                        <span class="badge badge-light">{{ files.videosCount > 0 ? files.videosCount + ' videos.' : '' }}</span>
+                        <span class="badge badge-light">{{ files.videosCount > 0 ? files.videosCount + ' video.' : '' }}</span>
                     </button>
 
-                    <button class="btn go-live" (click)="createPost()"><i class="fas fa-paper-plane"></i> Post</button>
+                    <button class="btn go-live" (click)="createPost()"><i class="fas fa-paper-plane"></i> 
+                       Post
+                    </button>
                   
                 </div>
               </div>
@@ -35,9 +42,11 @@
                 <span><i class="fas fa-pencil-alt"></i></span>
               </div>
 
-              <div class="tw-posts">
-                	<div class="user-post clearfix">
+              <div class="tw-posts" *ngIf="posts?.length > 0">
+
+                	<div class="user-post clearfix" *ngFor="let post of posts; let i=index;">
                         <div class="user-img">
+                            <!-- <img src="{{ getFilePath(post.user.avatar) }}" alt=""> -->
                             <img src="assets/user.jpg" alt="">
                         </div>
                         <div class="post-content">
@@ -45,36 +54,46 @@
                                 <div class="row no-gutters">
                                     <div class="col-6">
                                         <div class="user-info">
-                                          <span class="user-name">John Doe</span>
-                                          <span class="user-tag">@johndoe</span>
+                                          <span class="user-name">{{ post?.user?.firstName + ' ' + post?.user?.lastName }}</span>
+                                          <span class="user-tag">@{{ post?.user.userName}}</span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="post-time-stamp text-right">
-                                            <span class="post-date">Apr 07</span>
-                                            <span class="post-time">08:18am</span>
+                                            <span class="post-date">{{ post?.createdAt | date : 'mediumDate' }}</span>
+                                            <span class="post-time">{{ post?.createdAt | date : 'shortTime' }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         	<div class="post-text">
-                            	<h4>Vestibulum in Ullamcorper Tortor</h4>
-                            	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultrices gravida augue, et fringilla libero blandit blandit. Vestibulum in ullamcorper tortor. Cras elementum interdum dui, ut ultricies dolor lacinia vitae. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultrices gravida augue, et fringilla libero blandit blandit. Vestibulum in ullamcorper tortor. Cras elementum interdum dui, ut ultricies dolor lacinia vitae.</p>
+                            	<!-- <h4>Vestibulum in Ullamcorper Tortor</h4> -->
+                            	<p>{{ post?.text}}</p>
                             </div>
-                            <div class="post-media">
+                            <div class="post-media" *ngIf="post?.video">
                                 <video id="my-video" class="video-js embed-responsive embed-responsive-16by9" controls preload="auto" data-setup="{}">
-                                  <source src="assets/video.mp4" class="embed-responsive-item" type="video/mp4"/>
+                                  <source src="{{ getFilePath(post?.video?.filename) }}" class="embed-responsive-item" type="{{ post?.video?.mimetype }}"/>
                                 </video>  
                             </div>
+
+                            <div class="post-media">
+                                <div class="row">
+                                    <div class="col" *ngFor="let image of post?.images; let j=index;">
+                                        <img src="{{ getFilePath( image.filename )}}" class="img-fluid" alt=""> 
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="like-comment">
                             	<ul>
-                            		<li><span><i class="fas fa-thumbs-up"></i> 1.1K Likes</span></li>
-                            		<li><span><i class="fas fa-comment-alt"></i> 23 Comments</span></li>
+                            		<li><span><i class="fas fa-thumbs-up"></i> {{ post?.likeCount }}</span></li>
+                            		<li><span><i class="fas fa-comment-alt"></i> {{ post?.replyCount }}</span></li>
                             	</ul>
                             </div>
                         </div>
                     </div>
-                	<div class="user-post clearfix">
+
+                	<!-- <div class="user-post clearfix">
                         <div class="user-img">
                             <img src="assets/user.jpg" alt="">
                         </div>
@@ -110,6 +129,7 @@
                             </div>
                         </div>
                     </div>
+
                 	<div class="user-post clearfix">
                         <div class="user-img">
                             <img src="assets/user.jpg" alt="">
@@ -144,7 +164,9 @@
                             	</ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+
+                    
                 </div>
             </div>
         </div>

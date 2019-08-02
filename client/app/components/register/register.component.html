@@ -77,20 +77,20 @@
 
                                         <div class="form-group">
                                           <label>Confirm Password</label>
-                                          <input type="password" formControlName="confirm_password" placeholder="Confirm password" class="form-control" [ngClass]="{ 'is-invalid': f.confirm_password.touched && f.confirm_password.errors }" />
+                                          <input type="password" formControlName="confirmPassword" placeholder="Confirm password" class="form-control" [ngClass]="{ 'is-invalid': f.confirmPassword.touched && f.confirmPassword.errors }" />
                                           <div class="invalid-feedback">
-                                            <div *ngIf="f.confirm_password.hasError('required')">Confirm Password is required</div>
-                                            <div *ngIf="f.confirm_password.hasError('NoPassswordMatch')">Password doesn't match</div>
+                                            <div *ngIf="f.confirmPassword.hasError('required')">Confirm Password is required</div>
+                                            <div *ngIf="f.confirmPassword.hasError('NoPassswordMatch')">Password doesn't match</div>
                                           </div>
                                         </div>
 
                                         <div class="form-group">
                                           <label>Profile Image</label>
                                           <div class="custom-file">
-                                            <input type="file" class="custom-file-input" formControlName="profile_image" (change)="onFileSelect($event)" [ngClass]="{ 'is-invalid': f.profile_image.touched && !isImageSelected }">
+                                            <input type="file" class="custom-file-input" formControlName="profileImage" (change)="onFileSelect($event)" [ngClass]="{ 'is-invalid': f.profileImage.touched && !isImageSelected }">
                                             <input type="hidden" class="custom-file-input" formControlName="avatar" />
                                             <label class="custom-file-label" for="customFile">Choose file</label>
-                                            <div *ngIf="f.profile_image.touched && !isImageSelected" class="invalid-feedback">Profile Image is required</div>
+                                            <div *ngIf="f.profileImage.touched && !isImageSelected" class="invalid-feedback">Profile Image is required</div>
                                           </div>
                                         </div>
 

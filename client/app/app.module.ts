@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms'
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 /* Components */
 import { AppComponent } from './app.component';
 
@@ -24,6 +25,8 @@ import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-poli
 import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component';
 import { AboutComponent } from './components/about/about.component';
 import { ModalComponent } from './components/shared/modal/modal.component';
+import { SettingsComponent } from './components/shared/settings/settings.component';
+import { ProfileComponent } from './components/shared/profile/profile.component';
 
 
 @NgModule({
@@ -41,7 +44,9 @@ import { ModalComponent } from './components/shared/modal/modal.component';
     PrivacyPolicyComponent,
     TermsOfServiceComponent,
     AboutComponent,
-    ModalComponent
+    ModalComponent,
+    SettingsComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

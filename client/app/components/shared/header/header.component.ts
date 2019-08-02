@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../modal/modal.component';
 
+const newLocal = 'yes';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -19,22 +20,36 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {}
 
-  get isLoggedIn(){
+  get isLoggedIn() {
     return this.authService.userVal ? true : false;
   }
 
   confirm() {
     const modalRef = this.modalService.open(ModalComponent);
-    modalRef.componentInstance.data = { title : 'Logout Confirmation' , content : 'Are you sure that you want to logout ?'};
+    modalRef.componentInstance.data = { title : 'Logout Confirmation' , content : 'Are you sure that you want to logout ?' , type : 'confirmation'};
     modalRef.result.then((result) => {
-      if(result == 'yes') this.logOut();
+      if (result == newLocal) { this.logOut(); }
     });
   }
 
-  logOut(){
+  logOut() {
     this.authService.logOut();
     this.router.navigateByUrl('login');
   }
 
+  myFunction() {
+    var y = document.getElementById("m");
+    y.style.display = "none";
+    var z = document.getElementById("c");
+    z.style.display = "block";
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+      x.className += " responsive";
+    } else {
+      x.className = "topnav";
+      y.style.display = "block";
+      z.style.display = "none";
+    }
+  }
 
 }

@@ -1,0 +1,22 @@
+<app-header title="Profile"></app-header>
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+            <label class="labeltext">Which theme you would like to use?</label><br>
+            <div class="form-check-inline">
+
+                <label class="customradio"><span class="radiotextsty">Black</span>
+                    <input type="radio" name="black" value="black-theme" (change)="onThemeChange($event)" [checked]="currentTheme == 'black-theme'" [style.margin-left.px]="10"> 
+                    <span class="checkmark"></span>
+                </label>        
+                <label class="customradio"><span class="radiotextsty">White</span>
+                <input type="radio" name="white" value="white-theme" (change)="onThemeChange($event)" [checked]="currentTheme == 'white-theme'" [style.margin-left.px]="'10'">
+                <span class="checkmark"></span>
+                </label>
+
+            </div>
+        </div>
+    </div>
+</div>

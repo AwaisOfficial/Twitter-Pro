@@ -8,6 +8,6 @@
     <p> {{ data?.content }}</p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('no')">No</button>
-    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('yes')">Yes</button>
+    <button *ngIf="data?.type == 'confirmation'" type="button" class="btn btn-outline-dark" (click)="activeModal.close('no')">No</button>
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('yes')">{{ data?.type == 'confirmation' ? 'Yes' : 'OK'}}</button>
   </div>

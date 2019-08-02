@@ -23,7 +23,7 @@ export class CustomValidator {
         }
     }
 
-    static fileType(types: Array<any>){
+    static fileType(types: Array<any>) {
         return (control : FormControl) => {
             const file = control.value;
             if ( file ) {
@@ -39,6 +39,14 @@ export class CustomValidator {
               }
           
               return null;
+        }
+    }
+
+    static addValidation(validatoins? : any){
+        return (control: AbstractControl) : { [key : string] : any} => {
+
+            if(!control.value) return null;
+            
         }
     }
 }

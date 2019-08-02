@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import * as jwt_decode from 'jwt-decode';
 import { JWTOKEN, USER_INFO } from 'client/app/constants/constants';
 import { map } from 'rxjs/operators'
-import { User } from 'client/app/interfaces/user';
+import { IUser } from 'client/app/interfaces/user';
 import { Http_Headers } from '../../helpers/headers';
 import { environment } from '../../../environments/environment';
 
@@ -56,7 +56,7 @@ export class AuthService {
     }));
   }
 
-  get userVal() : User { return this.userSubject.value; }
+  get userVal() : IUser { return this.userSubject.value; }
   set Token(token) { localStorage.setItem(JWTOKEN, token);}
   get Token() : string { return localStorage.getItem(JWTOKEN);}
   set user(user) { localStorage.setItem(USER_INFO , JSON.stringify(user)); }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OperationsService, AuthService } from './services';
 import { APP_NAME } from './constants/constants';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,5 +14,9 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService){}
 
   ngOnInit(){ }
+
+  setTheme(){
+    
+  }
   
 }

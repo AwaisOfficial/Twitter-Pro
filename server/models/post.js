@@ -14,13 +14,13 @@ exports.postSchema = new mongoose_1.Schema({
     user: { type: Object, default: null },
     text: { type: String, default: null },
     images: { type: Array, default: [] },
-    video: { type: String, defualt: null },
+    video: { type: Object, defualt: null },
     inReplyToPostId: { type: bson_1.ObjectId, default: null },
     inReplyToUserId: { type: bson_1.ObjectId, default: null },
     coordinates: { type: Object, default: { latitutde: null, longitude: null } },
     place: { type: Object, default: null },
     replyCount: { type: Number, default: 0 },
-    reRostCount: { type: Number, default: 0 },
+    rePostCount: { type: Number, default: 0 },
     likeCount: { type: Number, default: 0 },
 });
 exports.Post = mongoose_1.default.model('Post', exports.postSchema);

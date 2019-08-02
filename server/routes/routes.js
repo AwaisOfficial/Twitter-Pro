@@ -6,6 +6,7 @@ const multer = require('multer');
 const config_1 = require("../config/config");
 const auth_guard_1 = require("../utils/auth-guard");
 const passport = require('passport');
+const path = require('path');
 class Routes {
     constructor() {
         this.authController = new controllers_1.AuthController();
@@ -13,6 +14,10 @@ class Routes {
         this.authGuard = new auth_guard_1.AuthGuard();
     }
     routes(app) {
+        app.route("/api/files/:image").get((req, res) => {
+            console.log(req.params.images);
+            res.sendFile(path.join(__dirname, "../uploads/" + req.params.image));
+        });
         /* Registration */
         app.route('/api/register').post((req, res, next) => {
             // // middleware
@@ -49,6 +54,7 @@ class Routes {
                 res.json({ success: true, messsage: "Files are uploaded ", files: req.files });
             });
         });
+        app.route('/api/get-posts').get(this.postController.getPosts);
     }
 }
 exports.Routes = Routes;

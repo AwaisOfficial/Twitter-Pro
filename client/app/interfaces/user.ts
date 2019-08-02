@@ -1,8 +1,10 @@
-export interface User {
-    _id : string,
-    user_name : string,
-    first_name : string,
-    last_name : string,
-    email : string,
-    token : string, 
+export interface IUser {
+    _id? : string,
+    userName? : string,
+    firstName? : string,
+    lastName? : string,
+    email? : string,
+    token? : string, 
+    password? : string,
+    createdAt? : Date,
 }

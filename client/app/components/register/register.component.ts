@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators  } from '@angular/forms';
 import { OperationsService, AuthService } from 'client/app/services';
 import { EMAIL_PATTERN, ERROR_MSG } from 'client/app/constants/constants';
 import { CustomValidator } from 'client/app/helpers/custom-validator';
@@ -8,6 +8,7 @@ import {  mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import { environment } from 'client/environments/environment';
+import { IUser } from 'client/app/interfaces';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { environment } from 'client/environments/environment';
 export class RegisterComponent implements OnInit {
 
   signUpForm : FormGroup;
+  
   submitted  : boolean;
   isRegistered : boolean;
   formData: FormData;
@@ -45,8 +47,8 @@ export class RegisterComponent implements OnInit {
                   CustomValidator.patternValidator(/[a-z]/, { hasLowerCase: true }),
                   Validators.minLength(5)
                 ]) ],
-    confirm_password: ['', Validators.compose([Validators.required])] ,
-    profile_image : ['', Validators.required],
+    confirmPassword: ['', Validators.compose([Validators.required])] ,
+    profileImage : ['', Validators.required],
     avatar : [''],
     role : ['user']
     } , { validators : CustomValidator.passwordValidator});
