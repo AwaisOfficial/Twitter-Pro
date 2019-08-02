@@ -111,35 +111,36 @@ export class HomeComponent implements OnInit  {
     }
 
     if(this.files.videos.length > 0 )
-      this.files.images.push(this.files.videos[0]);
+      this.files.images.push( this.files.videos[0] );
     
-    let formData = new FormData();    
-    for (var i = 0; i < this.files.images.length; i++) {
-      formData.append('postFiles', this.files.images[i] );
-    }    
-    const uploadImages  = this.operationsService.postOperations('post-images', formData);
-    const createRequest = uploadImages.pipe(
-      mergeMap(result => {
+    
+    let createRequest = null;
+    if(this.files.images.length > 0 ){
+      let formData = new FormData();    
+      for (var i = 0; i < this.files.images.length; i++) {
+        formData.append('postFiles', this.files.images[i] );
+      }    
+      const uploadImages  = this.operationsService.postOperations('post-images', formData);
+      createRequest = uploadImages.pipe(
+        mergeMap(result => {
 
-      //console.log('Files Upload Response', result);
+        //console.log('Files Upload Response', result);
 
-      if(result.success) {
+        if(result.success) {
 
-        this.form = this.formBuilder.group({
-          role : 'member',
-          text : this.postText.nativeElement.value,
-          images : this.formBuilder.array([ ]),
-          video : this.files.videos.length > 0 ? this.files.videos[0].name : null
-        });
+          this.form = this.getPostForm();
+          this.addImages(result.files);
 
-        this.addImages(result.files);
+          return  this.operationsService.postOperations('create-post', this.form.value);
+        }
+        else
+          return of(null);
+      }));
 
-        return  this.operationsService.postOperations('create-post', this.form.value);
-      }
-      else
-        return of(null);
-    }));
-
+    }
+    else
+      createRequest =  this.operationsService.postOperations('create-post', this.form.value)
+    
     createRequest.subscribe(result => {
       this.postCreationResponse = {}
       if(result.success){
@@ -157,6 +158,14 @@ export class HomeComponent implements OnInit  {
     error => console.error('Create Request Error',error));
   }
 
+  getPostForm(): FormGroup{
+    return this.formBuilder.group({
+      role : 'member',
+      text : this.postText.nativeElement.value,
+      images : this.formBuilder.array([ ]),
+      video : this.files.videos.length > 0 ? this.files.videos[0].name : null
+    });
+  }
   get formImages() : FormArray { return this.form.get('images') as FormArray; }
   
   getFilePath(fileName: string){
