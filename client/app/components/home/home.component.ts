@@ -138,8 +138,10 @@ export class HomeComponent implements OnInit  {
       }));
 
     }
-    else
-      createRequest =  this.operationsService.postOperations('create-post', this.form.value)
+    else{
+      this.form = this.getPostForm();
+      createRequest =  this.operationsService.postOperations('create-post', this.form.value);
+    }
     
     createRequest.subscribe(result => {
       this.postCreationResponse = {}
