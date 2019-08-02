@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //exports.CLIENT_URL = process.env.host || 'http://localhost:4200';
-export const CLIENT_URL   = 'https://twitterpro.herokuapp.com' | 'https://onlyvips.herokuapp.com' | 'http://localhost:4200';
+//exports.CLIENT_URL   = 'https://onlyvips.herokuapp.com'; 
+exports.CLIENT_URL   = 'https://twitterpro.herokuapp.com';
 exports.DATABASE_URL = process.env.DATABASE || 'mongodb+srv://Awais:awais31@twitterclone-cfqlw.mongodb.net/TwitterPro?retryWrites=true&w=majority';
 exports.PORT = process.env.PORT || 3000;
 exports.JWTSECRET = '$QET_UWN';
