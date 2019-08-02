@@ -164,6 +164,7 @@ export class HomeComponent implements OnInit  {
   }
 
   clearInputFields(){
+    this.files.images = this.files.videos = [];
     this.files.imagesCount = this.files.videosCount = 0;
     this.postText.nativeElement.value = '';
     setTimeout(() => { this.postCreationResponse = null }, 3000);
