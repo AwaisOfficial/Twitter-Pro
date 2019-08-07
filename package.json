@@ -53,6 +53,7 @@
     "passport-twitter": "^1.0.4",
     "popper": "^1.0.1",
     "rxjs": "~6.5.2",
+    "sendgrid": "^5.2.3",
     "tslib": "^1.9.0",
     "typegoose": "^5.8.1",
     "typescript": "~3.4.5",
