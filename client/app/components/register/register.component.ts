@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators  } from '@angular/forms';
-import { OperationsService, AuthService } from 'client/app/services';
+import { AuthService } from 'client/app/services';
 import { EMAIL_PATTERN, ERROR_MSG } from 'client/app/constants/constants';
 import { CustomValidator } from 'client/app/helpers/custom-validator';
-import { Router } from '@angular/router';
 import {  mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'client/environments/environment';
-import { IUser } from 'client/app/interfaces';
-
+import { CropImageComponent } from '../../modules/shared/crop-image/crop-image.component'
 
 @Component({
   selector: 'app-register',
@@ -28,7 +26,8 @@ export class RegisterComponent implements OnInit {
   SERVER_URL: string;
 
   constructor(private formBuilder: FormBuilder,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private modalService : NgbModal) { }
 
   ngOnInit() {
     
@@ -48,52 +47,85 @@ export class RegisterComponent implements OnInit {
                   Validators.minLength(5)
                 ]) ],
     confirmPassword: ['', Validators.compose([Validators.required])] ,
-    profileImage : ['', Validators.required],
+    profileImage : '',
     avatar : [''],
-    role : ['user']
+    role : ['user'],
+    isCelebrity : false ,
+    isAgreeToTerms : ['', [Validators.requiredTrue]]
     } , { validators : CustomValidator.passwordValidator});
 
     this.signUpForm.valueChanges.subscribe(result => {this.response = undefined; });
+    this.signUpForm.get('isCelebrity').valueChanges.subscribe(isCelebrity => {
+      const profileImage = this.signUpForm.get('profileImage');
+      const role         = this.signUpForm.get('role');
+      if(isCelebrity) {
+        profileImage.setValidators([Validators.required]);
+        role.setValue('member');
+      }
+      else {
+        profileImage.setValidators(null);
+        role.setValue('user');
+      }
+      profileImage.updateValueAndValidity();
+      role.updateValueAndValidity();
+    });
   }
 
   get f() { return this.signUpForm.controls; }
 
-  onFileSelect(event){
-   if (event.target.files.length > 0) {
-      this.isImageSelected = true;
-      const file = event.target.files[0];
-      this.formData = new FormData();
-      this.formData.append('avatar' , file);
-      this.formData.append('email', this.signUpForm.get('email').value);
-    }
+  onFileSelect(event) {
+
+  //  if (event.target.files.length > 0) {
+  //     this.isImageSelected = true;
+  //     const file = event.target.files[0];
+  //     this.formData = new FormData();
+  //     this.formData.append('avatar' , file);
+  //   }
+
+    console.log(event.target.files[0]);
+    const modalRef = this.modalService.open(CropImageComponent);
+    modalRef.componentInstance.data = { title : 'Crop Image' ,  event : event};
+    modalRef.result.then((result) => {
+      //console.log(result);
+
+      fetch(result).then(res => res.blob()).then(blob => {
+        const file = new File([blob], event.target.files[0].name);
+        console.log(file);
+        this.formData = new FormData();
+        this.formData.append('avatar' , file);
+      });
+    });
   }
+
+  /* SUBMITTING FORM FOR REGISTRATION */
   onSubmit() {
-    this.submitted = true;
-    console.log(this.isImageSelected , this.signUpForm.value)
     if(this.signUpForm.invalid) 
       return;
-    else if(!this.isImageSelected)
-      return;
-     
-    console.log(this.isImageSelected , this.signUpForm.value)
-      
+    
+    this.submitted = true;  
+    let register = null;
+    if(this.signUpForm.get('profileImage').value != '')  {
     const fileUpload = this.authService.register('profile-image' , this.formData);    
-    const register = fileUpload.pipe(
-      mergeMap((response : any) => {
-        console.log('profile-image Response', response);
-        if(response.success) {
-          this.signUpForm.get('avatar').setValue(response.filename);
-          this.signUpForm.get('role').setValue('user');
-          return this.authService.register('register', this.signUpForm.value);
-        }
-        else
-          return of(null);
-    }));
+      register = fileUpload.pipe(
+        mergeMap((response : any) => {
+          console.log('profile-image Response', response);
+          if(response.success) {
+            this.signUpForm.get('avatar').setValue(response.filename);
+            return this.authService.register('register', this.signUpForm.value);
+          }
+          else
+            return of(null);
+      }));
+    }
+    else {
+      this.signUpForm.get('avatar').setValue(null);
+      register = this.authService.register('register', this.signUpForm.value);
+    }
     
     register.subscribe(response => {
-      console.log('Registration Response ', response);
-            
 
+      console.log('Registration Response ', response);           
+      this.submitted = false;
       this.response = response;
 
       if(!this.response){
@@ -111,11 +143,10 @@ export class RegisterComponent implements OnInit {
       }
     },
     error => {
-      console.error("Registration response", error);
-      
+      this.submitted = false;
+      console.error("Registration Error", error);
     });      
   }  
-
 
   isErrorField(field: string) {
     return this.response && !this.response.success && this.response.message.indexOf(field) > -1;

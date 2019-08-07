@@ -50,7 +50,11 @@
                                           </div>
                                       </div>
                                       <div class="twitter-button text-center my-4">
-                                        <button class="btn btn-twitter" [disabled]="loginForm.invalid" >Login</button>
+                                        <button class="btn btn-twitter" [disabled]="loginForm.invalid" >
+                                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="submitted"></span>
+                                          <span class="sr-only" *ngIf="submitted">Loading...</span>
+                                          Login
+                                        </button>
                                       </div>
                                   </form>
                                   <div class="sign-up mb-4 text-center">

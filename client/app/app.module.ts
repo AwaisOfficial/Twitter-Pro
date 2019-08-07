@@ -3,31 +3,31 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms'
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
-/* Components */
-import { AppComponent } from './app.component';
-
+import { ImageCropperModule } from 'ngx-image-cropper';
+/* Custom Modules */
+import { UserModule } from './modules/user/user.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { MemberModule } from './modules/member/member.module';
+import { SharedModule } from './modules/shared/shared.module';
 /* Services */
 import { OperationsService } from './services';
+/* Components */
+import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
-import { SlideShowComponent } from './components/shared/slide-show/slide-show.component';
-import { HeaderComponent } from './components/shared/header/header.component';
-import { FooterComponent } from './components/shared/footer/footer.component';
-import { AlertComponent } from './components/shared/alert/alert.component';
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component';
 import { AboutComponent } from './components/about/about.component';
-import { ModalComponent } from './components/shared/modal/modal.component';
-import { SettingsComponent } from './components/shared/settings/settings.component';
-import { ProfileComponent } from './components/shared/profile/profile.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
+import * as $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 @NgModule({
   declarations: [
@@ -37,16 +37,10 @@ import { ProfileComponent } from './components/shared/profile/profile.component'
     HomeComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    SlideShowComponent,
-    HeaderComponent,
-    FooterComponent,
-    AlertComponent,
     PrivacyPolicyComponent,
     TermsOfServiceComponent,
     AboutComponent,
-    ModalComponent,
-    SettingsComponent,
-    ProfileComponent
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -55,10 +49,15 @@ import { ProfileComponent } from './components/shared/profile/profile.component'
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule ,
-   // MDBBootstrapModule.forRoot(),
-    NgbModule
+    NgbModule ,
+    ImageCropperModule,
+
+    AdminModule,
+    MemberModule,
+    UserModule,
+    SharedModule
   ],
-  entryComponents:[ModalComponent],
+  entryComponents:[ ],
   providers: [ OperationsService , NgbActiveModal ],
   bootstrap: [AppComponent]
 })

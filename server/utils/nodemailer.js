@@ -16,7 +16,7 @@ class NodeMailer {
                 service: "Gmail",
                 auth: {
                     user: 'im.awais.official@gmail.com',
-                    pass: '1$Pakistan'
+                    pass: '!$Paki$tan'
                 }
             });
             transporter.verify((err, success) => {

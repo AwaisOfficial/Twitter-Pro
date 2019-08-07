@@ -17,6 +17,7 @@ const models_1 = require("../models/");
 const config_1 = require("../config/config");
 const bson_1 = require("bson");
 const nodemailer_1 = require("../utils/nodemailer");
+const sendgrid_mailer = require("../utils/send-grid-mailer");
 let User = mongoose.model('User', models_1.userSchema);
 let Token = mongoose.model('Token', models_1.tokenSchema);
 class AuthController {
@@ -116,18 +117,18 @@ class AuthController {
             Token.findOne({ token: req.params.token }, (err, token) => {
                 console.log('Result', token);
                 if (token.token != req.params.token)
-                    return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token my have expired.' });
+                    return res.status(400).send({ type: 'not-verified', message: 'We were unable to find a valid token. Your token my have expired.' });
                 // If we found a token, find a matching user
                 User.findOne({ _id: token._userId }, (err, user) => {
                     if (user._id.toString() != token._userId.toString())
-                        return res.status(400).send({ success: false, msg: 'We were unable to find a user for this token.' });
+                        return res.status(400).send({ success: false, message: 'We were unable to find a user for this token.' });
                     if (user.isVerified)
-                        return res.status(400).send({ type: 'already-verified', msg: 'This user has already been verified.' });
+                        return res.status(400).send({ type: 'already-verified', message: 'This user has already been verified.' });
                     // Verify and save the user
                     user.isVerified = true;
                     user.save((err) => {
                         if (err) {
-                            return res.status(500).send({ msg: err.message });
+                            return res.status(500).send({ message: err.message });
                         }
                         res.redirect(config_1.CLIENT_URL + '/login?isVerified=true');
                     });
@@ -188,7 +189,7 @@ class AuthController {
                 // Save the verification token
                 token.save((err, _token) => {
                     if (err) {
-                        return res.status(500).send({ success: false, msg: err.message });
+                        return res.status(500).send({ success: false, message: err.message });
                     }
                     // Send the email
                     const url = 'http://' + req.headers.host + '/api/verifyEmail/' + _token.token;
@@ -203,12 +204,13 @@ class AuthController {
                         content: content
                     };
                     nodemailer_1.NodeMailer.sendMail(payload).then(response => {
-                        if (err) {
-                            return res.status(200).send({ success: false, msg: 'Unable to send verification email.' });
+                        if (!response) {
+                            console.error('Mail Sending Error', err);
+                            return res.status(200).send({ success: false, message: 'Unable to send verification email.' });
                         }
                         res.status(200).send({ success: true, message: 'Account created successfully. Please verify your account. We have sent you an email to this account ' + user.email + ' .' });
                     }).catch(error => {
-                        return res.status(200).send({ success: false, msg: 'Unable to send verification email.' });
+                        return res.status(200).send({ success: false, message: 'Unable to send verification email.', error: err });
                     });
                 });
             }
@@ -238,6 +240,10 @@ class AuthController {
     sendProfileResponse(document, res, user) {
         if (!document.isVerified && !document.twitterId)
             res.status(200).json({ success: false, message: 'Please verify your email address.' });
+        else if (document.isCelebrity && !document.isProfileReviewed)
+            res.status(200).json({ success: false, message: 'Profile is under review yet.' });
+        else if (document.isCelebrity && document.reviewStatus == 'rejected')
+            res.status(200).json({ success: false, message: document.reviewComments });
         else if (document.isSuspended)
             res.status(200).json({ success: false, message: 'We are sorry. your account has been suspended.' });
         else if (document.isDefaulted)

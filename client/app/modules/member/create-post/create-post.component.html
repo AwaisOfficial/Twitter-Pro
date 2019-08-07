@@ -1,0 +1,30 @@
+<div class="create-post">
+    <div class="form-group mb-5 position-relative">
+        <label class="form-control" >Create Post</label>
+        <button class="btn go-live"><i class="fas fa-video"></i> Go Live</button>
+      </div>
+      
+    <app-alert *ngIf="postCreationResponse" [response]="postCreationResponse"></app-alert>  
+
+    <textarea #postText type="text-area" class="form-control post-send" placeholder="What's on your mind ?"></textarea>  
+    
+    <div class="form-group mb-5 position-relative">
+        
+       <button class="btn choose-image" >
+          <i class="far fa-image"></i>
+          <input type="file" (change)="onImagesSelection($event , 'images')" accept="image/*" multiple>
+          <span class="badge badge-light">{{ files.imagesCount > 0 ? files.imagesCount + ' images.' : '' }}</span>
+        </button> 
+
+        <button class="btn choose-video" [style.margin-left.px]="files.imagesCount > 0 ? '70' : '20'">
+            <i class="fa fa-video"></i>
+            <input type="file" (change)="onImagesSelection($event , 'videos')" accept="video/*">
+            <span class="badge badge-light">{{ files.videosCount > 0 ? files.videosCount + ' video.' : '' }}</span>
+        </button>
+
+        <button class="btn go-live" (click)="createPost()"><i class="fas fa-paper-plane"></i> 
+           Post
+        </button>
+      
+    </div>
+</div>

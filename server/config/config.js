@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//exports.CLIENT_URL = process.env.host || 'http://localhost:4200';
-//exports.CLIENT_URL   = 'https://onlyvips.herokuapp.com'; 
-exports.CLIENT_URL   = 'https://twitterpro.herokuapp.com';
+exports.CLIENT_URL = 'https://twitterpro.herokuapp.com';
 exports.DATABASE_URL = process.env.DATABASE || 'mongodb+srv://Awais:awais31@twitterclone-cfqlw.mongodb.net/TwitterPro?retryWrites=true&w=majority';
 exports.PORT = process.env.PORT || 3000;
 exports.JWTSECRET = '$QET_UWN';
@@ -19,3 +17,4 @@ exports.UPLOAD_PATH = 'uploads';
 exports.COLLECTION_NAME = 'images';
 exports.TWITTER_CONSUMER_KEY = "E1Pqit9PSS956U2hpfSbnf3MM";
 exports.TWITTER_CONSUMER_SECRET = "G8KpfTKSU41QHLYAaowhPPNEoAgTlAudpeJV1DsDWfgDe1EZ14";
+exports.SENDGRID_API_KEY = "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";

@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { mergeMap} from 'rxjs/operators';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from '../shared/modal/modal.component';
+import { ModalComponent } from '../../modules/shared/modal/modal.component';
 import { environment } from 'client/environments/environment';
 import { ERROR_MSG, POST_CREATION_MSG } from 'client/app/constants/constants';
 
@@ -28,11 +28,6 @@ export class HomeComponent implements OnInit  {
               private modalService: NgbModal) { }
 
   ngOnInit() { 
-
-    // let data = { email: { value : '' , type : 'control' , required : true , custom_validation : CustomValidator.patternValidator } ,
-    //              password: { value : '' , type : 'control' , required : true , custom_validation : CustomValidator.passwordValidator }
-    //            }
-    // new CustomFormBuilder().initForm(data , this.formBuilder);
     this.SERVER_URL = environment.APIEndPoint;
     this.getPosts();
   }
@@ -111,38 +106,35 @@ export class HomeComponent implements OnInit  {
     }
 
     if(this.files.videos.length > 0 )
-      this.files.images.push( this.files.videos[0] );
+      this.files.images.push(this.files.videos[0]);
     
-    
-    let createRequest = null;
-    if(this.files.images.length > 0 ){
-      let formData = new FormData();    
-      for (var i = 0; i < this.files.images.length; i++) {
-        formData.append('postFiles', this.files.images[i] );
-      }    
-      const uploadImages  = this.operationsService.postOperations('post-images', formData);
-      createRequest = uploadImages.pipe(
-        mergeMap(result => {
+    let formData = new FormData();    
+    for (var i = 0; i < this.files.images.length; i++) {
+      formData.append('postFiles', this.files.images[i] );
+    }    
+    const uploadImages  = this.operationsService.postOperations('post-images', formData);
+    const createRequest = uploadImages.pipe(
+      mergeMap(result => {
 
-        //console.log('Files Upload Response', result);
+      //console.log('Files Upload Response', result);
 
-        if(result.success) {
+      if(result.success) {
 
-          this.form = this.getPostForm();
-          this.addImages(result.files);
+        this.form = this.formBuilder.group({
+          role : 'member',
+          text : this.postText.nativeElement.value,
+          images : this.formBuilder.array([ ]),
+          video : this.files.videos.length > 0 ? this.files.videos[0].name : null
+        });
 
-          return  this.operationsService.postOperations('create-post', this.form.value);
-        }
-        else
-          return of(null);
-      }));
+        this.addImages(result.files);
 
-    }
-    else{
-      this.form = this.getPostForm();
-      createRequest =  this.operationsService.postOperations('create-post', this.form.value);
-    }
-    
+        return  this.operationsService.postOperations('create-post', this.form.value);
+      }
+      else
+        return of(null);
+    }));
+
     createRequest.subscribe(result => {
       this.postCreationResponse = {}
       if(result.success){
@@ -160,14 +152,6 @@ export class HomeComponent implements OnInit  {
     error => console.error('Create Request Error',error));
   }
 
-  getPostForm(): FormGroup{
-    return this.formBuilder.group({
-      role : 'member',
-      text : this.postText.nativeElement.value,
-      images : this.formBuilder.array([ ]),
-      video : this.files.videos.length > 0 ? this.files.videos[0].name : null
-    });
-  }
   get formImages() : FormArray { return this.form.get('images') as FormArray; }
   
   getFilePath(fileName: string){
@@ -175,8 +159,8 @@ export class HomeComponent implements OnInit  {
   }
 
   clearInputFields(){
-    this.files.images = this.files.videos = [];
     this.files.imagesCount = this.files.videosCount = 0;
+    this.files.images = this.files.videos = [];
     this.postText.nativeElement.value = '';
     setTimeout(() => { this.postCreationResponse = null }, 3000);
   }

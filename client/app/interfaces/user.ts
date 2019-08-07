@@ -7,4 +7,5 @@ export interface IUser {
     token? : string, 
     password? : string,
     createdAt? : Date,
+    role?: string
 }

@@ -1,0 +1,31 @@
+
+<app-header></app-header>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">       
+        
+        <div class="post-section" >
+              
+            <app-create-post (onPostCreation)="addNewPost($event)"></app-create-post>
+
+            <app-posts [newCreatedPost]="newCreatedPost"></app-posts>
+
+            <div class="create-post-bottom-circled">
+                <span><i class="fas fa-pencil-alt"></i></span>
+            </div>
+              
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+            <div class="right-section">
+                <div class="adv-banner">
+                	<a href="#">
+                        <img src="assets/1.jpg" class="img-fluid" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>

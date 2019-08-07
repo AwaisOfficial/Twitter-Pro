@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { OperationsService, AuthService } from './services';
 import { APP_NAME } from './constants/constants';
 
 @Component({
@@ -11,12 +10,8 @@ export class AppComponent implements OnInit {
 
   title = APP_NAME;
 
-  constructor(private authService: AuthService){}
+  constructor(){}
 
   ngOnInit(){ }
-
-  setTheme(){
-    
-  }
   
 }

@@ -18,10 +18,10 @@
                                   </div>
                                   <div class="or-seperator">
                                     <span>OR</span>
-                                  </div>
-                                  
+                                  </div>                                  
                                   <form class="login-form" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-
+                                    
+                                    <!-- <app-crop-image [image]="imageFile"></app-crop-image> -->
                                     <app-alert *ngIf="response" [response]="response"></app-alert>
 
                                     <div class="custom-form">
@@ -57,7 +57,7 @@
                                             <div class="invalid-feedback">
                                               <div *ngIf="f.email.hasError('required')">Email is required</div>
                                               <div *ngIf="f.email.hasError('pattern')">Email is invalid</div>
-                                              <div *ngIf="isErrorField('Email')">{{ response?.message }}</div>
+                                              <div *ngIf="isErrorField('email')">{{ response?.message }}</div>
                                             </div> 
                                           </div>
                                           
@@ -87,48 +87,63 @@
                                         <div class="form-group">
                                           <label>Profile Image</label>
                                           <div class="custom-file">
-                                            <input type="file" class="custom-file-input" formControlName="profileImage" (change)="onFileSelect($event)" [ngClass]="{ 'is-invalid': f.profileImage.touched && !isImageSelected }">
+                                            <input type="file" class="custom-file-input" formControlName="profileImage" (change)="onFileSelect($event)" [ngClass]="{ 'is-invalid': f.profileImage.hasError('required') && f.profileImage.touched && !isImageSelected }">
                                             <input type="hidden" class="custom-file-input" formControlName="avatar" />
                                             <label class="custom-file-label" for="customFile">Choose file</label>
-                                            <div *ngIf="f.profileImage.touched && !isImageSelected" class="invalid-feedback">Profile Image is required</div>
+                                            
+                                            <div *ngIf="f.profileImage.hasError('required') && f.profileImage.touched && !isImageSelected" class="invalid-feedback">Profile Image is required.</div>
                                           </div>
                                         </div>
 
-                                          <div class="remember-forgot">
-                                            <div class="row">
-                                                <div class="col text-left m-0">
-                                                   
-                                                </div>
-                                                <div class="col text-right" >
-                                                  <a routerLink="/login">Go back to Login</a>
-                                                </div>
-                                              </div>
+                                          <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                              <input type="checkbox" class="form-check-input" id="celebrity" formControlName="isCelebrity">
+                                              <label class="form-check-label" for="celebrity">Are you a celebrity ?</label>
+                                            </div>
+                                            <small id="emailHelp" class="form-text text-muted">Celebrities profiles will be reviewed.</small>
                                           </div>
+
+                                          <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="agreeToTerms" formControlName="isAgreeToTerms">
+                                            <label class="form-check-label" for="agreeToTerms" >I agree to the <a routerLink="/terms-of-service" class="text-primary">terms and conditions</a></label>
+                                          </div>
+
+                                          
+                                            <div class="row mt-2">
+                                              <div class="col text-left m-0"></div>
+                                              <div class="col text-right text-light">
+                                                <a routerLink="/login">Go back to Login</a>
+                                              </div>
+                                            </div>
+                                          
                                       </div>
 
-                                      <div class="alert alert-primary" role="alert" *ngIf="isRegistered">
-                                         Congratulations !!! Account created successfully.
-                                         <p>Please login to continue.</p>
-                                      </div>
-                                      <div class="twitter-button text-center my-4">
-                                        <button type="submit" class="btn btn-twitter" [disabled]="signUpForm.invalid" >Register</button>
+                                      
+
+                                      <div class="twitter-button text-center my-3">
+                                        <button type="submit" class="btn btn-twitter" [disabled]="signUpForm.invalid" >
+                                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="submitted"></span>
+                                          <span class="sr-only" *ngIf="submitted">Loading...</span>
+                                          Register
+                                        </button>
                                       </div>
                                   </form>
                                  
-                                  <div class="social-icon mb-4 text-center">
+                                  <!-- <div class="social-icon mb-4 text-center">
                                     <ul>
                                       <li><a href="#"><i class="fab fa-instagram"></i></a></li>
                                       <li><a href="#"><i class="fab fa-twitter"></i></a></li>
                                       <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
                                     </ul>
-                                  </div>
+                                  </div> -->
+
                                   <div class="login-footer text-center">
                                     <ul class="mb-4">
                                       <li><a href="#">About</a></li>
                                       <li><a href="#">FAQ’s</a></li>
                                       <li><a href="#">Contact</a></li>
-                                      <li><a href="#">Terms</a></li>
-                                      <li><a href="#">Privacy</a></li>
+                                      <li><a routerLink="/terms-of-service">Terms</a></li>
+                                      <li><a routerLink="/privacy-policy">Privacy</a></li>
                                     </ul>
                                       <p>© 2019 Only VIPs. All rights reserved.</p>
                                   </div>
@@ -139,5 +154,4 @@
             </div>
           </div>
         </div> 
-
 </div>

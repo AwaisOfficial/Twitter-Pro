@@ -56,7 +56,7 @@ export class AuthService {
     }));
   }
 
-  get userVal() : IUser { return this.userSubject.value; }
+  get userVal() : any { return this.userSubject.value; }
   set Token(token) { localStorage.setItem(JWTOKEN, token);}
   get Token() : string { return localStorage.getItem(JWTOKEN);}
   set user(user) { localStorage.setItem(USER_INFO , JSON.stringify(user)); }

@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
 
     this.SERVER_URL = environment.APIEndPoint;
-    console.log(this.SERVER_URL);
     this.submitted = false;    
 
     this.loginForm = this.formBuilder.group({
@@ -68,14 +67,18 @@ export class LoginComponent implements OnInit {
   }
 
   handleResponse(response : any){
-    
+    console.log(response.user);
+    this.submitted = false;
     this.response = response;
-    if(response && response.user) 
-      this.router.navigate(['/']);
+    if(response && response.user) {
+      const role = response.user.role;
+      const routerLink = role == 'admin' ? 'admin' : ( role == 'member' ? 'member' : 'user') ;
+      this.router.navigate(['/'+ routerLink]);
+    }
   }
 
-  handleError(error : any){
-    
+  handleError(error : any){    
+    this.submitted = false;
     console.error('Login Error', error);
   }
 
