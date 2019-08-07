@@ -26,8 +26,6 @@ import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-
 import { AboutComponent } from './components/about/about.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
-import * as $ from "jquery";
-import * as bootstrap from "bootstrap";
 
 @NgModule({
   declarations: [
