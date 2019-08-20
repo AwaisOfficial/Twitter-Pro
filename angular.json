@@ -27,7 +27,6 @@
               "client/assets"
             ],
             "styles": [
-              "client/styles.css",
               "client/styles.scss",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",       
