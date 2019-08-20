@@ -10,14 +10,17 @@ import { SlideShowComponent } from './slide-show/slide-show.component';
 import { PostsComponent } from './posts/posts.component';
 import { CropImageComponent } from './crop-image/crop-image.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { SuggestedPeopleComponent } from './suggested-people/suggested-people.component';
 
 @NgModule({
-  declarations: [  AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent , SettingsComponent , SlideShowComponent, PostsComponent, CropImageComponent  ],
+  declarations: [  AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent ,
+                   SettingsComponent , SlideShowComponent, PostsComponent, CropImageComponent, SuggestedPeopleComponent  ],
   imports: [
     CommonModule ,
-    ImageCropperModule
+    ImageCropperModule 
   ],
   entryComponents:[ ModalComponent , CropImageComponent ],
-  exports : [ AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent , SettingsComponent , SlideShowComponent , PostsComponent , CropImageComponent ]
+  exports : [ AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent , 
+              SettingsComponent , SlideShowComponent , PostsComponent , CropImageComponent , SuggestedPeopleComponent ]
 })
 export class SharedModule { }

@@ -8,9 +8,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-exports.tokenSchema = new mongoose_1.Schema({
-    createdAt: { type: Date, required: true, default: Date.now, expires: 43200 },
-    token: { type: String, required: true },
-    _userId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: 'User' }
+exports.followerSchema = new mongoose_1.Schema({
+    follower: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+    followee: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+    startDate: { type: Date, default: Date.now },
 });
-exports.Token = mongoose_1.default.model('Token', exports.tokenSchema);
+exports.Follower = mongoose_1.default.model('Follower', exports.followerSchema);

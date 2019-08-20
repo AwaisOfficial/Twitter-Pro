@@ -5,7 +5,8 @@
     </button>
   </div>
   <div class="modal-body">
-    <p> {{ data?.content }}</p>
+    <p *ngIf="data?.content"> {{ data?.content }}</p>
+    
   </div>
   <div class="modal-footer">
     <button *ngIf="data?.type == 'confirmation'" type="button" class="btn btn-outline-dark" (click)="activeModal.close('no')">No</button>

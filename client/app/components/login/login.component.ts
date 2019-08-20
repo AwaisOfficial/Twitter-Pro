@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
   }
 
   handleResponse(response : any){
-    console.log(response.user);
+    console.log(response);
     this.submitted = false;
     this.response = response;
     if(response && response.user) {

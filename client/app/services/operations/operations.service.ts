@@ -18,9 +18,11 @@ export class OperationsService {
 
   postOperations(endPoint: string, data: any) : Observable<any> {
     if( this.includeHeadersOrNot(endPoint) )
-      return this.http.post(`${environment.APIEndPoint + endPoint}` , data , { headers : new Http_Headers().getHeaders() , withCredentials: true } ).pipe(catchError(error => of(error)));
+      return this.http.post(`${environment.APIEndPoint + endPoint}` , data , { headers : new Http_Headers().getHeaders() , withCredentials: true } ).pipe(catchError(error => {
+        return of(error);
+      }));
     else
-      return this.http.post(`${environment.APIEndPoint + endPoint}` , data  ).pipe(catchError(error => of(error)));
+      return this.http.post(`${environment.APIEndPoint + endPoint}` , data  ).pipe(catchError(error => { return of(error) }));
   }
 
   includeHeadersOrNot(endPoint: string){

@@ -15,16 +15,12 @@ const config_1 = require("../config/config");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.userSchema = new mongoose_1.Schema({
-    firstName: { type: String },
-    lastName: { type: String },
-    userName: { type: String, unique: true, required: true },
-    email: { type: String, unique: true, required: true },
-    role: { type: String, required: true, default: 'user' },
-    twitterId: { type: String, default: null },
-    created_at: { type: Date, default: new Date() },
-    password: { type: String },
+    about: { type: String, default: null },
     avatar: { type: String, default: null },
-    salt: { type: String, default: config_1.JWTSECRET },
+    birthDate: { type: String, default: null },
+    created_at: { type: Date, default: new Date() },
+    email: { type: String, unique: true, required: true },
+    firstName: { type: String },
     isCelebrity: { type: Boolean, default: false },
     isProfileReviewed: { type: Boolean, default: false },
     reviewStatus: { type: String, default: null },
@@ -32,6 +28,18 @@ exports.userSchema = new mongoose_1.Schema({
     isVerified: { type: Boolean, default: false },
     isSuspended: { type: Boolean, default: false },
     isDefaulted: { type: Boolean, default: false },
+    lastName: { type: String, default: '' },
+    location: {
+        country: { type: String, default: '' },
+        city: { type: String, default: '' },
+        address: { type: String, default: '' }
+    },
+    mobileNumber: { countryCode: { type: Number, default: 0 }, number: { type: Number, default: 0 } },
+    password: { type: String },
+    profileBanner: { type: String, default: null },
+    role: { type: String, required: true, default: 'user' },
+    twitterId: { type: String, default: null },
+    userName: { type: String, unique: true, required: true }
 });
 exports.userSchema.method('createHash', (password) => {
     return bcryptjs_1.default.hashSync(password);

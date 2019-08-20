@@ -5,3 +5,5 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./user"));
 __export(require("./token"));
+__export(require("./follow"));
+__export(require("./post"));

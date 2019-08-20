@@ -1,6 +1,5 @@
-<div class="tw-posts" *ngIf="posts?.length > 0">
-
-    <div class="user-post clearfix" *ngFor="let post of posts; let i=index;">
+<div class="tw-posts">
+    <div class="user-post clearfix" *ngFor="let post of posts$ | async; let i=index;">
         <div class="user-img">
             <img src="{{ getFilePath(post?.user?.avatar) }}" alt="">
         </div>
@@ -9,7 +8,7 @@
                 <div class="row no-gutters">
                     <div class="col-6">
                         <div class="user-info">
-                          <span class="user-name">{{ post?.user?.firstName + ' ' + post?.user?.lastName }}</span>
+                          <span class="user-name">{{ userCompleteName(post?.user) }}</span>
                           <span class="user-tag">@{{ post?.user.userName}}</span>
                         </div>
                     </div>
@@ -40,8 +39,8 @@
 
             <div class="like-comment">
                 <ul>
-                    <li><span><i class="fas fa-thumbs-up"></i> {{ post?.likeCount }}</span></li>
-                    <li><span><i class="fas fa-comment-alt"></i> {{ post?.replyCount }}</span></li>
+                    <li><span (click)="updatePostLike(post)"><i class="far fa-heart"></i> {{ post?.likeCount }}</span></li>
+                    <li><span><i class="far fa-comment-alt"></i> {{ post?.replyCount }}</span></li>
                 </ul>
             </div>
         </div>

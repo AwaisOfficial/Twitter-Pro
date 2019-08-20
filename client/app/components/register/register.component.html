@@ -7,7 +7,7 @@
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-6"></div>
-                <div class="col-md-6 bg-black">
+                <div class="col-md-6 black-theme">
                         <div class="login-section wrapper-table">
                             <div class="login-outer wrapper-cell">
                                   <div class="logo text-center">
@@ -100,12 +100,13 @@
                                               <input type="checkbox" class="form-check-input" id="celebrity" formControlName="isCelebrity">
                                               <label class="form-check-label" for="celebrity">Are you a celebrity ?</label>
                                             </div>
-                                            <small id="emailHelp" class="form-text text-muted">Celebrities profiles will be reviewed.</small>
+                                            <small *ngIf="f.isCelebrity.value == true" id="celebrity" class="form-text text-danger">Note: <strong>Celebrities profiles will be reviewed.</strong></small>
                                           </div>
 
+                                          
                                           <div class="form-check form-check-inline">
                                             <input type="checkbox" class="form-check-input" id="agreeToTerms" formControlName="isAgreeToTerms">
-                                            <label class="form-check-label" for="agreeToTerms" >I agree to the <a routerLink="/terms-of-service" class="text-primary">terms and conditions</a></label>
+                                            <label class="form-check-label" for="agreeToTerms" >I have read & I agree to the <a routerLink="/terms-of-service" class="text-primary"><strong>terms and conditions</strong></a></label>
                                           </div>
 
                                           
@@ -116,9 +117,7 @@
                                               </div>
                                             </div>
                                           
-                                      </div>
-
-                                      
+                                      </div>                                      
 
                                       <div class="twitter-button text-center my-3">
                                         <button type="submit" class="btn btn-twitter" [disabled]="signUpForm.invalid" >
@@ -127,6 +126,8 @@
                                           Register
                                         </button>
                                       </div>
+
+                                      
                                   </form>
                                  
                                   <!-- <div class="social-icon mb-4 text-center">

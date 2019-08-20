@@ -6,13 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const post_1 = require("../models/post");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config/config");
+const auth_1 = require("./auth");
+const utils_1 = require("../utils");
 class PostController {
     constructor() {
+        this.responseHandler = new utils_1.ResponseHandler();
         /*
          Creating Post
         */
         this.createPost = (req, res) => {
-            let token = this.getUser(req, res);
+            let token = new auth_1.AuthController().getSessionUser(req, res);
             if (!token.success)
                 return res.status(200).json(token);
             const user = token.user;
@@ -36,11 +39,16 @@ class PostController {
                     console.error("Post Fetching Error", error);
                     return res.status(200).json({ success: false, error: error });
                 }
-                return res.status(200).json({ success: true, posts: posts, uploadFolderPath: __dirname + '/uploads/' });
+                return res.status(200).json({ success: true, response: posts, uploadFolderPath: __dirname + '/uploads/' });
             }).sort({ 'createdAt': -1 }).limit(25);
         };
-        /* GETTING FOLLOWEES POSTS */
-        this.getFolloweesPosts = (req, res) => {
+        this.likePost = (req, res) => {
+            post_1.Post.findByIdAndUpdate(req.body.postId, { $inc: { likeCount: 1 }, $push: { likers: req.body.userId } }, { new: true }, (error, response) => {
+                if (error || !response)
+                    this.responseHandler.sendError(res, config_1.ERROR_MSG, error);
+                else
+                    this.responseHandler.sendResponse(res, response, config_1.ITEM_UPDATED);
+            });
         };
     }
     getUser(req, res) {

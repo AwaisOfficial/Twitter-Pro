@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OperationsService } from 'client/app/services';
+import { OperationsService, PostStoreService, AuthService } from 'client/app/services';
 import { environment } from 'client/environments/environment';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-posts',
@@ -9,28 +11,48 @@ import { environment } from 'client/environments/environment';
 })
 export class PostsComponent implements OnInit {
 
+  @Input('role') role : string;
   @Input('newCreatedPost') set newCreatedPost(post: any){
     this.posts.splice(0 ,0 , post);
   };
   
   posts: Array<any> = [];
+  posts$ : Observable<any>;
 
-  constructor(private operationsService: OperationsService) { }
+
+  constructor(private operationsService: OperationsService ,
+              private postStore : PostStoreService ,
+              private authService : AuthService) { }
 
   ngOnInit() {
-    this.getPosts();
+    const endPoint = this.role == 'member' ? 'get-posts' : 'get-followees-posts';
+    this.getPosts(endPoint);
   }
 
-  getPosts()  {
-    this.operationsService.getOperations('get-posts').subscribe((response : any) => {
-      if(response.success)
-        this.posts = response.posts;
-    },
-    error => console.error("Posts Fetching Error ", error));
+  getPosts(endPoint){
+    this.posts$ = this.postStore.allData;
+    this.postStore.getOperations(endPoint);
   }
 
   getFilePath(fileName: string){
     return environment.APIEndPoint + 'files/' + fileName;
+  }
+
+  userCompleteName(user) {
+    let name = '';
+    if(user){
+      name += ( user.firstName ? user.firstName : '');
+      name += ( user.lastName  ? ' ' + user.lastName  : '');
+    }
+    return name;
+  }  
+
+  updatePostLike(post){
+    this.operationsService.postOperations('like-post' , { postId : post._id , userId : this.authService.userVal['user']['_id']}).subscribe(response => {
+      if(response.success)
+        this.postStore.updateData(response.response, 'update');      
+    },
+    error => console.error('Like Post Error ', error) );
   }
 
 }

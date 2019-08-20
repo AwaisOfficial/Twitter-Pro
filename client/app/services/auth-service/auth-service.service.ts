@@ -43,7 +43,6 @@ export class AuthService {
   getTwitterUser(){
     const url = environment.APIEndPoint + 'twitter-profile';
     return this.http.get(`${url}`, {headers: new Http_Headers().getHeaders(), withCredentials : true}).pipe(map((response : any) => {
-      console.log('Only VIPs ', response);
       if(response && response.success) {
         this.Token = response.token;
         const user = this.decodeJWT();
@@ -60,7 +59,17 @@ export class AuthService {
   set Token(token) { localStorage.setItem(JWTOKEN, token);}
   get Token() : string { return localStorage.getItem(JWTOKEN);}
   set user(user) { localStorage.setItem(USER_INFO , JSON.stringify(user)); }
-  get user() { return localStorage.getItem(USER_INFO); }
+  get user() : any{ 
+    return localStorage.getItem(USER_INFO);
+  }
+  get userCompleteName() {
+    let name = '';
+    if(this.userVal){
+      name += ( this.userVal.user.firstName ? this.userVal.user.firstName : '');
+      name += ( this.userVal.user.lastName  ? ' ' + this.userVal.user.lastName  : '');
+    }
+    return name;
+  }
   
   isAuthenticated(): boolean { return localStorage.getItem(JWTOKEN) ? true : false; }
 

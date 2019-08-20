@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'client/environments/environment';
 import { CropImageComponent } from '../../modules/shared/crop-image/crop-image.component'
 
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -74,23 +75,11 @@ export class RegisterComponent implements OnInit {
   get f() { return this.signUpForm.controls; }
 
   onFileSelect(event) {
-
-  //  if (event.target.files.length > 0) {
-  //     this.isImageSelected = true;
-  //     const file = event.target.files[0];
-  //     this.formData = new FormData();
-  //     this.formData.append('avatar' , file);
-  //   }
-
-    console.log(event.target.files[0]);
     const modalRef = this.modalService.open(CropImageComponent);
     modalRef.componentInstance.data = { title : 'Crop Image' ,  event : event};
     modalRef.result.then((result) => {
-      //console.log(result);
-
       fetch(result).then(res => res.blob()).then(blob => {
         const file = new File([blob], event.target.files[0].name);
-        console.log(file);
         this.formData = new FormData();
         this.formData.append('avatar' , file);
       });
@@ -134,12 +123,8 @@ export class RegisterComponent implements OnInit {
       }
       window.scrollTo(0 , 0);
 
-      if(response.success) {
-       
-        setTimeout(() => {
-          //this.router.navigateByUrl('/');
-          this.signUpForm.reset();
-        }, 5000);        
+      if(response.success) {       
+        setTimeout(() => {this.signUpForm.reset();}, 5000);        
       }
     },
     error => {

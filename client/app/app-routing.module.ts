@@ -24,7 +24,7 @@ const routes: Routes = [
   { path : 'profile', component: ProfileComponent , canActivate : [AuthGuardService]},
   
   { path : 'admin'  , loadChildren : () => import('./modules/admin/admin.module').then(mod => mod.AdminModule) , canActivate : [AuthGuardService] , data : { role : 'admin'}} ,
-  { path : 'member' , loadChildren : () => import('./modules/member/member.module').then(mod => mod.MemberModule),   data : { role : 'member'}} ,
+  { path : 'member' , loadChildren : () => import('./modules/member/member.module').then(mod => mod.MemberModule),  canActivate : [AuthGuardService] , data : { role : 'member'}} ,
   { path : 'user'   , loadChildren : () => import('./modules/user/user.module').then(mod => mod.UserModule) , canActivate : [AuthGuardService] , data : { role : 'user'}} ,
   
   { path : 'not-found' , component : NotFoundComponent },

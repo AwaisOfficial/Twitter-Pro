@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -17,7 +25,7 @@ const models_1 = require("../models/");
 const config_1 = require("../config/config");
 const bson_1 = require("bson");
 const nodemailer_1 = require("../utils/nodemailer");
-const sendgrid_mailer = require("../utils/send-grid-mailer");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 let User = mongoose.model('User', models_1.userSchema);
 let Token = mongoose.model('Token', models_1.tokenSchema);
 class AuthController {
@@ -26,8 +34,7 @@ class AuthController {
             console.log(req.body);
             this.findUser(req).then(document => {
                 if (!document) {
-                    res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
-                    return;
+                    return res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
                 }
                 let user = new User();
                 let isCompared = user.schema.methods.comparePassword(req.body.password, document);
@@ -38,6 +45,7 @@ class AuthController {
             }).catch(error => {
                 console.error("Error", error);
                 res.status(200).json(error);
+                return this.sendError(res, config_1.ERROR_MSG);
             });
         };
         this.twitterProfile = (req, res) => {
@@ -47,8 +55,8 @@ class AuthController {
                 res.json({ success: false, user: null });
         };
         this.forgotPassword = (req, res) => {
-            this.findUser(req).then(document => {
-                if (!document) {
+            this.findUser(req).then((document) => {
+                if (!document || !document.success) {
                     res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
                     return;
                 }
@@ -79,7 +87,7 @@ class AuthController {
                 }).remove().exec();
             }).catch(error => {
                 console.error("Error", error);
-                res.status(200).json(error);
+                return res.status(200).json(error);
             });
         };
         this.resetPassword = (req, res) => {
@@ -177,7 +185,6 @@ class AuthController {
         user.password = user.schema.methods.createHash(req.body.password);
         user.save((err, response) => {
             if (err) {
-                console.error('Registration Error', err);
                 if (err.errmsg && err.errmsg.indexOf('email') > -1)
                     err.errmsg = 'Email already exists';
                 else if (err.errmsg && err.errmsg.indexOf('userName') > -1)
@@ -217,25 +224,21 @@ class AuthController {
         });
     }
     findUser(req) {
-        return new Promise((resolve, reject) => {
+        return __awaiter(this, void 0, void 0, function* () {
             const errors = express_validator_1.validationResult(req);
-            if (!errors.isEmpty()) {
-                reject({ success: false, error: errors });
-                return;
-            }
-            let value = req.body.userName;
-            let criteria = value.indexOf('@') > -1 ? { email: value } : { userName: value };
-            console.log(criteria);
-            User.findOne(criteria, (err, document) => {
-                if (err || document == null)
-                    reject({ success: false, status: 200, message: config_1.USER_NOT_FOUND });
-                else
-                    resolve(document);
-            });
+            if (!errors.isEmpty())
+                return { success: false, error: errors };
+            const value = req.body.userName;
+            const criteria = value.indexOf('@') > -1 ? { email: value } : { userName: value };
+            return yield User.findOne(criteria);
+            // if(!user)
+            //   return {success: false , status: 200, message:  USER_NOT_FOUND};
+            // else
+            //   return user;
         });
     }
     sendError(res, message) {
-        res.status(200).json({ success: false, message: message || config_1.ERROR_MSG });
+        return res.status(200).json({ success: false, message: message || config_1.ERROR_MSG });
     }
     sendProfileResponse(document, res, user) {
         if (!document.isVerified && !document.twitterId)
@@ -251,6 +254,18 @@ class AuthController {
         else {
             const jwt = user.schema.methods.generateJwt(document);
             res.status(200).json({ success: true, token: jwt });
+        }
+    }
+    getSessionUser(req, res) {
+        const token = req.headers.authorization;
+        if (!token)
+            return { success: false, error: config_1.AUTHORIZATION_HEADER_MISSING };
+        try {
+            const user = jsonwebtoken_1.default.verify(token, config_1.JWTSECRET);
+            return { success: true, user: user['user'] };
+        }
+        catch (error) {
+            return { success: false, error: config_1.TOKEN_EXPIRED_ERROR };
         }
     }
 }

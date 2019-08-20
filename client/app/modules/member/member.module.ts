@@ -11,6 +11,8 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule ,
     MemberRoutingModule ,
     SharedModule
-  ]
+  ],
+  entryComponents : [  ] ,
+  exports : [ CreatePostComponent ]
 })
 export class MemberModule { }

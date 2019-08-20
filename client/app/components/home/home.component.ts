@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@ang
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../../modules/shared/modal/modal.component';
 import { environment } from 'client/environments/environment';
-import { ERROR_MSG, POST_CREATION_MSG } from 'client/app/constants/constants';
+import { ERROR_MSG, POST_CREATION_MSG, JWTOKEN } from 'client/app/constants/constants';
 
 @Component({
   selector: 'app-home',

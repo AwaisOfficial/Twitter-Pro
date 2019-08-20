@@ -2,16 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const controllers_1 = require("../controllers");
 const upload_1 = require("../utils/upload");
-const multer = require('multer');
 const config_1 = require("../config/config");
 const auth_guard_1 = require("../utils/auth-guard");
+const multer = require('multer');
 const passport = require('passport');
 const path = require('path');
 class Routes {
     constructor() {
         this.authController = new controllers_1.AuthController();
         this.postController = new controllers_1.PostController();
+        this.suggestion = new controllers_1.Suggestion();
         this.authGuard = new auth_guard_1.AuthGuard();
+        this.followees = new controllers_1.Followees();
     }
     routes(app) {
         app.route("/api/files/:image").get((req, res) => {
@@ -55,6 +57,11 @@ class Routes {
             });
         });
         app.route('/api/get-posts').get(this.postController.getPosts);
+        app.route('/api/like-post').post(this.postController.likePost);
+        /* FOLLOW ROUTES  */
+        app.route('/api/suggested-people').get(this.authGuard.isAuthorized(), this.suggestion.getSuggestedPeople);
+        app.route('/api/start-following').post(this.authGuard.isAuthorized(['member', 'user']), this.followees.startFollowing);
+        app.route('/api/get-followees-posts').get(this.followees.getFolloweesPosts);
     }
 }
 exports.Routes = Routes;
