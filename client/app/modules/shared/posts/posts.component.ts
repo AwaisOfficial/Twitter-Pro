@@ -13,7 +13,8 @@ export class PostsComponent implements OnInit {
 
   @Input('role') role : string;
   @Input('newCreatedPost') set newCreatedPost(post: any){
-    this.posts.splice(0 ,0 , post);
+    //this.posts.splice(0 ,0 , post);
+    this.postStore.addItem(post);
   };
   
   posts: Array<any> = [];

@@ -43,4 +43,10 @@ export class PostStoreService {
     this.dataSubject.next(Object.assign ( { }, this.dataStore).data);
   }
 
+  addItem(item : any){
+    const data = <any[]>this.dataStore.data;
+    data.push(item);
+    this.dataSubject.next(Object.assign ( { }, this.dataStore).data);
+  }
+
 }

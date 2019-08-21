@@ -18,7 +18,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {}
 
   addNewPost(event){
-    console.log(event.post);
     this.newCreatedPost = event.post ? event.post : undefined;
   }
 
