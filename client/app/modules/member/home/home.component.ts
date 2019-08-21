@@ -15,9 +15,12 @@ export class HomeComponent implements OnInit {
 
   constructor(private modalService: NgbModal) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(localStorage.getItem(JWTOKEN));
+  }
 
   addNewPost(event){
+    console.log(event.post);
     this.newCreatedPost = event.post ? event.post : undefined;
   }
 

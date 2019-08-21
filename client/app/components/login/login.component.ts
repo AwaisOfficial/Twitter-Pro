@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
 
     this.SERVER_URL = environment.APIEndPoint;
-    console.log(this.SERVER_URL)
     this.submitted = false;    
 
     this.loginForm = this.formBuilder.group({

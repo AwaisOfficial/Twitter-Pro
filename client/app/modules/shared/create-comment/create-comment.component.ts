@@ -1,18 +1,18 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { FormControl, Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { OperationsService } from 'client/app/services';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { mergeMap } from 'rxjs/operators';
+import { Component, OnInit, ViewChild, Output, ElementRef , EventEmitter} from '@angular/core';
+import { FormArray, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ERROR_MSG, POST_CREATION_MSG } from 'client/app/constants/constants';
-import { ModalComponent } from 'client/app/modules/shared/modal/modal.component';
+import { mergeMap } from 'rxjs/operators';
+import { ModalComponent } from '../modal/modal.component';
+import { OperationsService } from 'client/app/services';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 
 @Component({
-  selector: 'app-create-post',
-  templateUrl: './create-post.component.html',
-  styleUrls: ['./create-post.component.scss']
+  selector: 'app-create-comment',
+  templateUrl: './create-comment.component.html',
+  styleUrls: ['./create-comment.component.scss']
 })
-export class CreatePostComponent implements OnInit  {
+export class CreateCommentComponent implements OnInit  {
 
   @ViewChild('postText', {static: false}) postText : ElementRef;
   @Output() onPostCreation = new EventEmitter<any>();
@@ -22,7 +22,8 @@ export class CreatePostComponent implements OnInit  {
   
   constructor(private operationsService: OperationsService , 
               private formBuilder: FormBuilder ,
-              private modalService: NgbModal) { }
+              private modalService: NgbModal ,
+              public activeModal: NgbActiveModal) { }
 
   ngOnInit() { }
 
@@ -91,7 +92,7 @@ export class CreatePostComponent implements OnInit  {
     }    
     const uploadImages  = this.operationsService.postOperations('post-images', formData);
     const createRequest = uploadImages.pipe(
-      mergeMap(result => {
+      mergeMap((result : any) => {
 
       //console.log('Files Upload Response', result);
 
@@ -112,7 +113,7 @@ export class CreatePostComponent implements OnInit  {
         return of(null);
     }));
 
-    createRequest.subscribe(result => {
+    createRequest.subscribe((result : any) => {
       this.postCreationResponse = {}
       if(result.success){
         this.postCreationResponse.success = true;

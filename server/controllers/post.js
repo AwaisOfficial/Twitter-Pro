@@ -43,7 +43,13 @@ class PostController {
             }).sort({ 'createdAt': -1 }).limit(25);
         };
         this.likePost = (req, res) => {
-            post_1.Post.findByIdAndUpdate(req.body.postId, { $inc: { likeCount: 1 }, $push: { likers: req.body.userId } }, { new: true }, (error, response) => {
+            const action = req.body.action;
+            let payLoad = {};
+            if (action == 'like')
+                payLoad = { $inc: { likeCount: 1 }, $push: { likers: req.body.userId } };
+            else
+                payLoad = { $inc: { likeCount: -1 }, $pull: { likers: req.body.userId } };
+            post_1.Post.findByIdAndUpdate(req.body.postId, payLoad, { new: true }, (error, response) => {
                 if (error || !response)
                     this.responseHandler.sendError(res, config_1.ERROR_MSG, error);
                 else
