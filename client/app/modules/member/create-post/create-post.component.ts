@@ -87,7 +87,7 @@ export class CreatePostComponent implements OnInit  {
     
     let formData = new FormData();    
     for (var i = 0; i < this.files.images.length; i++) {
-      formData.append('postFiles', this.files.images[i] );
+      formData.append( 'postFiles', this.files.images[i] );
     }    
     const uploadImages  = this.operationsService.postOperations('post-images', formData);
     const createRequest = uploadImages.pipe(
@@ -106,7 +106,7 @@ export class CreatePostComponent implements OnInit  {
 
         this.addImages(result.files);
 
-        return  this.operationsService.postOperations('create-post', this.form.value);
+        return this.operationsService.postOperations('create-post', this.form.value);
       }
       else
         return of(null);
