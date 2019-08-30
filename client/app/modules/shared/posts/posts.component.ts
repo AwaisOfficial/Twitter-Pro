@@ -15,9 +15,9 @@ import { Router } from '@angular/router';
 export class PostsComponent implements OnInit {
 
   @Input('role') role : string;
+  @Input('routerLink') routerLink : string;
   @Input('userId') userId : string;
   @Input('newCreatedPost') set newCreatedPost(post: any){
-    //this.postStore.addItem(post);
     if(post)
       this.addItem(post);
   };
@@ -34,7 +34,6 @@ export class PostsComponent implements OnInit {
     this.posts$.next( Object.assign( {} , this.dataStore).data);
   };
   get posts() { return this.posts$.getValue(); }
-
 
   constructor(private operationsService: OperationsService ,
               private postStore : PostStoreService ,
@@ -53,9 +52,10 @@ export class PostsComponent implements OnInit {
 
   getPosts(endPoint) { 
     this.userId = this.userId ? this.userId : this.authService.userVal['user']._id
-    const posts = this.operationsService.getOperations(endPoint , { userId : this.userId });
+    const posts = this.operationsService.getOperations(endPoint , { userId : this.userId , routerLink : this.routerLink , role : this.role });
     posts.pipe(map((result : any) => result.response))
          .subscribe((response : any) => {
+      console.log('Posts Response', response);
       if(response.length > 0){
         this.dataStore.data = response;
         this.posts$.next( Object.assign ( { }, this.dataStore).data  );
@@ -70,11 +70,24 @@ export class PostsComponent implements OnInit {
     this.posts$.next(Object.assign ( { }, this.dataStore).data);
   }
 
+  /* UPDATING DATA BY DELETING OR UPDATING SOME ITEM */
+  updateData(item : any , action : string){
+    const data = this.dataStore.data;
+    if( !data && data.length == 0 ) return;
+    data.forEach((currentItem , index) => {
+      if(item._id == currentItem._id ) {       
+        action == 'delete' ? this.dataStore.data.splice(index , 1)  
+                           : this.dataStore.data[index] = item;   
+      }     
+    });
+    this.posts$.next(Object.assign ( { }, this.dataStore).data);
+  }
+
   updatePostLike(post) {
     const action = this.isPostLikedByUser(post) ? 'disLike' : 'like';
     this.operationsService.postOperations('like-post' , { postId : post._id , memberId : post.user._id ,userId : this.authService.userVal['user']['_id'] , action : action }).subscribe(response => {
       if(response.success)
-        this.postStore.updateData(response.response, 'update');      
+        this.updateData(response.response, 'update');      
     },
     error => console.error('Like Post Error ', error) );
   }

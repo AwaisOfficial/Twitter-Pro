@@ -9,7 +9,7 @@
               
             <app-create-post (onPostCreation)="addNewPost($event)" type="post"></app-create-post>
 
-            <app-posts role="member" [newCreatedPost]="newCreatedPost"></app-posts>
+            <app-posts role="member" routerLink="home" [newCreatedPost]="newCreatedPost"></app-posts>
 
             <div class="create-post-bottom-circled" (click)="openPostCreationModal()">
                 <span><i class="fas fa-pencil-alt"></i></span>

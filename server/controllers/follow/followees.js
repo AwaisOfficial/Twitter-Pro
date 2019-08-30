@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../../config/config");
 const models_1 = require("../../models");
 const suggestion_1 = require("./suggestion");
+const followers_1 = require("./followers");
 /* TO WHOM CURRENT USER FOLLOWs */
 class Followees {
     constructor() {
@@ -38,7 +39,7 @@ class Followees {
         };
         /* GETTING FOLLOWEES POSTS */
         this.getFolloweesPosts = (req, res) => {
-            this.suggestion.getCurrentFollowings(req, res).then((followees) => {
+            new followers_1.Followers().getCurrentFollowings(req, res).then((followees) => {
                 followees = followees.map((following) => { return following['followee'].toString(); });
                 models_1.Post.find({ 'user._id': { $in: followees } }, (error, posts) => {
                     if (error || !posts) {

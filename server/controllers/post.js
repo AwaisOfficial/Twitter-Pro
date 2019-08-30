@@ -40,28 +40,33 @@ class PostController {
         };
         /* GETTING RECENT POSTS OF MEMBER */
         this.getPosts = (req, res) => {
-            // Post.find({ "user._id" : { $eq : req.query.userId } }, (error : any , posts: any) => {
-            //     if(error){
-            //         console.error("Post Fetching Error", error);
-            //         return res.status(200).json({success: false, error: error});
-            //     }
-            //     return res.status(200).json({success : true, total : posts.length , response: posts , uploadFolderPath : __dirname + '/uploads/'});
-            // }).sort({ 'createdAt' : -1 }).limit(25);
-            const followees = models_1.Follower.find({ follower: req.query.userId }, { followee: 1, _id: 0 });
-            followees.then((followees) => {
-                followees = followees.map((following) => { return following['followee'].toString(); });
-                const posts = post_1.Post.aggregate([
-                    { $match: { $or: [{ 'user._id': { $in: followees } }, { 'user._id': { $eq: req.query.userId } }] } },
-                ]).sort({ createdAt: -1 }).limit(25);
-                posts.then((result) => {
-                    return res.status(200).json({ success: true, total: result.length, response: result });
+            /* For Home */
+            if (req.query.routerLink == 'home') {
+                const followees = models_1.Follower.find({ follower: req.query.userId }, { followee: 1, _id: 0 });
+                followees.then((followees) => {
+                    followees = followees.map((following) => { return following['followee'].toString(); });
+                    const posts = post_1.Post.aggregate([
+                        { $match: { $or: [{ 'user._id': { $in: followees } }, { 'user._id': { $eq: req.query.userId } }] } },
+                    ]).sort({ createdAt: -1 }).limit(25);
+                    posts.then((result) => {
+                        return res.status(200).json({ success: true, total: result.length, response: result });
+                    }).catch(error => {
+                        return res.status(200).json({ success: false, error: error });
+                    });
                 }).catch(error => {
+                    console.error("Getting Followees Post Error", error);
                     return res.status(200).json({ success: false, error: error });
                 });
-            }).catch(error => {
-                console.error("Getting Followees Post Error", error);
-                return res.status(200).json({ success: false, error: error });
-            });
+            }
+            else {
+                post_1.Post.find({ "user._id": { $eq: req.query.userId } }, (error, posts) => {
+                    if (error) {
+                        console.error("Post Fetching Error", error);
+                        return res.status(200).json({ success: false, error: error });
+                    }
+                    return res.status(200).json({ success: true, total: posts.length, response: posts, uploadFolderPath: __dirname + '/uploads/' });
+                }).sort({ 'createdAt': -1 }).limit(25);
+            }
         };
         this.likePost = (req, res) => {
             const isFollowing = new followees_1.Followees().isFollowing(req.body.userId, req.body.memberId);

@@ -79,7 +79,7 @@
                   </div>
                   <div class="col-md-3" >
                       <div class="subscribe-btn">
-                        <button *ngIf="authService.userVal?.user?.userName != profile?.userName && !suggestedMember" class="btn btn-dark btn-sm btn-block has-icon"><i class="fas fa-hand-pointer"></i> Subscribed</button>
+                        <button *ngIf="authService.userVal?.user?.userName != profile?.userName && !queryParams?.suggestedMember" class="btn btn-dark btn-sm btn-block has-icon"><i class="fas fa-hand-pointer"></i> Subscribed</button>
                         <button *ngIf="authService.userVal?.user?.userName == profile?.userName" class="btn btn-primary btn-sm btn-block has-icon"><i class="fas fa-cog"></i> Edit Profile</button>
                       </div>
                   </div>
@@ -101,7 +101,7 @@
               </p>
         </div>
           
-        <app-posts role="member" [userId]="profile?._id" *ngIf="!queryParams?.suggestedMember && posts?.length > 0" [posts]="posts"></app-posts>  
+        <app-posts role="member" [userId]="profile?._id" routerLink="profile" *ngIf="!queryParams?.suggestedMember && posts?.length > 0" [posts]="posts"></app-posts>  
         
         <app-subscribe *ngIf="queryParams?.suggestedMember" [profile]="profile" (onSubscribe)="OnSubscription($event)"></app-subscribe>
               
