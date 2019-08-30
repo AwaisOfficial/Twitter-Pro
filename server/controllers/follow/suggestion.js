@@ -11,10 +11,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../../models");
 const config_1 = require("../../config/config");
 const auth_1 = require("../auth");
+const post_1 = require("../post");
+const followees_1 = require("./followees");
 class Suggestion {
     constructor() {
         this.getSuggestedPeople = (req, res) => {
-            const currentFollowings = this.getCurrentFollings(req, res);
+            const currentFollowings = this.getCurrentFollowings(req, res);
             currentFollowings.then((followees) => {
                 if (!followees)
                     return this.sendError(res);
@@ -23,7 +25,13 @@ class Suggestion {
                 followees.push(token.user._id);
                 const distinctMembers = this.getDistinctMembers(followees);
                 distinctMembers.then((members) => {
-                    return res.status(200).json({ success: true, count: members.length, response: members });
+                    return res.status(200).json({ success: true, response: members });
+                    // this.getMembersInfo(members).then(response => {
+                    //     return res.status(200).json({success : true , response : response});
+                    // }).catch(error => {
+                    //     console.error('Count Error' , error);
+                    //     return this.sendError(res, error);
+                    // });
                 }).catch(error => {
                     console.error('Distinct Member Error', error);
                     return this.sendError(res, error);
@@ -35,7 +43,7 @@ class Suggestion {
         };
     }
     /* GETTING USER's CURRENT FOLLOWINGS (TO WHOM HE/SHE IS FOLLOWING CURRENTLY) */
-    getCurrentFollings(req, res) {
+    getCurrentFollowings(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const token = new auth_1.AuthController().getSessionUser(req, res);
             if (!token.success)
@@ -48,6 +56,18 @@ class Suggestion {
         return __awaiter(this, void 0, void 0, function* () {
             const distinctMembers = yield models_1.User.find({ _id: { $nin: followings }, role: { $eq: 'member' } });
             return distinctMembers;
+        });
+    }
+    getMembersInfo(members) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = [];
+            for (const member of members) {
+                let mediaPosts = new post_1.PostController().countMediaPosts(member);
+                let followers = new followees_1.Followees().countFollowers(member);
+                let memberInfo = { postInfo: mediaPosts[0], followers: followers };
+                response.push({ member: member, memberInfo: memberInfo });
+            }
+            return response;
         });
     }
     sendError(res, error, message) {

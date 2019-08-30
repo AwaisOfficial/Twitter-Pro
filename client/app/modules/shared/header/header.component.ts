@@ -13,7 +13,13 @@ const newLocal = 'yes';
 export class HeaderComponent implements OnInit {
 
   @Input('title') title : string;  
-
+  navItems: Array<any> = [
+     { icon : 'fas fa-home' , name : 'Home' ,link : ''},
+     { icon : 'fas fa-envelope', name : 'Messages' , link : ''},
+     { icon : 'fas fa-bell' , name : 'Notifications', link : ''},
+     { icon : 'fas fa-user' , name : 'Profile', link : '/profile'},
+     { icon : 'fas fa-power-off', name : 'LogOut' , link : '/logOut' }
+    ]
   constructor(private authService: AuthService,
               private router: Router,
               private modalService: NgbModal) { }
@@ -49,6 +55,17 @@ export class HeaderComponent implements OnInit {
       x.className = "topnav";
       y.style.display = "block";
       z.style.display = "none";
+    }
+  }
+
+  navigateTo(link : string){
+    if(link == '/logOut')
+      this.confirm();
+    else if(link == '/profile')
+      this.router.navigate(['/profile'], {state: { data: { profile : this.authService.userVal['user'] , suggestedMember : false } } });
+    else {
+      const role = this.authService.userVal['user']['role'];
+      this.router.navigateByUrl(role + link);
     }
   }
 

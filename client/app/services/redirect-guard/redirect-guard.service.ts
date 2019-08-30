@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../auth-service/auth-service.service';
 import { Observable } from 'rxjs';
+import { IUser } from 'client/app/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class RedirectGuardService implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
-    const user = this.authService.userVal;
-    if (user) {      
+    const user = <IUser>this.authService.userVal;
+    if (user && user['user']) {      
       this.router.navigate(['/'+ user['user'].role]);
       return true;      
     }      

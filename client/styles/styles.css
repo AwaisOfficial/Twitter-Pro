@@ -315,7 +315,7 @@ header{
 	border-radius:50%;
 }
 .post-section, .right-section {
-    margin-top: 50px;
+  /* margin-top: 50px; */
 }
 .white-theme .user-info .user-name {
     color: #000;
@@ -431,7 +431,7 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light {
 }
 
 .like-comment ul li .fa-heart:hover{
-  color:#7daee0;
+  color:red;
 }
 .like-comment ul li .fa-comment-alt:hover{
   color:#64b96e;
@@ -601,7 +601,7 @@ button.choose-image , button.choose-video{
   color: #ddd;
   font-weight:400;
 }
-.adv-banner{
+.adv-banner {
 	display:block;
 	margin-bottom: 50px;
 }
@@ -728,6 +728,93 @@ button.choose-image , button.choose-video{
 	z-index:2;
 }
 
+.profile-banner{
+	background:url("/assets/3.jpg") top center no-repeat;
+	background-size:cover;
+	padding:172px 0 10px 0px;
+}
+.profile-image {
+    width: 125px;
+    height: 125px;
+    border-radius: 100%;
+	position: absolute;
+	left: -35px;
+    top: -50px;
+}
+.profile-image img{
+    width: 125px;
+    height: 125px;
+    border-radius: 100%;
+}
+.profile-stats {
+    padding: 10px 0 10px 90px;
+}
+.profiler-name {
+    font-size: 20px;
+    font-weight: 600;
+}
+.stats-figure .stat-head {
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 500;
+    font-size: 13px;
+}
+.stats-figure .stat-figure {
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 500;
+    font-size: 22px;
+}
+.last-seen {
+	margin-left: 102px;
+    color: #FFF;
+    font-size: 12px;
+    position: relative;
+}
+span.seen-status-dot {
+    height: 7px;
+    width: 7px;
+    background: #0ff500;
+    position: absolute;
+    border-radius: 100%;
+    top: 5px;
+    left: -12px;
+}
+.has-icon{
+	position:relative;
+}
+.has-icon .fas{
+	position:absolute;
+}
+.has-icon .fas {
+    position: absolute;
+    left: 35px;
+    top: 7px;
+}
+.subscribe-btn .btn{
+	border-radius: 50px;
+}
+.subscribe-btn {
+    margin: 10px 0px;
+}
+.profiler-biodata{
+	margin-left: 90px;
+	margin-top: 10px;
+}
+.profiler-biodata p .fas {
+    position: absolute;
+}
+.profiler-biodata p{
+	position:relative;
+	padding-left:20px;
+	margin-bottom: 7px;
+}
+.profiler-biodata p .fas {
+    position: absolute;
+    left: 0;
+    top: 3px;
+}
+
 
 
 @media(min-width:320px) and (max-width: 767px){
@@ -779,5 +866,37 @@ button.choose-image , button.choose-video{
 	}
 	.cb-slideshow, .cb-slideshow:after{
 		display:none;
+  }
+  
+  .profile-stats {
+		padding: 10px 0 10px 0px;
+	}
+	.profiler-biodata {
+		margin-left: 0;
+		margin-top: 10px;
+	}
+	.profile-image {
+		width: 100px;
+		height: 100px;
+		border-radius: 100%;
+		position: absolute;
+		left: 50%;
+		top: -50px;
+		margin-left: -50px;
+	}
+	.profile-image img {
+		width: 100px;
+		height: 100px;
+		border-radius: 100%;
+	}
+	.last-seen {
+	    margin-left: 12px;
+	}
+	.profiler {
+		text-align: center;
+		padding-top: 45px;
+		margin-bottom: 15px;
 	}
 }
+
+

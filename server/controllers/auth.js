@@ -26,26 +26,40 @@ const config_1 = require("../config/config");
 const bson_1 = require("bson");
 const nodemailer_1 = require("../utils/nodemailer");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const post_1 = require("./post");
+const followees_1 = require("./follow/followees");
 let User = mongoose.model('User', models_1.userSchema);
 let Token = mongoose.model('Token', models_1.tokenSchema);
 class AuthController {
     constructor() {
         this.login = (req, res) => {
-            console.log(req.body);
             this.findUser(req).then(document => {
                 if (!document) {
                     return res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
                 }
                 let user = new User();
                 let isCompared = user.schema.methods.comparePassword(req.body.password, document);
-                if (isCompared)
+                if (isCompared) {
                     this.sendProfileResponse(document, res, user);
+                    return;
+                }
                 else
-                    res.status(200).json({ success: false, message: config_1.INVALID_PASSWORD });
+                    return res.status(200).json({ success: false, message: config_1.INVALID_PASSWORD });
             }).catch(error => {
                 console.error("Error", error);
                 res.status(200).json(error);
                 return this.sendError(res, config_1.ERROR_MSG);
+            });
+        };
+        this.userProfile = (req, res) => {
+            this.findUser(req).then(document => {
+                if (!document)
+                    return res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND });
+                else
+                    return res.status(200).json({ success: true, response: document });
+            }).catch(error => {
+                console.log(error);
+                return res.status(200).json({ success: false, message: config_1.USER_NOT_FOUND, error: error });
             });
         };
         this.twitterProfile = (req, res) => {
@@ -120,10 +134,8 @@ class AuthController {
         };
         this.verifyEmail = (req, res) => {
             req.params.token = req.params.token.replace(/['"]+/g, '');
-            console.log('Verify Email', req.params.token);
             // Find a matching token
             Token.findOne({ token: req.params.token }, (err, token) => {
-                console.log('Result', token);
                 if (token.token != req.params.token)
                     return res.status(400).send({ type: 'not-verified', message: 'We were unable to find a valid token. Your token my have expired.' });
                 // If we found a token, find a matching user
@@ -170,6 +182,13 @@ class AuthController {
                         express_validator_1.body('token', 'Token is required.').exists(),
                     ];
             }
+        };
+        this.memberProfileDetails = (req, res) => {
+            this.getMemberProfileDetails(req).then((details) => {
+                return res.status(200).json({ success: true, response: details });
+            }).catch((error) => {
+                return res.status(200).json({ success: false, message: config_1.ERROR_MSG, error: error });
+            });
         };
     }
     set twitterTokens(tokens) { this._tokens = tokens; }
@@ -228,13 +247,9 @@ class AuthController {
             const errors = express_validator_1.validationResult(req);
             if (!errors.isEmpty())
                 return { success: false, error: errors };
-            const value = req.body.userName;
+            const value = (req.method == 'POST') ? req.body.userName : req.query.userName;
             const criteria = value.indexOf('@') > -1 ? { email: value } : { userName: value };
             return yield User.findOne(criteria);
-            // if(!user)
-            //   return {success: false , status: 200, message:  USER_NOT_FOUND};
-            // else
-            //   return user;
         });
     }
     sendError(res, message) {
@@ -252,8 +267,26 @@ class AuthController {
         else if (document.isDefaulted)
             res.status(200).json({ success: false, message: 'We are sorry. your account has been blocked.' });
         else {
+            // if(document.isCelebrity){
+            //   Post.aggregate([ 
+            //     { $match : { 'user._id' : document._id.toString() } },
+            //     { $count : 'totalPosts'  }
+            //   ]).exec((error : any, result : any) => {
+            //     if(error)
+            //       document.totalPosts = 0;
+            //     else 
+            //       document.totalPosts = result[0].totalPosts;               
+            //     console.log('New Document ', document.totalPosts , document);  
+            //     const jwt = user.schema.methods.generateJwt(document);
+            //     return res.status(200).json({success: true, token : jwt });    
+            //   });
+            // }
+            // else {
+            //   const jwt = user.schema.methods.generateJwt(document);
+            //   res.status(200).json({success: true, token : jwt });
+            // }
             const jwt = user.schema.methods.generateJwt(document);
-            res.status(200).json({ success: true, token: jwt });
+            return res.status(200).json({ success: true, token: jwt });
         }
     }
     getSessionUser(req, res) {
@@ -267,6 +300,16 @@ class AuthController {
         catch (error) {
             return { success: false, error: config_1.TOKEN_EXPIRED_ERROR };
         }
+    }
+    getMemberProfileDetails(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = [];
+            const followers = new followees_1.Followees().countFollowers({ _id: req.query.memberId });
+            const mediaPosts = new post_1.PostController().countMediaPosts({ _id: req.query.memberId });
+            let memberInfo = { postInfo: yield mediaPosts, followers: yield followers };
+            response.push(memberInfo);
+            return response;
+        });
     }
 }
 exports.AuthController = AuthController;

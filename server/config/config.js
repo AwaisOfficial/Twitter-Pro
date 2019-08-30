@@ -17,6 +17,7 @@ exports.PASSWORD_RESET_MAIL_SENT_ERROR = 'Unable to send email.';
 exports.UPLOAD_PATH = 'uploads';
 exports.COLLECTION_NAME = 'images';
 exports.ITEM_UPDATED = 'Item updated successfully.';
+exports.ERROR_FOR_UNFOLLOWED_USER = 'Please follow this person to like or comment on his posts.';
 exports.TWITTER_CONSUMER_KEY = "E1Pqit9PSS956U2hpfSbnf3MM";
 exports.TWITTER_CONSUMER_SECRET = "G8KpfTKSU41QHLYAaowhPPNEoAgTlAudpeJV1DsDWfgDe1EZ14";
 exports.SENDGRID_API_KEY = "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";

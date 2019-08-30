@@ -50,7 +50,6 @@ exports.userSchema.method('comparePassword', function (password, user) {
     return false;
 });
 exports.userSchema.method('generateJwt', function (user) {
-    console.log('User', user);
     let expiry = new Date();
     expiry.setDate(expiry.getDate() + 7);
     return jsonwebtoken_1.default.sign({

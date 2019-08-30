@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'client/environments/environment';
 import { Http_Headers } from 'client/app/helpers';
@@ -20,8 +20,11 @@ export class PostStoreService {
 
   get allData() { return this.dataSubject.asObservable(); }
     
-  getOperations(end_point: string){    
-    return this.http.get(`${environment.APIEndPoint + end_point}` , { headers : new Http_Headers().getHeaders() , withCredentials: true })
+  getOperations(end_point: string , params? : any){
+    let httpParams  = new HttpParams();
+    if(params) 
+     Object.keys(params).forEach(key => { httpParams = httpParams.append(key , params[key]);  }); 
+    return this.http.get(`${environment.APIEndPoint + end_point}` , { headers : new Http_Headers().getHeaders() , withCredentials: true  , params : httpParams } )
                     .pipe(map((result : any) => result.response))
                     .subscribe(( data : any ) => {
                       this.dataStore.data = data;
@@ -35,7 +38,7 @@ export class PostStoreService {
     const data = this.dataStore.data;
     if( !data && data.length == 0 ) return;
     data.forEach((currentItem , index) => {
-      if(item._id == currentItem._id ){       
+      if(item._id == currentItem._id ) {       
         action == 'delete' ? this.dataStore.data.splice(index , 1)  
                            : this.dataStore.data[index] = item;   
       }     
@@ -45,7 +48,7 @@ export class PostStoreService {
 
   addItem(item : any){
     const data = <any[]>this.dataStore.data;
-    data.push(item);
+    data.splice(0 , 0 , item);
     this.dataSubject.next(Object.assign ( { }, this.dataStore).data);
   }
 

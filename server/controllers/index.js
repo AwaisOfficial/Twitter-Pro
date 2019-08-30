@@ -8,3 +8,4 @@ __export(require("./post"));
 __export(require("./follow/followers"));
 __export(require("./follow/followees"));
 __export(require("./follow/suggestion"));
+__export(require("./payment"));

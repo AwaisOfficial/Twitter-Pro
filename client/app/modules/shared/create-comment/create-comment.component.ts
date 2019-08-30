@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, ElementRef , EventEmitter} from '@angular/core';
+import { Component, OnInit, ViewChild, Output, ElementRef , EventEmitter, Input} from '@angular/core';
 import { FormArray, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ERROR_MSG, POST_CREATION_MSG } from 'client/app/constants/constants';
 import { mergeMap } from 'rxjs/operators';
@@ -14,8 +14,9 @@ import { of } from 'rxjs';
 })
 export class CreateCommentComponent implements OnInit  {
 
-  @ViewChild('postText', {static: false}) postText : ElementRef;
+  @Input('data') data : any;
   @Output() onPostCreation = new EventEmitter<any>();
+  @ViewChild('postText', {static: false}) postText : ElementRef;
   files: any =  { images : []  , videos : [] ,  imagesCount : 0 , videosCount : 0};
   form : FormGroup; 
   postCreationResponse : any ;  

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { JWTOKEN } from 'client/app/constants/constants';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CreatePostComponent } from '../create-post/create-post.component';
 import { ModalComponent } from '../../shared/modal/modal.component';
 
 @Component({
@@ -15,12 +14,9 @@ export class HomeComponent implements OnInit {
 
   constructor(private modalService: NgbModal) { }
 
-  ngOnInit() {
-    console.log(localStorage.getItem(JWTOKEN));
-  }
+  ngOnInit() {}
 
   addNewPost(event){
-    console.log(event.post);
     this.newCreatedPost = event.post ? event.post : undefined;
   }
 

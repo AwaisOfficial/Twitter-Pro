@@ -13,16 +13,21 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { SuggestedPeopleComponent } from './suggested-people/suggested-people.component';
 import { CommentComponent } from './comment/comment.component';
 import { CreateCommentComponent } from './create-comment/create-comment.component';
+import { CreatePostComponent } from './create-post/create-post.component';
+import { ShowMemberProfileComponent } from './show-member-profile/show-member-profile.component';
+import { SubscribeComponent } from './subscribe/subscribe.component';
 
 @NgModule({
-  declarations: [  AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent ,
-                   SettingsComponent , SlideShowComponent, PostsComponent, CropImageComponent, SuggestedPeopleComponent, CommentComponent, CreateCommentComponent  ],
+  declarations: [ AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent ,
+                  SettingsComponent , SlideShowComponent, PostsComponent, CropImageComponent, SuggestedPeopleComponent,
+                  CommentComponent, CreateCommentComponent, CreatePostComponent, ShowMemberProfileComponent, SubscribeComponent  ],
   imports: [
     CommonModule ,
     ImageCropperModule 
   ],
-  entryComponents:[ ModalComponent , CropImageComponent , CreateCommentComponent],
+  entryComponents:[ ModalComponent , CropImageComponent , CreateCommentComponent , CreatePostComponent ],
   exports : [ AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent , 
-              SettingsComponent , SlideShowComponent , PostsComponent , CropImageComponent , SuggestedPeopleComponent  ]
+              SettingsComponent , SlideShowComponent , PostsComponent , CropImageComponent , 
+              SuggestedPeopleComponent , CreatePostComponent , SubscribeComponent ]
 })
 export class SharedModule { }

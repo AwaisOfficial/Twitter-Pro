@@ -14,6 +14,7 @@ class Routes {
         this.suggestion = new controllers_1.Suggestion();
         this.authGuard = new auth_guard_1.AuthGuard();
         this.followees = new controllers_1.Followees();
+        this.paymentCtrl = new controllers_1.PaymentController();
     }
     routes(app) {
         app.route("/api/files/:image").get((req, res) => {
@@ -34,6 +35,8 @@ class Routes {
         }, this.authController.validate('register'), this.authController.register);
         app.route('/api/verifyEmail/:token').get(this.authController.verifyEmail);
         app.route('/api/login').post(this.authController.validate('login'), this.authController.login);
+        app.route('/api/user-profile').get(this.authController.userProfile);
+        app.route('/api/member-profile').get(this.authController.memberProfileDetails);
         app.route('/api/forgot-password').post(this.authController.validate('forgot-password'), this.authController.forgotPassword);
         app.route('/api/reset-password').post(this.authController.validate('reset-password'), this.authController.resetPassword);
         app.post('/api/profile-image', upload_1.upload.single('avatar'), (req, res) => {
@@ -59,9 +62,11 @@ class Routes {
         app.route('/api/get-posts').get(this.postController.getPosts);
         app.route('/api/like-post').post(this.postController.likePost);
         /* FOLLOW ROUTES  */
-        app.route('/api/suggested-people').get(this.authGuard.isAuthorized(), this.suggestion.getSuggestedPeople);
+        app.route('/api/suggested-people').get(this.suggestion.getSuggestedPeople);
         app.route('/api/start-following').post(this.authGuard.isAuthorized(['member', 'user']), this.followees.startFollowing);
         app.route('/api/get-followees-posts').get(this.followees.getFolloweesPosts);
+        /* PAYMENT ROUTES */
+        app.route('/api/prepare-checkout').get(this.paymentCtrl.prepareCheckOut);
     }
 }
 exports.Routes = Routes;

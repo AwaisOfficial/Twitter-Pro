@@ -1,22 +1,22 @@
-<div class="container">
-    <div class="row">
+<div class="container mt-4">
+    <div class="row" *ngIf="response[0]?.member">
       <div class="col-12 col-sm-8 col-lg-12">
           <h6 class="text-dark mb-3 border-bottom border-light" [style.font-weight]="600">Who to Follow</h6> 
-          <div class="row border-light border-bottom mb-3" *ngFor="let user of people | async">
+          <div class="row border-light border-bottom mb-3" *ngFor="let member of response | async">
             <div class="col-2">
                 <div class="user-img">
-                    <img src="{{ userImage(user.avatar) }}" alt="{{ fullName(user) }}">
+                    <img src="{{ userImage(member.avatar) }}" alt="{{ fullName(member) }}">
                 </div>
             </div>  
             <div class="col-6">
                 <div class="user-info">
-                    <span class="user-name">{{ fullName(user) }}</span>
-                    <span class="user-tag">@{{ user.userName}}</span>
+                    <span class="user-name">{{ fullName(member) }}</span>
+                    <span class="user-tag">@{{ member.userName}}</span>
                 </div>
             </div>
             <div class="col-4">
                 <div class="post-time-stamp text-right">
-                    <button class="btn btn-primary" (click)="startFollowing(user)"><small>Follow</small></button>
+                    <button class="btn btn-primary" (click)="showProfile(member)"><small>Follow</small></button>
                 </div>
             </div>
           </div>       

@@ -3,13 +3,13 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-8">       
+    <div class="col-md-8 mt-4">       
         
-        <div class="post-section" >
+        <div class="post-section">
               
-            <app-create-post (onPostCreation)="addNewPost($event)"></app-create-post>
+            <app-create-post (onPostCreation)="addNewPost($event)" type="post"></app-create-post>
 
-            <app-posts [newCreatedPost]="newCreatedPost"></app-posts>
+            <app-posts role="member" [newCreatedPost]="newCreatedPost"></app-posts>
 
             <div class="create-post-bottom-circled" (click)="openPostCreationModal()">
                 <span><i class="fas fa-pencil-alt"></i></span>
@@ -18,13 +18,9 @@
         </div>
     </div>
     
-    <div class="col-md-4">
+    <div class="col-md-4 mt-4">
             <div class="right-section">
-                <div class="adv-banner">
-                	<a href="#">
-                        <img src="assets/1.jpg" class="img-fluid" alt="">
-                    </a>
-                </div>
+                <img src="assets/1.jpg" class="img-fluid" alt="">
 
                 <!-- Suggested People List -->
                 <app-suggested-people></app-suggested-people>

@@ -3,6 +3,7 @@ import { OperationsService, AuthService, SuggestionStoreService } from 'client/a
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'client/environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-suggested-people',
@@ -11,17 +12,15 @@ import { environment } from 'client/environments/environment';
 })
 export class SuggestedPeopleComponent implements OnInit {
 
-  people : Observable<Array<any>>;
+  response : Observable<Array<any>>;
 
   constructor(private operationsService : OperationsService , 
               private authService: AuthService,
+              private router : Router ,
               private suggestionStore : SuggestionStoreService) { }
 
   ngOnInit() {
-    // this.people = this.operationsService.getOperations('suggested-people').pipe(map((result : any) => result.response));
-    // this.people.subscribe(result => console.log(result));
-
-    this.people = this.suggestionStore.allData;
+    this.response = this.suggestionStore.allData;
     this.suggestionStore.getOperations('suggested-people');
   }
 
@@ -33,8 +32,8 @@ export class SuggestedPeopleComponent implements OnInit {
   }
 
   userImage(fileName: string){
-    //return environment.APIEndPoint + 'files/' + fileName;
-    return environment.APIEndPoint + 'files/1565175549519_birds.jpg'
+    return environment.APIEndPoint + 'files/' + fileName;
+    //return environment.APIEndPoint + 'files/1565175549519_birds.jpg'
   }
 
   startFollowing(followee : any){
@@ -45,6 +44,10 @@ export class SuggestedPeopleComponent implements OnInit {
         this.suggestionStore.removeItem(followee);
     },
     error => console.error("Start Following Error", error));
+  }
+
+  showProfile(member : any) : void {
+    this.router.navigate(['/profile'], {state: { data: { profile : member , suggestedMember : true } } });
   }
 
 }

@@ -1,1 +1,111 @@
 <app-header title="Profile"></app-header>
+
+<div class="profile-banner">
+    <div class="container">
+      <div class="row">
+          <div class="col-md-8">
+              <div class="last-seen">
+                  <span class="seen-status-dot"></span>
+                  Last seen yesterday
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="profile">
+    <div class="row">
+      <div class="col-md-12">
+          <div class="profile-stats">
+              <div class="profile-image">
+                <img src="assets/user.jpg" class="img-fluid" alt="{{ profile?.userName}}">
+              </div>
+              <div class="row">
+                  <div class="col-md-3">
+                      <div class="profiler">
+                  <div class="profiler-name">
+                    {{ commons.userCompleteName( profile ) }} <i class="fas fa-shield-alt"></i>
+                  </div>
+                  <div class="profiler-nick">
+                      @ {{ profile?.userName }}
+                  </div>
+              </div>                    
+                  </div>
+                  <div class="col-md-6">
+                      <div class="stats-figure">
+                          <div class="row">
+                              <div class="col">
+                                  <div class="pro-photos">
+                                      <div class="stat-figure">
+                                          {{ profile?.memberInfo?.postInfo[0]?.totalImages }}
+                                      </div>
+                                      <div class="stat-head">
+                                          Photos
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col">
+                                  <div class="pro-photos">
+                                      <div class="stat-figure">
+                                        {{ profile?.memberInfo?.postInfo[0]?.totalVideos}}
+                                      </div>
+                                      <div class="stat-head">
+                                          Videos
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col">
+                                  <div class="pro-photos">
+                                      <div class="stat-figure">
+                                        {{ profile?.memberInfo?.followers }}
+                                      </div>
+                                      <div class="stat-head">
+                                        Fans
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col">
+                                  <div class="pro-photos">
+                                      <div class="stat-figure">
+                                        {{ profile?.memberInfo?.postInfo[0]?.totalLikes }}
+                                      </div>
+                                      <div class="stat-head">
+                                          Likes
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-3" >
+                      <div class="subscribe-btn">
+                        <button *ngIf="authService.userVal?.user?.userName != profile?.userName && !suggestedMember" class="btn btn-dark btn-sm btn-block has-icon"><i class="fas fa-hand-pointer"></i> Subscribed</button>
+                        <button *ngIf="authService.userVal?.user?.userName == profile?.userName" class="btn btn-primary btn-sm btn-block has-icon"><i class="fas fa-cog"></i> Edit Profile</button>
+                      </div>
+                  </div>
+              </div>
+          </div>        
+      </div>
+
+      <div class="col-md-8">
+          <div class="profiler-biodata">
+              <p><i class="fas fa-user"></i> {{ profile?.about ? profile?.about : 'NA'}}</p>
+              <p><i class="fas fa-envelope"></i> {{ profile?.email ? profile?.email : ' '}}</p>
+              <p><i class="fas fa-map-marker-alt"></i> 
+                {{ profile?.location ? 
+                ( profile?.location.address ? profile.location.address : '') +
+                ( profile?.location.city ? (' ,' + profile.location.address ) : '') +
+                ( profile?.location.country ? (' ,' + profile.location.country ) : '') 
+                :
+                'NA'}}
+              </p>
+        </div>
+          
+        <app-posts role="member" [userId]="profile?._id" *ngIf="!queryParams?.suggestedMember && posts?.length > 0" [posts]="posts"></app-posts>  
+        
+        <app-subscribe *ngIf="queryParams?.suggestedMember" [profile]="profile" (onSubscribe)="OnSubscription($event)"></app-subscribe>
+              
+    </div>
+      
+  </div>
+</div>

@@ -10,6 +10,7 @@ import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-
 import { SettingsComponent } from './modules/shared/settings/settings.component';
 import { ProfileComponent } from './modules/shared/profile/profile.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ShowMemberProfileComponent } from './modules/shared/show-member-profile/show-member-profile.component';
 
 const routes: Routes = [
   { path : ''  , redirectTo : '', pathMatch: 'full' , canActivate : [ RedirectGuardService ] },
@@ -21,12 +22,14 @@ const routes: Routes = [
   { path : 'privacy-policy', component: PrivacyPolicyComponent},
   { path : 'terms-of-service', component: TermsOfServiceComponent},
   { path : 'settings', component: SettingsComponent},
-  { path : 'profile', component: ProfileComponent , canActivate : [AuthGuardService]},
+  { path : 'profile', component: ProfileComponent , canActivate : [AuthGuardService] , data : { role : [ 'user' , 'member']}},
+  { path : 'show-profile', component: ShowMemberProfileComponent , canActivate : [AuthGuardService] , data : { role : [ 'user' , 'member']}},
   
   { path : 'admin'  , loadChildren : () => import('./modules/admin/admin.module').then(mod => mod.AdminModule) , canActivate : [AuthGuardService] , data : { role : 'admin'}} ,
   { path : 'member' , loadChildren : () => import('./modules/member/member.module').then(mod => mod.MemberModule),  canActivate : [AuthGuardService] , data : { role : 'member'}} ,
   { path : 'user'   , loadChildren : () => import('./modules/user/user.module').then(mod => mod.UserModule) , canActivate : [AuthGuardService] , data : { role : 'user'}} ,
   
+
   { path : 'not-found' , component : NotFoundComponent },
   { path : '**' , redirectTo : 'not-found' }
 ];

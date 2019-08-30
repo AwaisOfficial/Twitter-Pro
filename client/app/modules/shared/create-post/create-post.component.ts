@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { OperationsService } from 'client/app/services';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ERROR_MSG, POST_CREATION_MSG } from 'client/app/constants/constants';
 import { ModalComponent } from 'client/app/modules/shared/modal/modal.component';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-create-post',
@@ -14,8 +14,10 @@ import { of } from 'rxjs';
 })
 export class CreatePostComponent implements OnInit  {
 
-  @ViewChild('postText', {static: false}) postText : ElementRef;
+  @Input('type') type : string;
   @Output() onPostCreation = new EventEmitter<any>();
+  @ViewChild('postText', {static: false}) postText : ElementRef;
+  
   files: any =  { images : []  , videos : [] ,  imagesCount : 0 , videosCount : 0};
   form : FormGroup; 
   postCreationResponse : any ;  
@@ -93,8 +95,6 @@ export class CreatePostComponent implements OnInit  {
     const createRequest = uploadImages.pipe(
       mergeMap(result => {
 
-      //console.log('Files Upload Response', result);
-
       if(result.success) {
 
         this.form = this.formBuilder.group({
@@ -137,6 +137,10 @@ export class CreatePostComponent implements OnInit  {
     this.files.images = this.files.videos = [];
     this.postText.nativeElement.value = '';
     setTimeout(() => { this.postCreationResponse = null }, 3000);
+  }
+
+  createPostMargin(): string {
+    return this.type == 'post' ? '90' : '0';
   }
 
 }

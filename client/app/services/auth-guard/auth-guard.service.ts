@@ -14,10 +14,10 @@ export class AuthGuardService implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
-    const currentUser = <IUser>this.authService.userVal.user;
+    const user = <IUser>this.authService.userVal;
     const role        = route.data.role;
-    if (currentUser) {      
-      if(role && role.indexOf(currentUser.role) > -1)
+    if (user && user['user']) {      
+      if(role && role.indexOf(user['user'].role) > -1)
         return true;
       else {
         this.router.navigate(['/not-found']);
