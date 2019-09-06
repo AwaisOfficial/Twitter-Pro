@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Commons } from 'client/app/helpers';
+import { USER_INFO } from 'client/app/constants/constants';
 
 @Component({
   selector: 'app-settings',
@@ -10,6 +11,7 @@ export class SettingsComponent implements OnInit {
 
   profile : any;
   commons : Commons;
+  proUser: string;
 
   constructor() { }
 
@@ -17,7 +19,7 @@ export class SettingsComponent implements OnInit {
     this.commons = new Commons();
     this.profile = history.state.data.profile;
     console.log(document.body.classList , this.profile);
-    
+    this.proUser = JSON.parse(localStorage.getItem(USER_INFO)).user.userName; 
   }
 
   onThemeChange(event){

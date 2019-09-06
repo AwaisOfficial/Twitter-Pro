@@ -1,8 +1,11 @@
 <div class="post-section" *ngIf="posts">
     <div class="tw-posts">
         <div class="user-post clearfix" *ngFor="let post of posts; let i=index;">
-            <div class="user-img">
+            <div class="user-img" *ngIf="post?.user.userName !== 'imgemmamasseyuk'">
                 <img src="assets/user.jpg" alt="">
+            </div>
+            <div class="user-img" *ngIf="post?.user.userName === 'imgemmamasseyuk'">
+                <img src="assets/pro-user.jpg" alt="">
             </div>
             <div class="post-content">
                 <div class="post-header">

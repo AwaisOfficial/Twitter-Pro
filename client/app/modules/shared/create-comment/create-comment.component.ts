@@ -23,13 +23,15 @@ export class CreateCommentComponent implements OnInit  {
   form : FormGroup; 
   postCreationResponse : any ;  
   commons: Commons;
-  hover: boolean = false;
   
-  constructor(private router: Router,
-              private operationsService: OperationsService , 
+  hover:boolean=false;
+
+  constructor(private operationsService: OperationsService , 
               private formBuilder: FormBuilder ,
               private modalService: NgbModal ,
-              public activeModal: NgbActiveModal) { }
+              public activeModal: NgbActiveModal,
+              private router:Router
+              ) {}
 
   ngOnInit() { 
     this.commons = new Commons();

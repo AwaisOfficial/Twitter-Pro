@@ -1,6 +1,6 @@
 <app-header title="Profile"></app-header>
 
-<div class="profile-banner">
+<div [ngClass]="this.proUser === 'imgemmamasseyuk'? 'profile-banner1': 'profile-banner'" >
     <div class="container">
       <div class="row">
           <div class="col-md-8">
@@ -17,7 +17,10 @@
     <div class="row">
       <div class="col-md-12">
           <div class="profile-stats">
-              <div class="profile-image">
+              <div class="profile-image" *ngIf="proUser === 'imgemmamasseyuk'">
+                <img src="assets/pro-user.jpg" class="img-fluid" alt="{{ profile?.userName}}">
+              </div>
+              <div class="profile-image" *ngIf="proUser !== 'imgemmamasseyuk'">
                 <img src="assets/user.jpg" class="img-fluid" alt="{{ profile?.userName}}">
               </div>
               <div class="row">
@@ -87,8 +90,8 @@
           </div>        
       </div>
 
-      <div class="col-md-8">
-          <div class="profiler-biodata">
+      <div class="col-md-8"  >
+          <div class="profiler-biodata" *ngIf="proUser !== 'imgemmamasseyuk'">
               <p><i class="fas fa-user"></i> {{ profile?.about ? profile?.about : 'NA'}}</p>
               <p><i class="fas fa-envelope"></i> {{ profile?.email ? profile?.email : ' '}}</p>
               <p><i class="fas fa-map-marker-alt"></i> 
@@ -98,6 +101,13 @@
                 ( profile?.location.country ? (' ,' + profile.location.country ) : '') 
                 :
                 'NA'}}
+              </p>
+        </div>
+          <div class="profiler-biodata" *ngIf="proUser === 'imgemmamasseyuk'">
+              <p><i class="fas fa-user"></i> Glamour model who loves to entertain. This is the only place to see my new and updated content everyday.</p>
+              <p><i class="fas fa-envelope"></i> gemma@only-vips.com</p>
+              <p><i class="fas fa-map-marker-alt"></i> 
+          Tamworth, GB
               </p>
         </div>
           

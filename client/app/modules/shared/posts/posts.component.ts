@@ -6,6 +6,7 @@ import { CreateCommentComponent } from '../create-comment/create-comment.compone
 import { Commons } from 'client/app/helpers';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { USER_INFO } from 'client/app/constants/constants';
 
 @Component({
   selector: 'app-posts',
@@ -14,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class PostsComponent implements OnInit {
 
+  proUser: string;
   @Input('role') role : string;
   @Input('routerLink') routerLink : string;
   @Input('userId') userId : string;
@@ -23,7 +25,7 @@ export class PostsComponent implements OnInit {
   };
   
   commons : Commons;
-  hover: boolean = false;
+
   private posts$ = new BehaviorSubject<any[]>([]);
   private dataStore : { data : any };
 
@@ -42,6 +44,7 @@ export class PostsComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
+    this.proUser = JSON.parse(localStorage.getItem(USER_INFO)).user.userName;
     this.commons = new Commons();
     if(!this.posts || this.posts.length == 0) {
       this.dataStore = { data: [] };

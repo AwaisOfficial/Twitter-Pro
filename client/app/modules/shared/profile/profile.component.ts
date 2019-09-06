@@ -3,6 +3,7 @@ import { Commons } from 'client/app/helpers';
 import { AuthService, OperationsService } from 'client/app/services';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import { USER_INFO } from 'client/app/constants/constants';
 
 @Component({
   selector: 'shared-profile',
@@ -16,6 +17,8 @@ export class ProfileComponent implements OnInit {
   profile : any;
   posts   : Array<any> = [];
 
+  proUser: string;
+
   constructor(private router : Router ,
               private authService : AuthService ,
               private operationsService : OperationsService) { }
@@ -23,7 +26,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.queryParams = history.state.data;
     this.profile = this.queryParams.profile;    
-    this.getData();    
+    this.getData();  
+    
+    this.proUser = JSON.parse(localStorage.getItem(USER_INFO)).user.userName;
   }
 
   getData() {    
