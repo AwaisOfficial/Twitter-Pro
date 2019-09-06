@@ -103,8 +103,8 @@ export class CreatePostComponent implements OnInit  {
           text   : this.postText.nativeElement.value,
           images : this.formBuilder.array([ ]),
           video  : this.files.videos.length > 0 ? this.files.videos[0].name : null ,
-          inReplyToPostId : this.data.post ? this.data.post._id : null,
-          inReplyToUserId : this.data.post ? this.data.post.user._id : null,
+          inReplyToPostId : this.data ? ( this.data.post ? this.data.post._id : null ):null,
+          inReplyToUserId : this.data ? ( this.data.post ? this.data.post.user._id : null ):null,
         });
 
         this.addImages(result.files);
@@ -121,7 +121,7 @@ export class CreatePostComponent implements OnInit  {
         this.postCreationResponse.success = true;
         this.postCreationResponse.message = POST_CREATION_MSG;
         this.form.reset();
-        this.onPostCreation.emit({post: this.data.post ? result.response[1] : result.response[0] });
+        this.onPostCreation.emit({post: this.data ? result.response[1] : result.response[0] });
         this.clearInputFields();
       }
       else {
