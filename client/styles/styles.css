@@ -39,7 +39,7 @@ body{
 	width:100%;
 	vertical-align:middle;
 }
-button.btn.btn-twitter {
+button.btn.btn-twitter , a.btn-twitter{
     background: #fff;
     color: #000;
     border-radius: 50px;
