@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Commons } from 'client/app/helpers';
-import { AuthService, PostStoreService, OperationsService } from 'client/app/services';
-import { forkJoin, Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { AuthService, OperationsService } from 'client/app/services';
+import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'shared-profile',
@@ -11,17 +11,13 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
-  // @Input('profile') profile : any;
-  // @Input('memberInfo') memberInfo : any;
-  // @Input('suggestedMember') suggestedMember : boolean = false;
   commons : Commons = new Commons();
   queryParams : any;
   profile : any;
   posts   : Array<any> = [];
 
-  constructor(private activatedRoute : ActivatedRoute ,
+  constructor(private router : Router ,
               private authService : AuthService ,
-              private postStore: PostStoreService ,
               private operationsService : OperationsService) { }
 
   ngOnInit() {
@@ -52,13 +48,16 @@ export class ProfileComponent implements OnInit {
       const posts   = this.operationsService.getOperations('get-posts', { userId : event.followee._id });
       posts.subscribe((response : any) => {
         console.log('Get Posts', response);
-        if(response.success){
-          
+        if(response.success){          
           this.queryParams.suggestedMember = false;
           this.posts   = response.success ? response.response : null;
         }
       });
     }
+  }
+
+  editProfile(profile : any) {
+    this.router.navigate(['/settings'], { state: { data: { profile : profile } } });
   }
   
 }

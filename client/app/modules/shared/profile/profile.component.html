@@ -80,7 +80,7 @@
                   <div class="col-md-3" >
                       <div class="subscribe-btn">
                         <button *ngIf="authService.userVal?.user?.userName != profile?.userName && !queryParams?.suggestedMember" class="btn btn-dark btn-sm btn-block has-icon"><i class="fas fa-hand-pointer"></i> Subscribed</button>
-                        <button *ngIf="authService.userVal?.user?.userName == profile?.userName" class="btn btn-primary btn-sm btn-block has-icon"><i class="fas fa-cog"></i> Edit Profile</button>
+                        <button *ngIf="authService.userVal?.user?.userName == profile?.userName" class="btn btn-primary btn-sm btn-block has-icon" (click)="editProfile(profile)"><i class="fas fa-cog"></i> Edit Profile</button>
                       </div>
                   </div>
               </div>

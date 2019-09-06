@@ -19,6 +19,8 @@ exports.postSchema = new mongoose_1.Schema({
     location: { type: Object, default: { latitutde: null, longitude: null } },
     place: { type: Object, default: null },
     replyCount: { type: Number, default: 0 },
+    repliers: { type: Array, default: [] },
+    rePosters: { type: Array, default: [] },
     rePostCount: { type: Number, default: 0 },
     text: { type: String, default: null },
     user: { type: Object, default: null },

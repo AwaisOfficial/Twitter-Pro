@@ -1,7 +1,7 @@
 <app-header title="Profile"></app-header>
 
 
-<div class="container mt-5">
+<!-- <div class="container mt-5">
     <div class="row">
         <div class="col-md-4 col-sm-4 col-xs-12 form-group">
             <label class="labeltext">Which theme you would like to use?</label><br>
@@ -19,4 +19,99 @@
             </div>
         </div>
     </div>
+</div> -->
+<div class="container">
+    <div class="row">
+      <div class="col-md-12">
+          <ul class="nav nav-tabs custom-tabs justify-content-end mt-5" id="myTab" role="tablist">
+            <span>Setting</span>
+            <li class="nav-item">
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Security</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Billing</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Privacy</a>
+            </li>
+          </ul>
+          
+          <div class="tab-content">
+
+            <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="profile-section-u">
+                          <p class="main-line">Change Profile and Cover Photo</p>
+                          <div class="change-pic text-right">
+                              <div class="banner">
+                                  <button class="btn btn-dark btn-sm">Upload Cover Photo</button>
+                                  <div class="user-image">
+                                    <img src="assets/user.jpg" class="img-fluid" alt="">
+                                  </div>
+                              </div>
+                              <div class="cover">
+                                <button class="btn btn-dark btn-sm">Upload Profile Photo</button>
+                              </div>
+                          </div>
+                          <div class="u-info-section">
+                              <label for="">Username</label>
+                              <input type="text" class="form-control" value="{{ profile?.userName }}" placeholder="Enter Username">
+                          </div>
+                          <div class="u-info-section">
+                              <label for="">Full Name</label>
+                              <input type="text" class="form-control" value="{{ commons.userCompleteName( profile )  }}" placeholder="Enter Full Name">
+                          </div>
+                          <div class="u-info-section">
+                              <label for="">About</label>
+                              <textarea rows="2" class="form-control">{{ profile?.about }}</textarea>
+                          </div>
+                          <div class="u-info-section">
+                              <label for="">Location</label>
+                              <input type="text" class="form-control" value="{{ profile?.location ? 
+                                ( profile?.location.address ? profile.location.address : '') +
+                                ( profile?.location.city ? (' ,' + profile.location.address ) : '') +
+                                ( profile?.location.country ? (' ,' + profile.location.country ) : '') 
+                                :
+                                'NA'}}" placeholder="Enter Location">
+                          </div>
+                          <div class="text-right c-p-footer">
+                              <button class="btn btn-dark btn-sm">Back</button>
+                              <button class="btn btn-dark btn-sm">Save</button>
+                          </div>
+                      </div>                    	
+                  </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab"> 
+                
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        Security Information
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        Billing Information.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                            Privacy Information.
+                    </div>
+                </div>
+            </div>
+          </div>
+      </div>
+  </div>
 </div>

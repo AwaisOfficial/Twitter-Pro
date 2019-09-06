@@ -29,13 +29,32 @@ class PostController {
             if (!token.success)
                 return res.status(200).json(token);
             const user = token.user;
-            const data = { text: req.body.text, user: user, images: req.body.images, video: req.body.video };
-            const post = new post_1.Post(data);
-            post.save((error, post) => {
-                if (error)
-                    return res.status(200).json({ success: false, error: error });
-                else
-                    return res.status(200).json({ success: true, post: post });
+            const data = { text: req.body.text,
+                user: user,
+                images: req.body.images,
+                video: req.body.video,
+                inReplyToPostId: req.body.inReplyToPostId,
+                inReplyToUserId: req.body.inReplyToUserId
+            };
+            // const post = new Post(data);
+            // post.save((error: any, post: any) => {
+            //     if(error)
+            //         return res.status(200).json({success: false, error: error});
+            //     else {   
+            //         return res.status(200).json({success : true, post: post});
+            //     }
+            // });      
+            const response = [];
+            const newPost = new post_1.Post(data).save();
+            response.push(newPost);
+            if (req.body.inReplyToPostId) {
+                const updatePost = post_1.Post.findByIdAndUpdate(req.body.inReplyToPostId, { $inc: { replyCount: 1 }, $push: { repliers: user._id } }, { new: true });
+                response.push(updatePost);
+            }
+            Promise.all(response).then((result) => {
+                return res.status(200).json({ success: true, response: result });
+            }).catch(error => {
+                return res.status(200).json({ success: false, error: error });
             });
         };
         /* GETTING RECENT POSTS OF MEMBER */

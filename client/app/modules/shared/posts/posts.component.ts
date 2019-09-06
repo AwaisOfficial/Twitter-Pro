@@ -23,7 +23,7 @@ export class PostsComponent implements OnInit {
   };
   
   commons : Commons;
-
+  hover: boolean = false;
   private posts$ = new BehaviorSubject<any[]>([]);
   private dataStore : { data : any };
 
@@ -96,9 +96,13 @@ export class PostsComponent implements OnInit {
     return (post && post.likers) ? ( post.likers.indexOf(this.authService.userVal['user']['_id']) > -1 ? true : false ) : false;
   }
 
-  createPost(){
+  isRePostedByUser(post) : boolean{
+    return (post && post.rePosters) ? ( post.rePosters.indexOf(this.authService.userVal['user']['_id']) > -1 ? true : false ) : false;
+  }
+
+  createPost(post : any){
     const modalRef = this.modalService.open(CreateCommentComponent);
-    modalRef.componentInstance.data = { title : 'Logout Confirmation' , content : 'Are you sure that you want to logout ?' , type : 'confirmation'};
+    modalRef.componentInstance.data = { title : 'Create Comment' , post : post };
     modalRef.result.then((result) => { });
   }
 

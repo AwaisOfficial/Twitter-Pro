@@ -5,8 +5,8 @@
         </div>
         
     <app-alert *ngIf="postCreationResponse" [response]="postCreationResponse"></app-alert>  
-
-    <textarea #postText type="text-area" class="form-control post-send" placeholder="What's happening ?"></textarea>  
+    
+    <textarea #postText type="text-area" class="form-control post-send" [placeholder]="data?.post ? 'Tell us your thougts?' : 'What\'s happening?'"></textarea>  
     
     <div class="form-group mb-5 position-relative">
         
@@ -23,7 +23,7 @@
         </button>
 
         <button class="btn go-live" (click)="createPost()"><i class="fas fa-paper-plane"></i> 
-            Post
+           {{ data?.post ? 'Reply' : 'Post' }} 
         </button>
         
     </div>

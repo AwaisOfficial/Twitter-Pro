@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Commons } from 'client/app/helpers';
 
 @Component({
   selector: 'app-settings',
@@ -7,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsComponent implements OnInit {
 
+  profile : any;
+  commons : Commons;
+
   constructor() { }
 
   ngOnInit() {
-    console.log(document.body.classList);
+    this.commons = new Commons();
+    this.profile = history.state.data.profile;
+    console.log(document.body.classList , this.profile);
+    
   }
 
   onThemeChange(event){

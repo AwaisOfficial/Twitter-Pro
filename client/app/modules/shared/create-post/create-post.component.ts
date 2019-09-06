@@ -14,6 +14,7 @@ import { ModalComponent } from 'client/app/modules/shared/modal/modal.component'
 })
 export class CreatePostComponent implements OnInit  {
 
+  @Input('data') data : any;
   @Input('type') type : string;
   @Output() onPostCreation = new EventEmitter<any>();
   @ViewChild('postText', {static: false}) postText : ElementRef;
@@ -77,7 +78,7 @@ export class CreatePostComponent implements OnInit  {
 
   /* CREATING POST */
   createPost() {
-    if(!this.postText.nativeElement.value){
+    if(!this.postText.nativeElement.value) {
       const modalRef = this.modalService.open(ModalComponent);
       modalRef.componentInstance.data = { title : 'Create Post' , content : 'Please enter some text.' , type : 'alert'};
       modalRef.result.then((result) => {console.log(result);});
@@ -98,14 +99,15 @@ export class CreatePostComponent implements OnInit  {
       if(result.success) {
 
         this.form = this.formBuilder.group({
-          role : 'member',
-          text : this.postText.nativeElement.value,
+          role   : 'member',
+          text   : this.postText.nativeElement.value,
           images : this.formBuilder.array([ ]),
-          video : this.files.videos.length > 0 ? this.files.videos[0].name : null
+          video  : this.files.videos.length > 0 ? this.files.videos[0].name : null ,
+          inReplyToPostId : this.data.post ? this.data.post._id : null,
+          inReplyToUserId : this.data.post ? this.data.post.user._id : null,
         });
 
         this.addImages(result.files);
-
         return  this.operationsService.postOperations('create-post', this.form.value);
       }
       else
@@ -113,12 +115,13 @@ export class CreatePostComponent implements OnInit  {
     }));
 
     createRequest.subscribe(result => {
+      console.log('Post Creation Response', result);
       this.postCreationResponse = {}
-      if(result.success){
+      if(result.success) {
         this.postCreationResponse.success = true;
         this.postCreationResponse.message = POST_CREATION_MSG;
         this.form.reset();
-        this.onPostCreation.emit({post: result.post });
+        this.onPostCreation.emit({post: this.data.post ? result.response[1] : result.response[0] });
         this.clearInputFields();
       }
       else {

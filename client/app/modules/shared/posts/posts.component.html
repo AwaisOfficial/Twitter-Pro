@@ -14,7 +14,6 @@
                                 [ngStyle]="{color: hover==true  ? 'blue' : 'dark' }"> 
                                   {{ commons.userCompleteName(post?.user) }}
                                 </a>
-
                             </span>
                             <span class="user-tag">@{{ post?.user.userName}}</span>
                             </div>
@@ -47,7 +46,7 @@
                 <div class="like-comment">
                     <ul>
                         <li><span (click)="updatePostLike(post)"><i class="far fa-heart" [ngStyle]="{'color' : isPostLikedByUser(post) ? 'red' : '' }"></i> {{ post?.likeCount }}</span></li>
-                        <li><span (click)="createPost()"><i class="far fa-comment-alt"></i> {{ post?.replyCount }}</span></li>
+                        <li><span (click)="createPost(post)"><i class="far fa-comment-alt" [ngStyle]="{'color' : isRePostedByUser(post) ? 'green' : '' }"></i> {{ post?.replyCount }}</span></li>
                     </ul>
                 </div>
             </div>
