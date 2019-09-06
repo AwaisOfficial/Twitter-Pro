@@ -27,11 +27,11 @@ export class ProfileComponent implements OnInit {
   }
 
   getData() {    
-    const profile = this.operationsService.getOperations('member-profile' , { memberId : this.queryParams.profile._id });
-    const posts   = this.operationsService.getOperations('get-posts', { userId : this.queryParams.profile._id });
+    const profile = this.operationsService.getOperations('member-profile' , { memberId : this.profile._id });
+    const posts   = this.operationsService.getOperations('get-posts', { userId : this.profile._id });
     const requests= [];
     requests.push(profile);
-    if(!this.queryParams.suggestedMember)
+    if(!this.queryParams.suggestedMember && this.profile.role == 'member')
     requests.push(posts);
     const data = forkJoin(requests);
     data.subscribe((response : any) => {

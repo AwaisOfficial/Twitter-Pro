@@ -39,7 +39,7 @@ body{
 	width:100%;
 	vertical-align:middle;
 }
-button.btn.btn-twitter , a.btn-twitter{
+button.btn.btn-twitter  , a.btn-twitter {
     background: #fff;
     color: #000;
     border-radius: 50px;
@@ -475,6 +475,50 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light {
 	left: 40px;
     padding-left: 5px
 }
+
+button.choose-image , button.choose-video{
+    position: relative;
+    overflow: hidden;
+  }
+
+.create-post button.choose-video {
+    padding-left: 5px;
+    margin-left: 20px;
+}
+
+.choose-image input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.choose-video input[type=file] {    
+    position: absolute;
+    left: 30;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
 .white-theme .create-post input[type=text]{
 	border: 0;
     border-bottom: 1px solid #e2e2e2;

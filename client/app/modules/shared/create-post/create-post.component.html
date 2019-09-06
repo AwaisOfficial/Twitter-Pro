@@ -16,7 +16,7 @@
             <span class="badge badge-light">{{ files.imagesCount > 0 ? files.imagesCount + ' images.' : '' }}</span>
         </button> 
 
-        <button class="btn choose-video" [style.margin-left.px]="files.imagesCount > 0 ? '75' : '20'">
+        <button class="btn choose-video" [style.margin-left.px]="files.imagesCount > 0 ? '85' : '30'">
             <i class="fa fa-video"></i>
             <input type="file" (change)="onImagesSelection($event , 'videos')" accept="video/mp4 , .mp4 , video/mov , .mov">
             <span class="badge badge-light">{{ files.videosCount > 0 ? files.videosCount + ' video.' : '' }}</span>
