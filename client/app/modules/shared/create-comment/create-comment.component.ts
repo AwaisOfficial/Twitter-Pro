@@ -7,6 +7,7 @@ import { OperationsService } from 'client/app/services';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { Commons } from 'client/app/helpers';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-comment',
@@ -21,9 +22,11 @@ export class CreateCommentComponent implements OnInit  {
   files: any =  { images : []  , videos : [] ,  imagesCount : 0 , videosCount : 0 };
   form : FormGroup; 
   postCreationResponse : any ;  
-  private commons: Commons;
+  commons: Commons;
+  hover : boolean = false;
   
-  constructor(private operationsService: OperationsService , 
+  constructor(private router : Router,
+              private operationsService: OperationsService , 
               private formBuilder: FormBuilder ,
               private modalService: NgbModal ,
               public activeModal: NgbActiveModal) { }
@@ -146,4 +149,9 @@ export class CreateCommentComponent implements OnInit  {
     setTimeout(() => { this.postCreationResponse = null }, 3000);
   }
 
+
+  goToProfile(user){
+    this.router.navigate(['/profile'], {state: { data: { profile : user , suggestedMember : false } } });
+  }
+  
 }
