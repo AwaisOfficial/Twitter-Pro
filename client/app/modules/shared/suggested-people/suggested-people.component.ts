@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'client/environments/environment';
 import { Router } from '@angular/router';
+import { Commons } from 'client/app/helpers';
 
 @Component({
   selector: 'app-suggested-people',
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 export class SuggestedPeopleComponent implements OnInit {
 
   response : Observable<Array<any>>;
+  commons  : Commons;
 
   constructor(private operationsService : OperationsService , 
               private authService: AuthService,
@@ -20,18 +22,20 @@ export class SuggestedPeopleComponent implements OnInit {
               private suggestionStore : SuggestionStoreService) { }
 
   ngOnInit() {
+    this.commons  = new Commons();
     this.response = this.suggestionStore.allData;
     this.suggestionStore.getOperations('suggested-people');
   }
 
   fullName(user : any){
-    let fullName = user.firstName ? user.firstName : '';
+    let fullName  = user.firstName ? user.firstName : '';
         fullName += user.lastName ? ' ' + user.lastName  : '';
     return fullName;
 
   }
 
   userImage(fileName: string){
+    console.log(fileName);
     return environment.APIEndPoint + 'files/' + fileName;
     //return environment.APIEndPoint + 'files/1565175549519_birds.jpg'
   }

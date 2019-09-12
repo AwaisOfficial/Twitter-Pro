@@ -2,8 +2,8 @@ import { environment } from '../../environments/environment';
 
 export class Commons {
 
-    getFilePath(fileName: string){
-      return fileName ? environment.APIEndPoint + 'files/' + fileName : '';
+    getFilePath(fileName: string){      
+      return environment.APIEndPoint + 'files/' + fileName ;
     }
 
     userCompleteName(user) {

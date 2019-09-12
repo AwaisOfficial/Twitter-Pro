@@ -18,6 +18,7 @@ exports.userSchema = new mongoose_1.Schema({
     about: { type: String, default: null },
     avatar: { type: String, default: null },
     birthDate: { type: String, default: null },
+    coverPhoto: { type: String, default: null },
     created_at: { type: Date, default: new Date() },
     email: { type: String, unique: true, required: true },
     firstName: { type: String },
@@ -36,7 +37,6 @@ exports.userSchema = new mongoose_1.Schema({
     },
     mobileNumber: { countryCode: { type: Number, default: 0 }, number: { type: Number, default: 0 } },
     password: { type: String },
-    profileBanner: { type: String, default: null },
     role: { type: String, required: true, default: 'user' },
     twitterId: { type: String, default: null },
     userName: { type: String, unique: true, required: true }

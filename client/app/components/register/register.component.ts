@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
 
   onFileSelect(event) {
     const modalRef = this.modalService.open(CropImageComponent);
-    modalRef.componentInstance.data = { title : 'Crop Image' ,  event : event};
+    modalRef.componentInstance.data = { title : 'Crop Image' ,  event : event , image : 'profile'};
     modalRef.result.then((result) => {
       fetch(result).then(res => res.blob()).then(blob => {
         const file = new File([blob], event.target.files[0].name);

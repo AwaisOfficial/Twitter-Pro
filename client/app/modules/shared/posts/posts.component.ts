@@ -58,7 +58,7 @@ export class PostsComponent implements OnInit {
     const posts = this.operationsService.getOperations(endPoint , { userId : this.userId , routerLink : this.routerLink , role : this.role });
     posts.pipe(map((result : any) => result.response))
          .subscribe((response : any) => {
-      console.log('Posts Response', response);
+      //console.log('Posts Response', response);
       if(response.length > 0){
         this.dataStore.data = response;
         this.posts$.next( Object.assign ( { }, this.dataStore).data  );

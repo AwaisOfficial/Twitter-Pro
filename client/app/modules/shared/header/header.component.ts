@@ -64,7 +64,9 @@ export class HeaderComponent implements OnInit {
     else if(link == '/profile')
       this.router.navigate(['/profile'], {state: { data: { profile : this.authService.userVal['user'] , suggestedMember : false } } });
     else {
+      
       const role = this.authService.userVal['user']['role'];
+      console.log(role , JSON.parse(this.authService.user) , this.authService.userVal);
       this.router.navigateByUrl(role + link);
     }
   }

@@ -12,10 +12,15 @@ export class CropImageComponent implements OnInit {
   @Input('data') data;
   imageChangedEvent: any = '';
   croppedImage: any = '';
+  windowWidth : number;
 
   constructor(public activeModal: NgbActiveModal) {}
 
-  ngOnInit() { this.imageChangedEvent = event; }
+  ngOnInit() { 
+    this.imageChangedEvent = this.data.event; 
+    this.windowWidth = window.innerWidth;
+    console.log('Data', this.windowWidth , this.data );
+  }
 
   imageCropped(event: ImageCroppedEvent) {this.croppedImage = event.base64; }
 

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { AlertComponent } from './alert/alert.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
@@ -16,6 +17,7 @@ import { CreateCommentComponent } from './create-comment/create-comment.componen
 import { CreatePostComponent } from './create-post/create-post.component';
 import { ShowMemberProfileComponent } from './show-member-profile/show-member-profile.component';
 import { SubscribeComponent } from './subscribe/subscribe.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent ,
@@ -23,7 +25,10 @@ import { SubscribeComponent } from './subscribe/subscribe.component';
                   CommentComponent, CreateCommentComponent, CreatePostComponent, ShowMemberProfileComponent, SubscribeComponent  ],
   imports: [
     CommonModule ,
-    ImageCropperModule 
+    ImageCropperModule ,
+    FormsModule, 
+    ReactiveFormsModule ,
+    DatePickerModule
   ],
   entryComponents:[ ModalComponent , CropImageComponent , CreateCommentComponent , CreatePostComponent ],
   exports : [ AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent , 

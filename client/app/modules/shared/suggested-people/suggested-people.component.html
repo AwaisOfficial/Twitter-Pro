@@ -1,16 +1,16 @@
 <div class="container mt-4">
     <div class="row">
       <div class="col-12 col-sm-8 col-lg-12">
-          <h6 class="text-dark mb-3 border-bottom border-light" [style.font-weight]="600">Who to Follow</h6> 
+          <h6 class="text-dark mb-3 border-bottom border-light" [style.font-weight]="600">Our Top VIP’s</h6> 
           <div class="row border-light border-bottom mb-3" *ngFor="let member of response | async">
             <div class="col-2">
                 <div class="user-img">
-                    <img src="{{ userImage(member.avatar) }}" alt="{{ fullName(member) }}">
+                    <img src="{{ commons.getFilePath(member.avatar) }}" alt="{{ commons.userCompleteName(member) }}">
                 </div>
             </div>  
             <div class="col-6">
                 <div class="user-info">
-                    <span class="user-name">{{ fullName(member) }}</span>
+                    <span class="user-name">{{ commons.userCompleteName(member) }}</span>
                     <span class="user-tag">@{{ member.userName}}</span>
                 </div>
             </div>

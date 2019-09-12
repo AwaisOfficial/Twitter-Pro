@@ -6,8 +6,8 @@
     </div>
     <div class="modal-body">
         <div class="row text-center">
-            <div class="col" *ngIf="imageChangedEvent">
-                <image-cropper
+            <div class="col" >
+                <image-cropper *ngIf="data?.image == 'profile'"
                     [imageChangedEvent]="imageChangedEvent"
                     [maintainAspectRatio]="true"
                     [aspectRatio]="1 / 1"
@@ -15,10 +15,17 @@
                     format="png"
                     (imageCropped)="imageCropped($event)"></image-cropper>
 
-                <img [src]="croppedImage" />
+                    <image-cropper *ngIf="data?.image == 'cover'"
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="16 / 6"
+                    [resizeToWidth]="data?.width"
+                    format="png"
+                    (imageCropped)="imageCropped($event)"></image-cropper>
+
+                <img [src]="croppedImage" *ngIf="data?.image == 'profile'"/>
             </div>
-        </div>
-        
+        </div>        
     </div>
     <div class="modal-footer">
     <button *ngIf="data?.type == 'confirmation'" type="button" class="btn btn-outline-dark" (click)="activeModal.close('no')">No</button>

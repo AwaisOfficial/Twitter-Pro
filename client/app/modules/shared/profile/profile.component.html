@@ -1,13 +1,14 @@
 <app-header title="Profile"></app-header>
 
-<div [ngClass]="this.proUser === 'imgemmamasseyuk'? 'profile-banner1': 'profile-banner'" >
+<!-- <div class="profile-banner" > -->
+<div [ngStyle]="{'background': getCoverPhoto() , 'background-size' : 'contain' , 'padding': '170px 0px 10px 0px'}" >
     <div class="container">
       <div class="row">
           <div class="col-md-8">
-              <div class="last-seen">
+              <!-- <div class="last-seen">
                   <span class="seen-status-dot"></span>
                   Last seen yesterday
-              </div>
+              </div> -->
           </div>
       </div>
   </div>
@@ -17,12 +18,10 @@
     <div class="row">
       <div class="col-md-12">
           <div class="profile-stats">
-              <div class="profile-image" *ngIf="proUser === 'imgemmamasseyuk'">
-                <img src="assets/pro-user.jpg" class="img-fluid" alt="{{ profile?.userName}}">
+              <div class="profile-image">
+                <img src="{{ commons.getFilePath(profile?.avatar) }}" class="img-fluid" alt="{{ profile?.userName}}">
               </div>
-              <div class="profile-image" *ngIf="proUser !== 'imgemmamasseyuk'">
-                <img src="assets/user.jpg" class="img-fluid" alt="{{ profile?.userName}}">
-              </div>
+             
               <div class="row">
                   <div class="col-md-3">
                       <div class="profiler">
@@ -40,7 +39,7 @@
                               <div class="col">
                                   <div class="pro-photos">
                                       <div class="stat-figure">
-                                          {{ profile?.memberInfo?.postInfo[0]?.totalImages }}
+                                          {{ profile?.memberInfo?.postInfo[0] ? profile?.memberInfo?.postInfo[0]?.totalImages : 0 }}
                                       </div>
                                       <div class="stat-head">
                                           Photos
@@ -50,7 +49,7 @@
                               <div class="col">
                                   <div class="pro-photos">
                                       <div class="stat-figure">
-                                        {{ profile?.memberInfo?.postInfo[0]?.totalVideos}}
+                                        {{ profile?.memberInfo?.postInfo[0] ? profile?.memberInfo?.postInfo[0].totalVideos : 0 }}
                                       </div>
                                       <div class="stat-head">
                                           Videos
@@ -60,7 +59,7 @@
                               <div class="col">
                                   <div class="pro-photos">
                                       <div class="stat-figure">
-                                        {{ profile?.memberInfo?.followers }}
+                                        {{ profile?.memberInfo?.followers ? profile?.memberInfo?.followers : 0 }}
                                       </div>
                                       <div class="stat-head">
                                         Fans
@@ -70,7 +69,7 @@
                               <div class="col">
                                   <div class="pro-photos">
                                       <div class="stat-figure">
-                                        {{ profile?.memberInfo?.postInfo[0]?.totalLikes }}
+                                        {{ profile?.memberInfo?.postInfo[0] ? profile?.memberInfo?.postInfo[0]?.totalLikes : 0 }}
                                       </div>
                                       <div class="stat-head">
                                           Likes
@@ -91,25 +90,22 @@
       </div>
 
       <div class="col-md-8"  >
-          <div class="profiler-biodata" *ngIf="proUser !== 'imgemmamasseyuk'">
+          <div class="profiler-biodata">
               <p><i class="fas fa-user"></i> {{ profile?.about ? profile?.about : 'NA'}}</p>
               <p><i class="fas fa-envelope"></i> {{ profile?.email ? profile?.email : ' '}}</p>
               <p><i class="fas fa-map-marker-alt"></i> 
-                {{ profile?.location ? 
-                ( profile?.location.address ? profile.location.address : '') +
-                ( profile?.location.city ? (' ,' + profile.location.address ) : '') +
-                ( profile?.location.country ? (' ,' + profile.location.country ) : '') 
+                {{ ( !profile?.location.address && !profile?.location.city && !profile?.location.country) 
+                ? 
+                'NA'
                 :
-                'NA'}}
+                ( ( profile?.location.address ? profile.location.address : '') +
+                  ( profile?.location.city ? (' ,' + profile.location.city ) : '') +
+                  ( profile?.location.country ? (' ,' + profile.location.country ) : '') 
+                )
+                }}
               </p>
         </div>
-          <div class="profiler-biodata" *ngIf="proUser === 'imgemmamasseyuk'">
-              <p><i class="fas fa-user"></i> Glamour model who loves to entertain. This is the only place to see my new and updated content everyday.</p>
-              <p><i class="fas fa-envelope"></i> gemma@only-vips.com</p>
-              <p><i class="fas fa-map-marker-alt"></i> 
-          Tamworth, GB
-              </p>
-        </div>
+        
           
         <app-posts role="member" [userId]="profile?._id" routerLink="profile" *ngIf="!queryParams?.suggestedMember && posts?.length > 0" [posts]="posts"></app-posts>  
         

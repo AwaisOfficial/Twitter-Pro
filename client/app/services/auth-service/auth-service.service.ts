@@ -59,9 +59,7 @@ export class AuthService {
   set Token(token) { localStorage.setItem(JWTOKEN, token);}
   get Token() : string { return localStorage.getItem(JWTOKEN);}
   set user(user) { localStorage.setItem(USER_INFO , JSON.stringify(user)); }
-  get user() : any{ 
-    return localStorage.getItem(USER_INFO);
-  }
+  get user() : any{ return localStorage.getItem(USER_INFO); }
   get userCompleteName() {
     let name = '';
     if(this.userVal){

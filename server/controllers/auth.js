@@ -68,6 +68,24 @@ class AuthController {
             else
                 res.json({ success: false, user: null });
         };
+        this.updateProfile = (req, res) => {
+            User.findByIdAndUpdate(req.body._id, req.body, { new: true }, (error, response) => {
+                if (error)
+                    return res.status(200).json({ success: false, response: error });
+                else
+                    return res.status(200).json({ success: true, response: { user: response } });
+            });
+        };
+        this.updatePassword = (req, res) => {
+            let user = new User();
+            const password = user.schema.methods.createHash(req.body.password);
+            User.findByIdAndUpdate(req.body._id, { password: password }, { new: true }, (error, response) => {
+                if (error)
+                    return res.status(200).json({ success: false, response: error });
+                else
+                    return res.status(200).json({ success: true, response: { user: response } });
+            });
+        };
         this.forgotPassword = (req, res) => {
             this.findUser(req).then((document) => {
                 if (!document || !document.success) {

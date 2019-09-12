@@ -17,18 +17,14 @@ export class ProfileComponent implements OnInit {
   profile : any;
   posts   : Array<any> = [];
 
-  proUser: string;
-
   constructor(private router : Router ,
               private authService : AuthService ,
               private operationsService : OperationsService) { }
 
   ngOnInit() {
     this.queryParams = history.state.data;
-    this.profile = this.queryParams.profile;    
+    this.profile = this.queryParams.profile;
     this.getData();  
-    
-    this.proUser = JSON.parse(localStorage.getItem(USER_INFO)).user.userName;
   }
 
   getData() {    
@@ -43,6 +39,7 @@ export class ProfileComponent implements OnInit {
       if(response){
         this.profile['memberInfo'] = response[0].success ? response[0].response[0] : null ;
         this.posts   = response[1] ? ( response[1].success ? response[1].response : {} ) : null;
+        console.log('Profile', this.profile);
       }
     });
   }
@@ -59,6 +56,10 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
+  }
+
+  getCoverPhoto(){
+    return 'url("'+this.commons.getFilePath(this.profile.coverPhoto)+'") top center no-repeat';
   }
 
   editProfile(profile : any) {
