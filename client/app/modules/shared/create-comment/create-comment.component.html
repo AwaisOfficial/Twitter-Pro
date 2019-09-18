@@ -16,7 +16,7 @@
                     <div class="col-6">
                         <div class="user-info">
                         <span class="user-name" (mouseover)="hover=true" (mouseleave)="hover=false">
-                            <a href="javascript: void(0);" (click)="goToProfile(data?.post?.user)" class="text-dark" 
+                            <a href="javascript: void(0);" (click)="goToProfile(data?.post?.user)" class="text-light" 
                             [ngStyle]="{color: hover==true  ? 'blue' : 'dark' }"> 
                               {{ commons.userCompleteName(data?.post?.user) }}
                             </a>

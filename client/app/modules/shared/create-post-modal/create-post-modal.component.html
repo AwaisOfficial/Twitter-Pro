@@ -1,0 +1,59 @@
+<div class="post-section" *ngIf="posts">
+        <div class="tw-posts">
+            <div class="user-post clearfix" *ngFor="let post of posts; let i=index;">
+                <div class="user-img">
+                    <img src="{{ commons.getFilePath(post?.user?.avatar) }}" alt="">
+                </div>
+                
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="row no-gutters">
+                            <div class="col-6">
+                                <div class="user-info">
+                                <span class="user-name" (mouseover)="hover=true" (mouseleave)="hover=false">
+                                    <a href="javascript: void(0);" (click)="goToProfile(post?.user)" class="text-light" 
+                                    [ngStyle]="{color: hover==true  ? 'blue' : 'dark' }"> 
+                                      {{ commons.userCompleteName(post?.user) }}
+                                    </a>
+                                </span>
+                                <span class="user-tag">@{{ post?.user.userName}}</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="post-time-stamp text-right">
+                                    <span class="post-date">{{ post?.createdAt | date : 'mediumDate' }}</span>
+                                    <span class="post-time">{{ post?.createdAt | date : 'shortTime' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-text">
+                        <p>{{ post?.text}}</p>
+                    </div>
+                    <div class="post-media" *ngIf="post?.video">
+                        <video id="my-video" class="video-js embed-responsive embed-responsive-16by9" controls preload="auto" data-setup="{}">
+                        <source src="{{ commons.getFilePath(post?.video?.filename) }}" class="embed-responsive-item" type="{{ post?.video?.mimetype }}"/>
+                        </video>  
+                    </div>
+    
+                    <div class="post-media">
+                        <div class="row">
+                            <div class="col" *ngFor="let image of post?.images; let j=index;">
+                                <img src="{{ commons.getFilePath( image.filename )}}" class="img-fluid" alt=""> 
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="like-comment">
+                        <ul>
+                            <li (click)="updatePostLike(post)" ><span ><i class="far fa-heart" [ngStyle]="{'color' : isPostLikedByUser(post) ? 'white' : '' }"></i> {{ post?.likeCount }}</span></li>
+                            <li (click)="createPost(post)"><span><i class="far fa-comment-alt" ></i> {{ post?.replyCount }}</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                
+
+            </div>
+        </div>
+    </div>    

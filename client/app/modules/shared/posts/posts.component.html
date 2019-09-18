@@ -1,19 +1,18 @@
-<div class="post-section" *ngIf="posts">
+ <div class="post-section" *ngIf="posts">
     <div class="tw-posts">
         <div class="user-post clearfix" *ngFor="let post of posts; let i=index;">
-            <div class="user-img" *ngIf="post?.user.userName !== 'imgemmamasseyuk'">
-                <img src="assets/user.jpg" alt="">
+
+            <div class="user-img">
+                <img src="{{ commons.getFilePath(post?.user?.avatar) }}" alt="">
             </div>
-            <div class="user-img" *ngIf="post?.user.userName === 'imgemmamasseyuk'">
-                <img src="assets/pro-user.jpg" alt="">
-            </div>
+            
             <div class="post-content">
                 <div class="post-header">
                     <div class="row no-gutters">
                         <div class="col-6">
                             <div class="user-info">
                             <span class="user-name" (mouseover)="hover=true" (mouseleave)="hover=false">
-                                <a href="javascript: void(0);" (click)="goToProfile(post?.user)" class="text-dark" 
+                                <a href="javascript: void(0);" (click)="goToProfile(post?.user)" class="text-light" 
                                 [ngStyle]="{color: hover==true  ? 'blue' : 'dark' }"> 
                                   {{ commons.userCompleteName(post?.user) }}
                                 </a>
@@ -48,11 +47,45 @@
 
                 <div class="like-comment">
                     <ul>
-                        <li><span (click)="updatePostLike(post)"><i class="far fa-heart" [ngStyle]="{'color' : isPostLikedByUser(post) ? 'red' : '' }"></i> {{ post?.likeCount }}</span></li>
-                        <li><span (click)="createPost(post)"><i class="far fa-comment-alt" [ngStyle]="{'color' : isRePostedByUser(post) ? 'green' : '' }"></i> {{ post?.replyCount }}</span></li>
+                        <li (click)="updatePostLike(post)" ><span ><i class="far fa-heart" [ngStyle]="{'color' : isPostLikedByUser(post) ? 'red' : '' }"></i> {{ post?.likeCount }}</span></li>
+                        <li data-toggle="collapse" href="#postComments" role="button" aria-expanded="false" aria-controls="postComments"><span><i class="far fa-comment-alt" ></i> {{ post?.replyCount }}</span></li>
+                        <li (click)="postDeleteConfirmation(post)"><span><i class="fa fa-trash" ></i></span></li>
                     </ul>
                 </div>
+
+                <div class="collapse" id="postComments">
+
+                    <div class="d-flex pt-3 writeCommentBox">
+
+                        <div class="commentImage">
+                            <img src="assets/user.jpg" alt="">
+                        </div>
+                        
+                        <div class="commentContent">
+                            <textarea placeholder="Write comment..."></textarea>
+                            <div class="form-group createPostBtns d-flex  position-relative pb-0">        
+                                
+                                <button class="btn choose-image left-0 pl-0" >
+                                    <i class="far fa-image"></i>
+                                    <input type="file" (change)="onImagesSelection($event , 'images')" accept="image/gif,image/jpeg, image/jpg , image/gif,image/png , .png, .jpg , .jpeg , .gif" multiple>
+                                    <span class="badge badge-light">{{ files.imagesCount > 0 ? files.imagesCount + ' images.' : '' }}</span>
+                                </button>                         
+                                
+                                <button class="btn choose-video" [style.margin-left.px]="files.imagesCount > 0 ? '30' : '0'">
+                                    <i class="fa fa-video"></i>
+                                    <input type="file" (change)="onImagesSelection($event , 'videos')" accept="video/mp4 , .mp4 , video/mov , .mov">
+                                    <span class="badge badge-light">{{ files.videosCount > 0 ? files.videosCount + ' video.' : '' }}</span>
+                                </button>
+                                
+                                <button class="btn go-live ml-auto pr-0" (click)="createPost()"><i class="fas fa-paper-plane"></i> 
+                                    Comment
+                                </button>                           
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
-</div>    
+</div>     

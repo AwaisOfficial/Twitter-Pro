@@ -29,7 +29,6 @@ const routes: Routes = [
   { path : 'member' , loadChildren : () => import('./modules/member/member.module').then(mod => mod.MemberModule),  canActivate : [AuthGuardService] , data : { role : 'member'}} ,
   { path : 'user'   , loadChildren : () => import('./modules/user/user.module').then(mod => mod.UserModule) , canActivate : [AuthGuardService] , data : { role : 'user'}} ,
   
-
   { path : 'not-found' , component : NotFoundComponent },
   { path : '**' , redirectTo : 'not-found' }
 ];

@@ -3,22 +3,23 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-8 mt-4">       
+    <div class="col-lg-8 mt-4">       
         
-        <div class="post-section">
+        
               
-            <app-create-post (onPostCreation)="addNewPost($event)" type="post"></app-create-post>
+        <app-create-post (onPostCreation)="addNewPost($event)" type="post"></app-create-post>
 
-            <app-posts role="member" routerLink="home" [newCreatedPost]="newCreatedPost"></app-posts>
+        <app-posts role="member" pageName="home" [newCreatedPost]="newCreatedPost"></app-posts>
 
-            <div class="create-post-bottom-circled" (click)="openPostCreationModal()">
-                <span><i class="fas fa-pencil-alt"></i></span>
-            </div>
-              
+        <div class="create-post-bottom-circled" (click)="openPostCreationModal()">
+            <span><i class="fas fa-pencil-alt"></i></span>
         </div>
+              
+        
+
     </div>
     
-    <div class="col-md-4 mt-4">
+    <div class="col-lg-4 mt-4">
             <div class="right-section">
                 <img src="assets/1.jpg" class="img-fluid" alt="">
 

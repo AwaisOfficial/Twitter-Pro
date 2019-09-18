@@ -1,13 +1,13 @@
-<div>
+<div class="h-100 d-flex align-items-center w-100 flex-1">
   
   <app-slide-show></app-slide-show>
     
-  <div class="">
+  <div class="h-100 w-100">
           <div class="">
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-6"></div>
-                <div class="col-md-6 black-theme">
+                <div class="col-md-6 ">
                         <div class="login-section wrapper-table">
                             <div class="login-outer wrapper-cell">
                                   <div class="logo text-center">
@@ -19,7 +19,7 @@
                                   <div class="or-seperator">
                                     <span>OR</span>
                                   </div>                                  
-                                  <form class="login-form" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+                                  <form class="login-form mb-4" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
                                     
                                     <!-- <app-crop-image [image]="imageFile"></app-crop-image> -->
                                     <app-alert *ngIf="response" [response]="response"></app-alert>
@@ -97,7 +97,7 @@
 
                                           <div class="form-group">
                                             <div class="form-check form-check-inline">
-                                              <input type="checkbox" class="form-check-input" id="celebrity" formControlName="isCelebrity">
+                                              <input type="checkbox" class="form-check-input styled-checkbox" id="celebrity" formControlName="isCelebrity">
                                               <label class="form-check-label" for="celebrity">Are you a celebrity ?</label>
                                             </div>
                                             <small *ngIf="f.isCelebrity.value == true" id="celebrity" class="form-text text-danger">Note: <strong>Celebrities profiles will be reviewed.</strong></small>
@@ -105,8 +105,8 @@
 
                                           
                                           <div class="form-check form-check-inline">
-                                            <input type="checkbox" class="form-check-input" id="agreeToTerms" formControlName="isAgreeToTerms">
-                                            <label class="form-check-label" for="agreeToTerms" >I have read & I agree to the <a routerLink="/terms-of-service" class="text-primary"><strong>terms and conditions</strong></a></label>
+                                            <input type="checkbox" class="form-check-input styled-checkbox" id="agreeToTerms" formControlName="isAgreeToTerms">
+                                            <label class="form-check-label" for="agreeToTerms" >I have read & I agree to the <a routerLink="/terms-of-service" class="text-light"><u>terms and conditions</u></a></label>
                                           </div>
 
                                           
@@ -138,16 +138,7 @@
                                     </ul>
                                   </div> -->
 
-                                  <div class="login-footer text-center">
-                                    <ul class="mb-4">
-                                      <li><a href="#">About</a></li>
-                                      <li><a href="#">FAQ’s</a></li>
-                                      <li><a href="#">Contact</a></li>
-                                      <li><a routerLink="/terms-of-service">Terms</a></li>
-                                      <li><a routerLink="/privacy-policy">Privacy</a></li>
-                                    </ul>
-                                      <p>© 2019 Only VIPs. All rights reserved.</p>
-                                  </div>
+                                  
                               </div>
                           </div>
                       </div>
@@ -156,3 +147,14 @@
           </div>
         </div> 
 </div>
+<div class="login-footer d-flex align-items-center">
+    <p class="copyrightText">© 2019 Only VIPs. All rights reserved.</p>
+    <ul class="ml-auto">
+      <li><a href="#">About</a></li>
+      <li><a href="#">FAQ’s</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a routerLink="/terms-of-service">Terms</a></li>
+      <li><a routerLink="/privacy-policy">Privacy</a></li>
+    </ul>
+    
+  </div>

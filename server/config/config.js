@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CLIENT_URL = process.env.host || 'https://twitterpro.herokuapp.com';
 //export const CLIENT_URL = 'https://twitterpro.herokuapp.com';
 //export const CLIENT_URL = 'https://onlyvips.herokuapp.com';
-exports.DATABASE_URL = process.env.DATABASE || 'mongodb+srv://Awais:awais31@twitterclone-cfqlw.mongodb.net/TwitterPro?retryWrites=true&w=majority';
+exports.DATABASE_URL = process.env.DATABASE || 'mongodb+srv://Awais:awais31@twitterclone-cfqlw.mongodb.net/socialApp?retryWrites=true&w=majority';
 exports.PORT = process.env.PORT || 3000;
 exports.JWTSECRET = '$QET_UWN';
 exports.ERROR_MSG = 'Something went wrong.';

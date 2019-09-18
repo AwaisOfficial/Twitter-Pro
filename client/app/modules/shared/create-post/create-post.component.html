@@ -1,31 +1,32 @@
-<div class="create-post" [style.marginLeft.px]="createPostMargin()">
-    <div class="form-group mb-5 position-relative" *ngIf="type == 'post'">
-        <label class="form-control" >Create Post</label>
-        <button class="btn go-live"><i class="fas fa-video"></i> Go Live</button>
+<div class="create-post" [style.margin-left.px]="createPostMargin()">
+    <div class="createPostHeader mb-5 position-relative" *ngIf="type == 'post'">
+        <h3 class="text-white">Create Post</h3>
+            <button class="btn go-live go-live-btn">Go Live <i class="fas fa-video"></i></button>
         </div>
         
     <app-alert *ngIf="postCreationResponse" [response]="postCreationResponse"></app-alert>  
     
-    <textarea #postText type="text-area" class="form-control post-send" [placeholder]="data?.post ? 'Tell us your thougts?' : 'What\'s happening?'"></textarea>  
+    <textarea id="createPostInput" #postText type="text-area" class="border border-light form-control post-send mb-2 p-2" [placeholder]="data?.post ? 'Tell us your thougts?' : 'What\'s happening?'"></textarea>  
     
-    <div class="form-group mb-5 position-relative">
+    <div class="form-group createPostBtns  position-relative">
         
-        <button class="btn choose-image" >
+        <button class="btn choose-image left-0" >
             <i class="far fa-image"></i>
             <input type="file" (change)="onImagesSelection($event , 'images')" accept="image/gif,image/jpeg, image/jpg , image/gif,image/png , .png, .jpg , .jpeg , .gif" multiple>
-            <span class="badge badge-light">{{ files.imagesCount > 0 ? files.imagesCount + ' images.' : '' }}</span>
+            <span class="badge badge-light" [style.margin-left.px]="files.imagesCount > 0 ? '10' : '0'">{{ files.imagesCount > 0 ? files.imagesCount + ' images.' : '' }}</span>
         </button> 
 
         <button class="btn choose-video" [style.margin-left.px]="files.imagesCount > 0 ? '85' : '30'">
             <i class="fa fa-video"></i>
             <input type="file" (change)="onImagesSelection($event , 'videos')" accept="video/mp4 , .mp4 , video/mov , .mov">
-            <span class="badge badge-light">{{ files.videosCount > 0 ? files.videosCount + ' video.' : '' }}</span>
+            <span class="badge badge-light" [style.margin-left.px]="files.videosCount > 0 ? '10' : '0'">{{ files.videosCount > 0 ? files.videosCount + ' video.' : '' }}</span>
         </button>
 
-        <button class="btn go-live" (click)="createPost()"><i class="fas fa-paper-plane"></i> 
+        <button class="btn go-live" (click)="createPost()" [disabled]="creatingPost">
+            <span *ngIf="creatingPost" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <i class="fas fa-paper-plane"></i> 
            {{ data?.post ? 'Reply' : 'Post' }} 
         </button>
         
     </div>
 </div>
-    

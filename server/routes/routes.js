@@ -83,12 +83,11 @@ class Routes {
         });
         app.route('/api/get-posts').get(this.postController.getPosts);
         app.route('/api/like-post').post(this.postController.likePost);
+        app.route('/api/delete-post').post(this.postController.deletePost);
         /* FOLLOW ROUTES  */
         app.route('/api/suggested-people').get(this.suggestion.getSuggestedPeople);
         app.route('/api/start-following').post(this.authGuard.isAuthorized(['member', 'user']), this.followees.startFollowing);
         app.route('/api/get-followees-posts').get(this.followees.getFolloweesPosts);
-        /* PAYMENT ROUTES */
-        app.route('/api/prepare-checkout').get(this.paymentCtrl.prepareCheckOut);
     }
 }
 exports.Routes = Routes;

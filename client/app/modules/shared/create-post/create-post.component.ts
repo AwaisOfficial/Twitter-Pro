@@ -17,11 +17,13 @@ export class CreatePostComponent implements OnInit  {
   @Input('data') data : any;
   @Input('type') type : string;
   @Output() onPostCreation = new EventEmitter<any>();
+  
   @ViewChild('postText', {static: false}) postText : ElementRef;
   
-  files: any =  { images : []  , videos : [] ,  imagesCount : 0 , videosCount : 0};
+  files: any =  { images : []  , videos : [] ,  imagesCount : 0 , videosCount : 0 };
   form : FormGroup; 
   postCreationResponse : any ;  
+  creatingPost : boolean = false;
   
   constructor(private operationsService: OperationsService , 
               private formBuilder: FormBuilder ,
@@ -66,9 +68,7 @@ export class CreatePostComponent implements OnInit  {
   }
 
   addImages(images : Array<any>) {
-    //const formImages = this.formImages;
     for (let i = 0; i < images.length; i++) {      
-      // images.push(new FormControl(this.files.images[i].name));
       if(images[i].mimetype.indexOf('video') > -1)
          this.form.get('video').setValue(images[i]);
       else
@@ -81,9 +81,13 @@ export class CreatePostComponent implements OnInit  {
     if(!this.postText.nativeElement.value) {
       const modalRef = this.modalService.open(ModalComponent);
       modalRef.componentInstance.data = { title : 'Create Post' , content : 'Please enter some text.' , type : 'alert'};
-      modalRef.result.then((result) => {console.log(result);});
+      modalRef.result.then((result) => { console.log(result);}).catch(result => {
+        console.log(result);
+      });
       return;
     }
+
+    this.creatingPost = true;
 
     if(this.files.videos.length > 0 )
       this.files.images.push(this.files.videos[0]);
@@ -103,8 +107,8 @@ export class CreatePostComponent implements OnInit  {
           text   : this.postText.nativeElement.value,
           images : this.formBuilder.array([ ]),
           video  : this.files.videos.length > 0 ? this.files.videos[0].name : null ,
-          inReplyToPostId : this.data.post ? this.data.post._id : null,
-          inReplyToUserId : this.data.post ? this.data.post.user._id : null,
+          inReplyToPostId : this.data ? (this.data.post ? this.data.post._id : null) : null,
+          inReplyToUserId : this.data ? (this.data.post ? this.data.post.user._id : null ) : null,
         });
 
         this.addImages(result.files);
@@ -121,15 +125,20 @@ export class CreatePostComponent implements OnInit  {
         this.postCreationResponse.success = true;
         this.postCreationResponse.message = POST_CREATION_MSG;
         this.form.reset();
-        this.onPostCreation.emit({post: this.data.post ? result.response[1] : result.response[0] });
+        this.onPostCreation.emit({post: this.data ? result.response[1] : result.response });
         this.clearInputFields();
       }
       else {
         this.postCreationResponse.success = false;
         this.postCreationResponse.message = ERROR_MSG;
       }
+
+      this.creatingPost = false; 
     }, 
-    error => console.error('Create Request Error',error));
+    error => {
+      console.error('Create Request Error',error)
+      this.creatingPost = false;
+    });
   }
 
   get formImages() : FormArray { return this.form.get('images') as FormArray; } 

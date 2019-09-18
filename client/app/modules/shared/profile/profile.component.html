@@ -107,7 +107,7 @@
         </div>
         
           
-        <app-posts role="member" [userId]="profile?._id" routerLink="profile" *ngIf="!queryParams?.suggestedMember && posts?.length > 0" [posts]="posts"></app-posts>  
+        <app-posts role="member" [userId]="profile?._id" pageName="profile" *ngIf="!queryParams?.suggestedMember && posts?.length > 0" [posts]="posts"></app-posts>  
         
         <app-subscribe *ngIf="queryParams?.suggestedMember" [profile]="profile" (onSubscribe)="OnSubscription($event)"></app-subscribe>
               

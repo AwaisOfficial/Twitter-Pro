@@ -26,6 +26,7 @@ const config_1 = require("../config/config");
 const bson_1 = require("bson");
 const nodemailer_1 = require("../utils/nodemailer");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const send_grid_mailer_1 = require("../utils/send-grid-mailer");
 const post_1 = require("./post");
 const followees_1 = require("./follow/followees");
 let User = mongoose.model('User', models_1.userSchema);
@@ -247,14 +248,28 @@ class AuthController {
                         subject: 'Account Verification',
                         content: content
                     };
-                    nodemailer_1.NodeMailer.sendMail(payload).then(response => {
+                    /*
+                    //For LocalHost
+                    NodeMailer.sendMail(payload).then(response => {
+                      if (!response) {
+                        console.error('Mail Sending Error', err);
+                        return res.status(200).send({ success: false, message: 'Unable to send verification email.' });
+                        }
+                        res.status(200).send({success: true, message : 'Account created successfully. Please verify your account. We have sent you an email to this account '+ user.email + ' .' });
+                    }).catch(error =>{
+                      return res.status(200).send({ success: false, message: 'Unable to send verification email.' , error : err});
+                    });
+                    */
+                    //For Heroku App
+                    send_grid_mailer_1.SendGridMailer.sendMail(payload).then(result => {
                         if (!response) {
                             console.error('Mail Sending Error', err);
                             return res.status(200).send({ success: false, message: 'Unable to send verification email.' });
                         }
                         res.status(200).send({ success: true, message: 'Account created successfully. Please verify your account. We have sent you an email to this account ' + user.email + ' .' });
                     }).catch(error => {
-                        return res.status(200).send({ success: false, message: 'Unable to send verification email.', error: err });
+                        console.error('SendGrid Mail Error', error);
+                        return res.status(200).send({ success: false, message: 'Unable to send verification email.', error: error });
                     });
                 });
             }

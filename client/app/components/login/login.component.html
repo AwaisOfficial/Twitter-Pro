@@ -1,21 +1,21 @@
-<div>
+<div class="h-100 d-flex align-items-center w-100 flex-1">
   
   <app-slide-show></app-slide-show>
     
- <div class="">
-          <div class="">
-            <div class="container-fluid">
-              <div class="row">
+ <div class="h-100 w-100">
+          <div class="h-100">
+            <div class="container-fluid h-100">
+              <div class="row h-100">
                 <div class="col-md-6">
                 </div>
-                <div class="col-md-6 bg-black">
-                        <div class="login-section wrapper-table">
+                <div class="col-md-6 h-100">
+                        <div class="login-section wrapper-table h-100">
                             <div class="login-outer wrapper-cell">
                                   <div class="logo text-center">
                                     <img src="assets/logo.png" alt="" style="padding: 22px;height: 90px;">
                                   </div>
                                   <div class="twitter-button text-center">
-                                    <a class="btn btn-twitter" href='{{ SERVER_URL }}twitter-login'> <i class="fab fa-twitter"></i>Sign Up / Login with Twitter</a>
+                                    <a class="btn btn-twitter" href='{{ SERVER_URL }}twitter-login'> <i class="fab fa-twitter mr-3"></i>Sign Up / Login with Twitter</a>
                                   </div>
                                   <div class="or-seperator">
                                     <span>OR</span>
@@ -40,10 +40,12 @@
                                             </div>
                                           </div>
                                           <div class="remember-forgot">
-                                            <div class="row">
-                                                <div class="col text-left checkbox-animated m-0">
+                                            <div class="row mx-0">
+                                                <div class="col text-left checkbox-animated m-0 pl-0">
+                                                    <input class="styled-checkbox" id="rememberMe" type="checkbox" value="">
+                                                    <label for="rememberMe">Remember Me</label>
                                                 </div>
-                                                <div class="col text-right">
+                                                <div class="col text-right pr-0">
                                                     <a routerLink="/forgot-password">Forgot Password?</a>
                                                   </div>
                                               </div>
@@ -62,16 +64,7 @@
                                       <a routerLink="/register">Sign Up</a>
                                   </div>
                                   
-                                  <div class="login-footer text-center">
-                                    <ul class="mb-4">
-                                      <li><a routerLink="/about">About</a></li>
-                                      <li><a href="#">FAQ’s</a></li>
-                                      <li><a href="#">Contact</a></li>
-                                      <li><a routerLink="/terms-of-service">Terms</a></li>
-                                      <li><a routerLink="/privacy-policy">Privacy</a></li>
-                                    </ul>
-                                      <p>© 2019 Only VIPs. All rights reserved.</p>
-                                  </div>
+                                  
                               </div>
                           </div>
                       </div>
@@ -79,4 +72,16 @@
           </div>
         </div>
     </div>
+    
 </div>
+<div class="login-footer d-flex align-items-center">
+    <p class="copyrightText">© 2019 Only VIPs. All rights reserved.</p>
+    <ul class="ml-auto">
+      <li><a routerLink="/about">About</a></li>
+      <li><a href="#">FAQ’s</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a routerLink="/terms-of-service">Terms</a></li>
+      <li><a routerLink="/privacy-policy">Privacy</a></li>
+    </ul>
+      
+  </div>

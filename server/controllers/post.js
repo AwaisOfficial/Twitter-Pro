@@ -11,7 +11,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const post_1 = require("../models/post");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config/config");
 const auth_1 = require("./auth");
@@ -30,7 +29,7 @@ class PostController {
                 return res.status(200).json(token);
             const user = token.user;
             const data = { text: req.body.text,
-                user: user,
+                userId: user._id,
                 images: req.body.images,
                 video: req.body.video,
                 inReplyToPostId: req.body.inReplyToPostId,
@@ -45,14 +44,17 @@ class PostController {
             //     }
             // });      
             const response = [];
-            const newPost = new post_1.Post(data).save();
+            const newPost = new models_1.Post(data).save();
             response.push(newPost);
             if (req.body.inReplyToPostId) {
-                const updatePost = post_1.Post.findByIdAndUpdate(req.body.inReplyToPostId, { $inc: { replyCount: 1 }, $push: { repliers: user._id } }, { new: true });
+                const updatePost = models_1.Post.findByIdAndUpdate(req.body.inReplyToPostId, { $inc: { replyCount: 1 }, $push: { repliers: user._id } }, { new: true });
                 response.push(updatePost);
             }
             Promise.all(response).then((result) => {
-                return res.status(200).json({ success: true, response: result });
+                const response = result[0].toObject();
+                response.user = user;
+                //console.log('Updated Object' ,response);
+                return res.status(200).json({ success: true, response: response });
             }).catch(error => {
                 return res.status(200).json({ success: false, error: error });
             });
@@ -64,11 +66,22 @@ class PostController {
                 const followees = models_1.Follower.find({ follower: req.query.userId }, { followee: 1, _id: 0 });
                 followees.then((followees) => {
                     followees = followees.map((following) => { return following['followee'].toString(); });
-                    const posts = post_1.Post.aggregate([
-                        { $match: { $or: [{ 'user._id': { $in: followees } }, { 'user._id': { $eq: req.query.userId } }] } },
+                    const posts = models_1.Post.aggregate([
+                        { $match: { $or: [{ 'userId': { $in: followees } }, { 'userId': { $eq: req.query.userId } }] } },
                     ]).sort({ createdAt: -1 }).limit(25);
-                    posts.then((result) => {
-                        return res.status(200).json({ success: true, total: result.length, response: result });
+                    posts.then((posts) => {
+                        const userIds = posts.map((post) => { return post.userId.toString(); });
+                        const users$ = models_1.User.find({ '_id': { $in: userIds } });
+                        users$.then((users) => {
+                            const updatedPosts = posts.map((post, index) => {
+                                const user = users.filter((user) => { return (post.userId == user._id) ? true : false; });
+                                post['user'] = user[0];
+                                return post;
+                            });
+                            return res.status(200).json({ success: true, total: updatedPosts.length, response: updatedPosts });
+                        }).catch(error => {
+                            return res.status(200).json({ success: false, error: error });
+                        });
                     }).catch(error => {
                         return res.status(200).json({ success: false, error: error });
                     });
@@ -78,12 +91,22 @@ class PostController {
                 });
             }
             else {
-                post_1.Post.find({ "user._id": { $eq: req.query.userId } }, (error, posts) => {
+                models_1.Post.find({ 'userId': { $eq: req.query.userId } }, (error, posts) => {
                     if (error) {
-                        console.error("Post Fetching Error", error);
                         return res.status(200).json({ success: false, error: error });
                     }
-                    return res.status(200).json({ success: true, total: posts.length, response: posts, uploadFolderPath: __dirname + '/uploads/' });
+                    const user$ = models_1.User.find({ '_id': req.query.userId });
+                    user$.then((user) => {
+                        const updatedPosts = posts.map((post, index) => {
+                            post = post.toObject();
+                            post['user'] = user[0];
+                            return post;
+                        });
+                        return res.status(200).json({ success: true, total: updatedPosts.length, response: updatedPosts });
+                    }).catch(error => {
+                        return res.status(200).json({ success: false, error: error });
+                    });
+                    //return res.status(200).json({success : true, total : posts.length , response: posts });
                 }).sort({ 'createdAt': -1 }).limit(25);
             }
         };
@@ -100,15 +123,29 @@ class PostController {
                     payLoad = { $inc: { likeCount: 1 }, $push: { likers: req.body.userId } };
                 else
                     payLoad = { $inc: { likeCount: -1 }, $pull: { likers: req.body.userId } };
-                post_1.Post.findByIdAndUpdate(req.body.postId, payLoad, { new: true }, (error, response) => {
+                models_1.Post.findByIdAndUpdate(req.body.postId, payLoad, { new: true }, (error, response) => {
                     if (error || !response)
                         this.responseHandler.sendError(res, config_1.ERROR_MSG, error);
-                    else
+                    response = response.toObject();
+                    const user$ = models_1.User.find({ '_id': response.userId });
+                    user$.then((user) => {
+                        response.user = user[0];
                         this.responseHandler.sendResponse(res, response, config_1.ITEM_UPDATED);
+                    }).catch(error => {
+                        return res.status(200).json({ success: false, error: error });
+                    });
                 });
             }).catch(error => {
                 this.responseHandler.sendError(res, config_1.ERROR_MSG, error);
                 return;
+            });
+        };
+        this.deletePost = (req, res) => {
+            models_1.Post.findByIdAndDelete(req.body.postId, (error, response) => {
+                if (error)
+                    return res.status(200).json({ success: false, response: '' });
+                else
+                    return res.status(200).json({ success: true, response: response });
             });
         };
     }
@@ -127,20 +164,20 @@ class PostController {
     /* Counting Media Posts Of a Specific Member */
     countMediaPosts(member) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield post_1.Post.aggregate([
+            return yield models_1.Post.aggregate([
                 {
-                    $match: { 'user._id': { $eq: member._id.toString() } }
+                    $match: { 'userId': { $eq: member._id.toString() } }
                 },
                 {
                     $group: {
-                        _id: "user._id",
+                        _id: 'userId',
                         totalImages: {
                             $sum: { "$size": "$images" }
                         },
                         totalVideos: {
                             $sum: {
                                 $cond: [
-                                    { $ne: ["$video ", null] },
+                                    { $ne: ["$video", null] },
                                     1,
                                     0
                                 ]

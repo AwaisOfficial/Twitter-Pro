@@ -30,9 +30,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule ,
     DatePickerModule
   ],
-  entryComponents:[ ModalComponent , CropImageComponent , CreateCommentComponent , CreatePostComponent ],
+  entryComponents:[ ModalComponent , CropImageComponent , CreateCommentComponent , CreatePostComponent],
   exports : [ AlertComponent , FooterComponent, HeaderComponent , ModalComponent, ProfileComponent , 
               SettingsComponent , SlideShowComponent , PostsComponent , CropImageComponent , 
-              SuggestedPeopleComponent , CreatePostComponent , SubscribeComponent ]
+              SuggestedPeopleComponent , CreatePostComponent , SubscribeComponent , CreateCommentComponent , CreatePostComponent  ]
 })
 export class SharedModule { }

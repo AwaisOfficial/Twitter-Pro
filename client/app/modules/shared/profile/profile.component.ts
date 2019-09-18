@@ -63,6 +63,7 @@ export class ProfileComponent implements OnInit {
   }
 
   editProfile(profile : any) {
+    console.log('Profile', profile);
     this.router.navigate(['/settings'], { state: { data: { profile : profile } } });
   }
   

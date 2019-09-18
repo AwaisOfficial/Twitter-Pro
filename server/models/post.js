@@ -23,7 +23,7 @@ exports.postSchema = new mongoose_1.Schema({
     rePosters: { type: Array, default: [] },
     rePostCount: { type: Number, default: 0 },
     text: { type: String, default: null },
-    user: { type: Object, default: null },
+    userId: { type: String, default: null },
     video: { type: Object, defualt: null },
 });
 exports.Post = mongoose_1.default.model('Post', exports.postSchema);

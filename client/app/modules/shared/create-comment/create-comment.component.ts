@@ -23,8 +23,9 @@ export class CreateCommentComponent implements OnInit  {
   form : FormGroup; 
   postCreationResponse : any ;  
   commons: Commons;
-  hover : boolean = false;
-  
+  hover: boolean = false;
+
+
   constructor(private router : Router,
               private operationsService: OperationsService , 
               private formBuilder: FormBuilder ,
@@ -149,9 +150,8 @@ export class CreateCommentComponent implements OnInit  {
     setTimeout(() => { this.postCreationResponse = null }, 3000);
   }
 
-
   goToProfile(user){
     this.router.navigate(['/profile'], {state: { data: { profile : user , suggestedMember : false } } });
   }
-  
+
 }
